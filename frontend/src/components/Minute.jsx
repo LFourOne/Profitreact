@@ -86,6 +86,17 @@ export function Minute() {
         resetComplete();
     }
 
+    const onSubmitEdit = async (data) => {
+        const response = await axios.post('http://localhost:5500/reports/minute/edit-commitment', data, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        })
+        await fetchApi();
+        closeModal();
+    }
+
     const onSubmitDelete = async (event, id_compromiso) => {
         
         event.preventDefault();
@@ -320,56 +331,60 @@ export function Minute() {
                     className={styles['modal']}
                 >
                     {editingCommitment && (
-                        <table id={styles['modal-table']}>
-                            <thead id={styles['modal-thead']}>
-                                <tr>
-                                    <th className={styles['modal-thead-th']}>Proyecto</th>
-                                    <th className={styles['modal-thead-th-large']}>Responsable</th>
-                                    <th className={styles['modal-thead-th']}>Fecha</th>
-                                    <th id={styles['modal-thead-th-commitment-text']}>Compromiso</th>
-                                    <th className={styles['modal-thead-th']}>Prioridad</th>
-                                </tr>
-                            </thead>
-                            <tbody id={styles['modal-tbody']}>
-                                {console.log(editingCommitment)}
-                                <tr>
-                                    <td className={styles['modal-td']}>
-                                        {meetingData.length > 0 && meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3 ? (
-                                            <select name="project-select" id={styles['project-select']} defaultValue={editingCommitment.id_proyecto} {...registerEdit("project_id", {required: true})}>
-                                                {projects.map((project) => (
-                                                    <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                        <form onSubmit={handleSubmitEdit(onSubmitEdit)}>
+                            <table id={styles['modal-table']}>
+                                <thead id={styles['modal-thead']}>
+                                    <tr>
+                                        <th className={styles['modal-thead-th']}>Proyecto</th>
+                                        <th className={styles['modal-thead-th-large']}>Responsable</th>
+                                        <th className={styles['modal-thead-th']}>Fecha</th>
+                                        <th id={styles['modal-thead-th-commitment-text']}>Compromiso</th>
+                                        <th className={styles['modal-thead-th']}>Prioridad</th>
+                                    </tr>
+                                </thead>
+                                <tbody id={styles['modal-tbody']}>
+                                    {console.log(editingCommitment)}
+                                    <tr>
+                                        <td className={styles['modal-td']}>
+                                            {meetingData.length > 0 && meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3 ? (
+                                                <select name="project-select" id={styles['project-select']} defaultValue={editingCommitment.id_proyecto} {...registerEdit("project_id", {required: true})}>
+                                                    {projects.map((project) => (
+                                                        <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                                                    ))}
+                                                </select>
+                                            )
+                                            :
+                                            (
+                                                <span>{editingCommitment.id_proyecto}</span>
+                                            )}
+                                        </td>
+                                        <td className={styles['modal-td']}>
+                                            <select name="name_and_last_name_form" id={styles['name_and_last_name_form']} defaultValue={editingCommitment.responsable} {...registerEdit("name_and_last_name_form", {required: true})}>
+                                                {staffInfo.map((staff) => (
+                                                    <option value={staff.rut_personal} key={staff.rut_personal}>{staff.nombres} {staff.apellido_p} {staff.apellido_m}</option>
                                                 ))}
                                             </select>
-                                        )
-                                        :
-                                        (
-                                            <span>{editingCommitment.id_proyecto}</span>
-                                        )}
-                                    </td>
-                                    <td className={styles['modal-td']}>
-                                        <select name="name_and_last_name_form" id={styles['name_and_last_name_form']} defaultValue={editingCommitment.responsable} {...registerEdit("name_and_last_name_form", {required: true})}>
-                                            {staffInfo.map((staff) => (
-                                                <option value={staff.rut_personal} key={staff.rut_personal}>{staff.nombres} {staff.apellido_p} {staff.apellido_m}</option>
-                                            ))}
-                                        </select>
-                                    </td>
-                                    <td className={styles['modal-td']}>
-                                        <input type="date" name="commitment-date" id={styles['commitment-date']} defaultValue={formatDateForInput(editingCommitment.fecha_comprometida)} {...registerEdit("commitment-date", {required: true})} />
-                                    </td>
-                                    <td className={styles['modal-td']}>
-                                        <input type="text" name="commitment-text" id={styles['commitment-text']} defaultValue={editingCommitment.texto_compromiso} {...registerEdit("commitment-text", {required: true})} />
-                                    </td>
-                                    <td className={styles['modal-td']}>
-                                        <input type="checkbox" name="priority" id={styles['priority']} defaultChecked={editingCommitment.prioridad} {...registerEdit("priority")} />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        </td>
+                                        <td className={styles['modal-td']}>
+                                            <input type="date" name="commitment-date" id={styles['commitment-date']} defaultValue={formatDateForInput(editingCommitment.fecha_comprometida)} {...registerEdit("commitment-date", {required: true})} />
+                                        </td>
+                                        <td className={styles['modal-td']}>
+                                            <input type="text" name="commitment-text" id={styles['commitment-text']} defaultValue={editingCommitment.texto_compromiso} {...registerEdit("commitment-text", {required: true})} />
+                                        </td>
+                                        <td className={styles['modal-td']}>
+                                            <input type="checkbox" name="priority" id={styles['priority']} defaultChecked={editingCommitment.prioridad} {...registerEdit("priority")} />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <input type="hidden" value={editingCommitment.id_compromiso} {...registerEdit("id_commitment")} />
+                            <input type="hidden" value={meetingData[0].id_tipo_reunion} {...registerEdit("id_meeting_type")} />
+                            <div id={styles['modal-buttons']}>
+                                <button id={styles['secondary-btn']} onClick={closeModal}>Cancelar</button>
+                                <button type='submit' id={styles['primary-btn']}>Guardar Cambios</button>
+                            </div>
+                        </form>
                     )}
-                    <div id={styles['modal-buttons']}>
-                        <button id={styles['secondary-btn']} onClick={closeModal}>Cancelar</button>
-                        <button id={styles['primary-btn']}>Guardar Cambios</button>
-                    </div>
                 </Modal>
                 </section>
             </section>

@@ -265,6 +265,50 @@ def complete_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
+@app.route('/reports/minute/edit-commitment', methods=['POST'])
+def edit_commitment():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    data = request.get_json()
+
+    if data['priority'] == True:
+        data['priority'] = 1
+    else:
+        data['priority'] = 0
+
+    data['commitment-date'] = datetime.strptime(data['commitment-date'], '%Y-%m-%d').strftime('%Y/%m/%d')
+
+    if data['id_meeting_type'] == '1' or data['id_meeting_type'] == '3':
+
+        print(f"Esto es meeting type = {data['id_meeting_type']}")
+
+        commitment_data = {
+            'id_compromiso' : data['id_commitment'],
+            'id_proyecto' : data['project_id'],
+            'texto_compromiso' : data['commitment-text'],
+            'fecha_comprometida' : data['commitment-date'],
+            'responsable' : data['name_and_last_name_form'],
+            'prioridad': data['priority']
+        }
+
+        Commitment.update_commitment_by_meeting_type(commitment_data)
+
+    else:
+
+        commitment_data = {
+            'id_compromiso' : data['id_commitment'],
+            'texto_compromiso' : data['commitment-text'],
+            'fecha_comprometida' : data['commitment-date'],
+            'responsable' : data['name_and_last_name_form'],
+            'prioridad': data['priority']
+        }
+
+        Commitment.update_commitment(commitment_data)
+
+    return jsonify({'status': 'success', 'message': 'success'}), 200
+
 @app.route('/reports/minute/delete-commitment', methods=['POST'])
 def delete_commitment():
     

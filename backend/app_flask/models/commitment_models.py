@@ -65,6 +65,15 @@ class Commitment:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
+    def update_commitment_by_meeting_type(cls, data):
+        query = """
+                UPDATE compromiso
+                SET texto_compromiso = %(texto_compromiso)s, id_proyecto = %(id_proyecto)s, fecha_comprometida = %(fecha_comprometida)s, responsable = %(responsable)s, prioridad = %(prioridad)s
+                WHERE id_compromiso = %(id_compromiso)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
     def select_all_and_previous(cls, data):
         query = """
                 SELECT compromiso.*, reunion.id_tipo_reunion FROM compromiso 
