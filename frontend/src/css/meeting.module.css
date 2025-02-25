@@ -1,0 +1,65 @@
+#main-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 1100px;
+    height: 780px;
+    border-radius: 12px;
+    border: 1px solid black;
+    gap: 10px;
+    background-color: white;
+    overflow: scroll;
+    overflow-x: hidden;
+    margin-top: 10px;
+}
+#form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 20px;
+    gap: 15px;
+}
+label{
+    font-size: 18px;
+}
+#btn-container{
+    display: flex;
+    justify-content: center;
+}
+#btn{
+    height: 40px;
+    width: 150px;
+    background-color: rgb(115, 167, 39);
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+#btn:hover{
+    background-color: rgb(101, 146, 33);
+}
+#reunion-imagen{
+    width: 700px;
+    height: 450px;
+}
+.input-container{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.select-input{
+    width: 350px;
+    height: 35px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+#demo-multiple-checkbox-label{
+    font-size: 11px;
+}
+#name_and_last_name_form_toki{
+    width: 350px;
+    max-width: 350px;
+    max-height: 80px;
+}
