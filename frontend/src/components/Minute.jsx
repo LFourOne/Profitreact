@@ -27,6 +27,9 @@ export function Minute() {
 
     const { id_reunion } = useParams();
     
+    const [stateFilter, setStateFilter] = useState(1);
+    const [projectFilter, setProjectFilter] = useState("");
+
     const [loading, setLoading] = useState(true);
 
     const fetchApi = async () => {
@@ -164,6 +167,26 @@ export function Minute() {
         {loading ? <p>Cargando...</p> : (
             <>
             <section id={styles['main-section']}>
+                <section id={styles['filters-section']}>
+                    <div id={styles['state-filter']}>
+                        <label htmlFor="state-filter-select">Filtrar por estado:</label>
+                        <select id="state-filter-select" value={stateFilter} onChange={(e) => setStateFilter(Number(e.target.value))}>
+                            <option value={1}>Vigente</option>
+                            <option value={2}>Completado</option>
+                            <option value={3}>Eliminado</option>
+                            <option value={0}>Todos</option>
+                        </select>
+                    </div>
+                    <div id={styles['project-filter']}>
+                        <label htmlFor="project-filter-select">Filtrar por proyecto:</label>
+                        <select id="project-filter-select" value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
+                            <option value="">Todos</option>
+                            {projects.map((project) => (
+                                <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                            ))}
+                        </select>
+                    </div>
+                </section>
                 <section className={styles['commitment-section']}>
                     <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
                         <table className={styles['top-table']}>
@@ -263,7 +286,9 @@ export function Minute() {
                                 </tr>
                             </thead>
                             <tbody className={styles['tbody-list']}>
-                                {commitments.map((commitment) => (
+                                {commitments
+                                .filter(commitment => (stateFilter === 0 || commitment.id_estado_compromiso === stateFilter) && (projectFilter === "" || commitment.id_proyecto === projectFilter))
+                                .map((commitment) => (
                                     <tr className={styles['tr-list']} key={commitment.id_compromiso}>
                                         <td className={styles['td']}>{commitment.id_proyecto}</td>
                                         <td className={styles['td']}>{commitment.responsable_nombre}</td>
@@ -350,7 +375,7 @@ export function Minute() {
                 </section>
                 <section>
                     {meetingData.length > 0 && meetingData[0].hora_termino === 0 ? (
-                        <button type='submit' onClick={(e) => closeMeeting(e, meetingData[0].id_reunion)}>Cerrar Reunión</button>
+                        <button type='submit' className={styles['primary-btn']} onClick={(e) => closeMeeting(e, meetingData[0].id_reunion)}>Cerrar Reunión</button>
                     )
                     :
                     (
@@ -416,7 +441,7 @@ export function Minute() {
                             <input type="hidden" value={meetingData[0].id_tipo_reunion} {...registerEdit("id_meeting_type")} />
                             <div id={styles['modal-buttons']}>
                                 <button id={styles['secondary-btn']} onClick={closeModal}>Cancelar</button>
-                                <button type='submit' id={styles['primary-btn']}>Guardar Cambios</button>
+                                <button type='submit' className={styles['primary-btn']}>Guardar Cambios</button>
                             </div>
                         </form>
                     )}

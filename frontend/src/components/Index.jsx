@@ -68,7 +68,7 @@ export function Index() {
                         </div>
                     </div>
                     <div id={styles['last-commitments-container']}>
-                        <h2>Tus últimos compromisos</h2>
+                        <h2>Lorem ipsum dolor sit amet</h2>
                         <div className={styles['commitments-container']}>
 
                         </div>
