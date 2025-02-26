@@ -112,6 +112,21 @@ export function Minute() {
         resetDelete();
     }
 
+    const closeMeeting = async (event, id_meeting) => {
+
+        event.preventDefault();
+
+        const response = await axios.post('http://localhost:5500/reports/minute/close-meeting', {id_meeting}, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        })
+
+        await fetchApi();
+        
+    }
+
     const formatDate = (dateString) => {
         const date = new Date(dateString);
     
@@ -212,10 +227,20 @@ export function Minute() {
                                         <input type="checkbox" name="priority" id={styles['priority']} {...registerAdd("priority")} />
                                     </td>
                                     <td className={styles['td']}>
-                                        <button type="submit" className={styles['pointer']}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                        </button>
-                                        <input type="hidden" value={id_reunion} {...registerAdd("id_reunion")} />
+                                        {meetingData[0].hora_termino === 1 ? (
+                                            <span>Reunión Cerrada</span>
+                                        )
+                                        :
+                                        (
+                                        <>
+                                            <button type="submit" className={styles['pointer']}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            </button>
+                                            <input type="hidden" value={id_reunion} {...registerAdd("id_reunion")} />
+                                        </>
+                                        )
+                                        }
+                                        
                                     </td>
                                 </tr>
                             </tbody>
@@ -322,6 +347,16 @@ export function Minute() {
                             </tbody>
                         </table>
                     </div>
+                </section>
+                <section>
+                    {meetingData.length > 0 && meetingData[0].hora_termino === 0 ? (
+                        <button type='submit' onClick={(e) => closeMeeting(e, meetingData[0].id_reunion)}>Cerrar Reunión</button>
+                    )
+                    :
+                    (
+                        <span>Reunión cerrada</span>
+                    )
+                    }
                 </section>
                 <section id={styles['modal-section']}>
                 <Modal

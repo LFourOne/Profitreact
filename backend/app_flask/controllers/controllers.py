@@ -192,6 +192,8 @@ def minute(id_reunion):
     elif meeting_data[0]['hora_termino'] != None:
         meeting_data[0]['hora_termino'] = 1
 
+    meeting_data[0]['id_reunion'] = id_reunion
+
     name_and_last_name = Staff.obtain_name_and_last_name()
     rut_jefe_proyecto = Project.select_rut_jefe_proyecto({'id_proyecto' : meeting_data[0]['id_proyecto']})
     nombre_jefe_proyecto = Staff.obtain_all_with_rut({'rut_personal' : rut_jefe_proyecto[0]['jefe_proyectos']})
@@ -322,5 +324,26 @@ def delete_commitment():
     }
 
     Commitment.delete_commitment(commitment_data)
+
+    return jsonify({'status': 'success', 'message': 'success'}), 200
+
+@app.route('/reports/minute/close-meeting', methods=['POST'])
+def close_meeting():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    data = request.get_json()
+
+    print(f"Data: {data}")
+
+    hour_date = datetime.now().strftime('%H:%M:%S')
+
+    meeting_data = {
+        'id_reunion' : data['id_meeting'],
+        'hora_termino' : hour_date
+    }
+
+    Meeting.close_meeting(meeting_data)
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
