@@ -7,6 +7,7 @@ from app_flask.models.meeting_models import Meeting
 from app_flask.models.staff_models import Staff
 from app_flask.models.attendant_models import Attendant
 from app_flask.models.commitment_models import Commitment
+from app_flask.models.topic_agreement_models import Agreements, Topics 
 from datetime import datetime
 
 bcrypt = Bcrypt(app)
@@ -184,6 +185,10 @@ def minute(id_reunion):
         'id_empresa': session['id_empresa']
     }
 
+    agreements = Agreements.select_agreements({'id_reunion' : id_reunion})
+
+    topics = Topics.select_topics({'id_reunion' : id_reunion})
+
     meeting_data = Meeting.select_all({'id_reunion' : id_reunion})
 
     # 0 = Reunión en curso / 1 = Reunión finalizada 
@@ -218,7 +223,9 @@ def minute(id_reunion):
         'project_chief_name' : nombre_jefe_proyecto,
         'meeting_data' : meeting_data,
         'projects' : project_list,
-        'commitments' : commitments
+        'commitments' : commitments,
+        'agreements' : agreements,
+        'topics' : topics
         }), 200
 
 @app.route('/reports/minute/add-commitment', methods=['POST'])
@@ -284,8 +291,6 @@ def edit_commitment():
 
     if data['id_meeting_type'] == '1' or data['id_meeting_type'] == '3':
 
-        print(f"Esto es meeting type = {data['id_meeting_type']}")
-
         commitment_data = {
             'id_compromiso' : data['id_commitment'],
             'id_proyecto' : data['project_id'],
@@ -345,5 +350,39 @@ def close_meeting():
     }
 
     Meeting.close_meeting(meeting_data)
+
+    return jsonify({'status': 'success', 'message': 'success'}), 200
+
+@app.route('/reports/minute/add-agreement', methods=['POST'])
+def add_agreement():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    data = request.get_json()
+
+    agreement_data = {
+        'id_reunion' : data['id_reunion'],
+        'texto_acuerdo' : data['agreement']
+    }
+
+    Agreements.create_agreements(agreement_data)
+
+    return jsonify({'status': 'success', 'message': 'success'}), 200
+
+@app.route('/reports/minute/add-topic', methods=['POST'])
+def add_topic():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    data = request.get_json()
+
+    topic_data = {
+        'id_reunion' : data['id_reunion'],
+        'texto_tema_tratado' : data['topic']
+    }
+
+    Topics.create_topics(topic_data)
 
     return jsonify({'status': 'success', 'message': 'success'}), 200

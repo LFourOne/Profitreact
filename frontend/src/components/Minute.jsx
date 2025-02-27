@@ -13,6 +13,8 @@ export function Minute() {
     const { register: registerComplete, handleSubmit: handleSubmitComplete, reset: resetComplete, control: controlComplete, formState: { errors : errorsComplete } } = useForm();
     const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, control: controlEdit, formState: { errors : errorsEdit } } = useForm();
     const { register: registerDelete, handleSubmit: handleSubmitDelete, reset: resetDelete, control: controlDelete, formState: { errors : errorsDelete } } = useForm();
+    const { register: registerAgreement, handleSubmit: handleSubmitAgreement, reset: resetAgreement, control: controlAgreement, formState: { errors : errorsAgreement } } = useForm();
+    const { register: registerTopic, handleSubmit: handleSubmitTopic, reset: resetTopic, control: controlTopic, formState: { errors : errorsTopic } } = useForm();
 
     const navigate = useNavigate();
     
@@ -22,6 +24,9 @@ export function Minute() {
     const [meetingData, setMeetingData] = useState([]);
     const [projectChiefName, setProjectChiefName] = useState([]);
     const [commitments, setCommitments] = useState([]);
+    const [agreements, setAgreements] = useState([]);
+    const [topics, setTopics] = useState([]);
+
     const [editingCommitment, setEditingCommitment] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -44,6 +49,8 @@ export function Minute() {
             setMeetingData(response.data.meeting_data);
             setProjectChiefName(response.data.project_chief_name);
             setCommitments(response.data.commitments);
+            setAgreements(response.data.agreements);
+            setTopics(response.data.topics);
             console.log(response.data);
 
         } catch (error) {
@@ -113,6 +120,36 @@ export function Minute() {
 
         await fetchApi();
         resetDelete();
+    }
+
+    const onSubmitAddAgreement = async (data) => {
+
+        data.id_reunion = id_reunion;
+
+        const response = await axios.post('http://localhost:5500/reports/minute/add-agreement', data, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        })
+
+        await fetchApi();
+        resetAgreement();
+    }
+
+    const onSubmitAddTopic = async (data) => {
+
+        data.id_reunion = id_reunion;
+
+        const response = await axios.post('http://localhost:5500/reports/minute/add-topic', data, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        })
+
+        await fetchApi();
+        resetTopic();
     }
 
     const closeMeeting = async (event, id_meeting) => {
@@ -373,7 +410,7 @@ export function Minute() {
                         </table>
                     </div>
                 </section>
-                <section>
+                <section id={styles['close-meeting-section']}>
                     {meetingData.length > 0 && meetingData[0].hora_termino === 0 ? (
                         <button type='submit' className={styles['primary-btn']} onClick={(e) => closeMeeting(e, meetingData[0].id_reunion)}>Cerrar Reunión</button>
                     )
@@ -382,6 +419,66 @@ export function Minute() {
                         <span>Reunión cerrada</span>
                     )
                     }
+                </section>
+                <section id={styles['topics-agreements-container']}>
+                    <section id={styles['agreements-container']}>
+                        <div className={styles['add-agreement-container']}>
+                            <form onSubmit={handleSubmitAgreement(onSubmitAddAgreement)} className={styles['topic-agreement-form']}>
+                                <div className={styles['topic-agreement-input']}>
+                                    <label htmlFor="agreements">Acuerdos</label>
+                                    <input type="text" name='agreements' id={styles['agreements']} {...registerAgreement("agreement", {required: true})} />
+                                </div>
+                                <div>
+                                    <button type='submit' className={styles['primary-btn']}>Añadir Acuerdo</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className={styles['topic-agreement-table-section']}>
+                            <table className={styles['topic-agreement-table']}>
+                                <thead>
+                                    <tr>
+                                        <th className={styles['head-th-agreement-topic-text']}>Texto del Acuerdo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {agreements.length > 0 && agreements.map((agreement) => (
+                                        <tr key={agreement.id_acuerdo}>
+                                            <td className={styles['agreement-topic-text']}>{agreement.texto_acuerdo}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                    <section id={styles['topics-container']}>
+                        <div className={styles['add-agreement-container']}>
+                            <form onSubmit={handleSubmitTopic(onSubmitAddTopic)} className={styles['topic-agreement-form']}>
+                                <div className={styles['topic-agreement-input']}>
+                                    <label htmlFor="topics_covered">Temas Tratados</label>
+                                    <input type="text" name='topics_covered' id={styles['topics-covered']} {...registerTopic("topic", {required: true})} />
+                                </div>
+                                <div>
+                                    <button type='submit' className={styles['primary-btn']}>Añadir Tema Tratado</button>
+                                </div>
+                            </form>
+                        </div>
+                        <div className={styles['topic-agreement-table-section']}>
+                            <table className={styles['topic-agreement-table']}>
+                                <thead>
+                                    <tr>
+                                        <th className={styles['head-th-agreement-topic-text']}>Texto del Tema Tratado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {topics.length > 0 && topics.map((topic) => (
+                                        <tr key={topic.id_tema}>
+                                            <td className={styles['agreement-topic-text']}>{topic.texto_tema_tratado}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
                 </section>
                 <section id={styles['modal-section']}>
                 <Modal

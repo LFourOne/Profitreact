@@ -2,8 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     width: 100vw;
+    overflow-y: auto;
 }
 #filters-section{
     display: flex;
@@ -214,4 +215,60 @@
 }
 #secondary-btn:hover{
     background-color: rgb(240, 240, 240);
+}
+#close-meeting-section{
+    margin-top: 50px;
+}
+
+/* Topics */
+
+#topics-agreements-container{
+    display: flex;
+    justify-content: space-between;
+    width: 1533px;
+    margin-top: 30px;
+    border: 1px solid lightgray;
+}
+
+.topic-agreement-table-section{
+    margin-top: 30px;
+    height: 250px;
+    overflow-y: scroll;
+}
+.add-agreement-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.head-th-agreement-topic-text{
+    background-color: rgb(131, 170, 73);
+    font-weight: 500;
+    color: white;
+    width: 800px;
+    border: 1px solid black;
+}
+.topic-agreement-form{
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-top: 25px;
+}
+.topic-agreement-input{
+    display: flex;
+    gap: 12px;
+}
+.head-th-created-at{
+    background-color: rgb(131, 170, 73);
+    font-weight: 500;
+    color: white;
+    width: 200px;
+}
+.agreement-topic-text{
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: center;
+    border: 1px solid black;
+}
+.topic-agreement-table{
+    border-collapse: collapse;
 }
