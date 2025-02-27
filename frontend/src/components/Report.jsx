@@ -42,6 +42,11 @@ export function Report() {
         
         event.preventDefault();
 
+        const confirmed = window.confirm('¿Estás seguro que deseas eliminar esta reunión? (No podrás volver a recuperarla)');
+        if (!confirmed) {
+            return;
+        }
+
         const response = await axios.post('http://localhost:5500/reports/delete-meeting', { id_reunion }, {
             headers: {
                 'Content-Type': 'application/json'

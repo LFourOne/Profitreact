@@ -44,6 +44,12 @@ export function Meeting() {
     }, []);
 
     const onSubmitAdd = async (data) => {
+
+        const confirmed = window.confirm('¿Estás seguro que deseas crear una reunión?');
+        if (!confirmed) {
+            return;
+        }
+
         const response = await axios.post('http://localhost:5500/meetings/insert', data, {
             headers: {
                 'Content-Type': 'application/json'

@@ -70,6 +70,12 @@ export function Minute() {
     }, []);
 
     const onSubmitAdd = async (data) => {
+
+        const confirmed = window.confirm('¿Estás segur@ que deseas añadir este compromiso?');
+        if (!confirmed) {
+            return;
+        }
+
         const response = await axios.post('http://localhost:5500/reports/minute/add-commitment', data, {
             headers: {
                 'Content-Type': 'application/json'
@@ -85,6 +91,11 @@ export function Minute() {
 
         event.preventDefault();
 
+        const confirmed = window.confirm('¿Estás segur@ que deseas completar este compromiso?');
+        if (!confirmed) {
+            return;
+        }
+
         const response = await axios.post('http://localhost:5500/reports/minute/complete-commitment', {id_compromiso}, {
             headers: {
                 'Content-Type': 'application/json'
@@ -97,6 +108,12 @@ export function Minute() {
     }
 
     const onSubmitEdit = async (data) => {
+
+        const confirmed = window.confirm('¿Estás segur@ que deseas editar este compromiso?');
+        if (!confirmed) {
+            return;
+        }
+
         const response = await axios.post('http://localhost:5500/reports/minute/edit-commitment', data, {
             headers: {
                 'Content-Type': 'application/json'
@@ -111,6 +128,11 @@ export function Minute() {
         
         event.preventDefault();
 
+        const confirmed = window.confirm('¿Estás segur@ que deseas eliminar este compromiso?');
+        if (!confirmed) {
+            return;
+        }
+
         const response = await axios.post('http://localhost:5500/reports/minute/delete-commitment', {id_compromiso}, {
             headers: {
                 'Content-Type': 'application/json'
@@ -123,6 +145,11 @@ export function Minute() {
     }
 
     const onSubmitAddAgreement = async (data) => {
+
+        const confirmed = window.confirm('¿Estás segur@ que deseas agregar este acuerdo?');
+        if (!confirmed) {
+            return;
+        }
 
         data.id_reunion = id_reunion;
 
@@ -139,6 +166,11 @@ export function Minute() {
 
     const onSubmitAddTopic = async (data) => {
 
+        const confirmed = window.confirm('¿Estás segur@ que deseas agregar este tema tratado?');
+        if (!confirmed) {
+            return;
+        }
+
         data.id_reunion = id_reunion;
 
         const response = await axios.post('http://localhost:5500/reports/minute/add-topic', data, {
@@ -153,6 +185,11 @@ export function Minute() {
     }
 
     const closeMeeting = async (event, id_meeting) => {
+
+        const confirmed = window.confirm('¿Estás segur@ que deseas cerrar la reunión? (No podrás agregar más compromisos en esta reunión)');
+        if (!confirmed) {
+            return;
+        }
 
         event.preventDefault();
 
