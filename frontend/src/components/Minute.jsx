@@ -466,7 +466,13 @@ export function Minute() {
                                     <input type="text" name='agreements' id={styles['agreements']} {...registerAgreement("agreement", {required: true})} />
                                 </div>
                                 <div>
+                                {meetingData.length > 0 && meetingData[0].hora_termino === 0 ? (
                                     <button type='submit' className={styles['primary-btn']}>Añadir Acuerdo</button>
+                                ) 
+                                : 
+                                (
+                                    null
+                                )}
                                 </div>
                             </form>
                         </div>
@@ -495,7 +501,14 @@ export function Minute() {
                                     <input type="text" name='topics_covered' id={styles['topics-covered']} {...registerTopic("topic", {required: true})} />
                                 </div>
                                 <div>
+                                {meetingData.length > 0 && meetingData[0].hora_termino === 0 ? (
                                     <button type='submit' className={styles['primary-btn']}>Añadir Tema Tratado</button>
+                                )
+                                :
+                                (
+                                    null
+                                )
+                                }
                                 </div>
                             </form>
                         </div>

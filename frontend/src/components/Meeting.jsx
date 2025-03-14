@@ -8,7 +8,7 @@ import styles from '../css/Meeting.module.css';
 
 export function Meeting() {
 
-    const { register, handleSubmit, reset, control, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, control, formState: { errors }, watch, setValue } = useForm();
 
     const navigate = useNavigate();
 
@@ -16,6 +16,19 @@ export function Meeting() {
     const [projects, setProjects] = useState([]);
     const [meetingData, setMeetingData] = useState([]);
     const [staff, setStaff] = useState([]);
+
+    const [isProjectDisabled, setIsProjectDisabled] = useState(false);
+    const meetingType = watch("meeting_type");
+
+    useEffect(() => {
+        if (meetingType === "3") {
+            setValue("project", "JE");
+            setIsProjectDisabled(true);
+        } else {
+            setIsProjectDisabled(false);
+            setValue("project", "");
+        }
+    }, [meetingType, setValue]);
 
     const fetchApi = async () => {
 
@@ -57,6 +70,9 @@ export function Meeting() {
             withCredentials: true
         });
         await fetchApi();
+        
+        navigate(`/reports/minute/${response.data.meeting}`)
+
         reset();
     };
     
@@ -82,7 +98,7 @@ export function Meeting() {
                         </div>
                         <div className={styles['input-container']} id={styles['input-project']}>
                             <label htmlFor="project">Proyectos</label>
-                            <select name="project" id={styles['project']} className={styles['select-input']} defaultValue="" {...register("project", {required: true})}>
+                            <select name="project" id={styles['project']} className={styles['select-input']} defaultValue="" disabled={isProjectDisabled} {...register("project", {required: true})}>
                                 <option value="" disabled>Selecciona una opción</option>
                                 {projects.map((project) => (
                                     <option key={project.id_proyecto} value={project.id_proyecto}>{project.id_proyecto}</option>

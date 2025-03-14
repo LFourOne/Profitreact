@@ -1,3 +1,8 @@
+#main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 #section{
     max-height: 667px;
     margin-top: 35px;
@@ -6,16 +11,23 @@
 }
 #table{
     border-collapse: collapse;
+    width: 939px;
     border: 1px solid lightgray;
     text-align: left;
+}
+#thead{
+    height: 66px;
 }
 .th{
     background-color: rgb(131, 170, 73);
     color: white;
     font-size: 17px;
-    padding: 20px 40px 20px 40px;
     text-align: center;
     font-weight: 500;
+    width: 164px;
+}
+#th-meeting{
+    width: 259px;
 }
 .td{
     padding: 20px;

@@ -10,6 +10,8 @@ export function Report() {
 
     const [sessionData, setSessionData] = useState({});
     const [meetingData, setMeetingData] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [projectFilter, setProjectFilter] = useState("");
     const [loading, setLoading] = useState(true);
     
     const fetchApi = async () => {
@@ -20,6 +22,7 @@ export function Report() {
         
         setSessionData(response.data.session);
         setMeetingData(response.data.meetings);
+        setProjects(response.data.projects);
         console.log(response.data);
 
         } catch (error) {
@@ -70,12 +73,21 @@ export function Report() {
     return(
         <>
         {loading ? <p>Cargando...</p> : (
-            <main>
+            <main id={styles['main']}>
+                <div id={styles['project-filter']}>
+                    <label htmlFor="project-filter-select">Filtrar por proyecto:</label>
+                    <select id="project-filter-select" value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
+                        <option value="">Todos</option>
+                        {projects.map((project) => (
+                            <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                        ))}
+                    </select>
+                </div>
                 <section id={styles['section']}>
                     <table id={styles['table']}>
-                        <thead>
+                        <thead id={styles['thead']}>
                             <tr>
-                                <th className={styles['th']}>Reunión</th>
+                                <th className={styles['th']} id={styles['th-meeting']}>Reunión</th>
                                 <th className={styles['th']}>Proyecto</th>
                                 <th className={styles['th']}>Fecha</th>
                                 <th className={styles['th']}>Hora Inicio</th>
@@ -84,7 +96,9 @@ export function Report() {
                             </tr>
                         </thead>
                         <tbody>
-                            {meetingData.map((meeting) => (
+                            {meetingData
+                            .filter((meeting) => projectFilter === "" || meeting.id_proyecto === projectFilter)
+                            .map((meeting) => (
                             <tr key={meeting.id_reunion} onClick={() => navigate(`/reports/minute/${meeting.id_reunion}`)} id={styles['meeting-tr']}>
                                 <td className={styles['td']} id={styles['tipo_reunion_td']}>{meeting.descripcion_tipo_reunion}</td>
                                 <td className={styles['td']}>{meeting.id_proyecto}</td>

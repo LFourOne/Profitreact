@@ -14,7 +14,6 @@ bcrypt = Bcrypt(app)
 
 @app.route('/')
 def login():
-
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
 @app.route('/login/process', methods=['POST'])
@@ -128,7 +127,11 @@ def insert_meeting():
         Attendant.create_attendant(attendant_data)
 
 
-    return jsonify({'status': 'success', 'message': 'success'}), 200
+    return jsonify({
+        'status': 'success', 
+        'message': 'success',
+        'meeting': meeting_id
+        }), 200
 
 @app.route('/reports')
 def reports():
@@ -148,9 +151,12 @@ def reports():
 
     meetings = Meeting.select_all_meetings()
 
+    project_list = Project.get_projects()
+
     return jsonify({
         'session' : response_data,
-        'meetings' : meetings
+        'meetings' : meetings,
+        'projects' : project_list
         }), 200
 
 @app.route('/reports/delete-meeting', methods=['POST'])
