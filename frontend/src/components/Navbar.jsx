@@ -10,6 +10,7 @@ export function Navbar() {
         <NavLink to="/index" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Inicio</NavLink>
         <NavLink to="/meeting" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reuniones</NavLink>
         <NavLink to="/reports" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reportes</NavLink>
+        <NavLink to="/training" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
       </div>
     </nav>
   );

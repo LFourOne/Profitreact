@@ -5,6 +5,7 @@ import { Login } from './components/Login';
 import { Meeting } from './components/Meeting';
 import { Report } from './components/Report';
 import { Minute } from './components/Minute';
+import { Training } from './components/Training';
 
 export function App() {
 
@@ -20,6 +21,7 @@ export function App() {
           <Route path="/meeting" element={<Meeting />} />
           <Route path="/reports" element={<Report />} />
           <Route path="/reports/minute/:id_reunion" element={<Minute />} />
+          <Route path="/training" element={<Training />} />
         </Routes>
     </>
   );
