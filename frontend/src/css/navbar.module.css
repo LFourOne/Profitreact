@@ -21,7 +21,38 @@
     height: 50px;
     margin-left: 25px;
 }
-
 .selected-link{
-    color: rgb(102, 146, 37);
+    color: #669225;
 }
+.dropdown{
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    padding-top: 15px;
+    width: 130px;
+    border-radius: 4px;
+  }
+  
+  .dropdown-content a {
+    display: block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: black;
+  }
+  
+  .dropdown-content a:hover {
+    background-color: #d9ecbd;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }

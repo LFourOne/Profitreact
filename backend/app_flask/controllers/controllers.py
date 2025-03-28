@@ -42,6 +42,7 @@ def login_process():
     session['email'] = user_login.email
     session['id_especialidad'] = user_login.id_especialidad
     session['id_empresa'] = user_login.id_empresa
+    session['color'] = user_login.color
     session.permanent = True
 
     # Retornamos un mensaje de éxito

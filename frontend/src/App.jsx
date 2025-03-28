@@ -6,6 +6,8 @@ import { Meeting } from './components/Meeting';
 import { Report } from './components/Report';
 import { Minute } from './components/Minute';
 import { Training } from './components/Training';
+import { Gantt } from './components/Gantt';
+import { GanttDelivery } from './components/GanttDelivery';
 
 export function App() {
 
@@ -21,6 +23,8 @@ export function App() {
           <Route path="/meeting" element={<Meeting />} />
           <Route path="/reports" element={<Report />} />
           <Route path="/reports/minute/:id_reunion" element={<Minute />} />
+          <Route path="/gantt" element={<Gantt />} />
+          <Route path="/gantt/delivery" element={<GanttDelivery />} />
           <Route path="/training" element={<Training />} />
         </Routes>
     </>

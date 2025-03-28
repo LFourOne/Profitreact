@@ -17,7 +17,8 @@ class Staff:
         self.fecha_nacimiento = data.get('fecha_nacimiento')
         self.fecha_contratacion = data.get('fecha_contratacion')
         self.estado = data.get('estado')
-        self.jefe_especialidad = data.get('jefe_especialidad')
+        self.color = data.get('color')
+        self.id_especialidad = data.get('id_especialidad')
         self.reporta_hh = data.get('reporta_hh') 
 
     @classmethod
@@ -49,5 +50,39 @@ class Staff:
         query = """
                 SELECT jefe_especialidad FROM especialidades
                 WHERE id_especialidad = %(id_especialidad)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    # Los siguientes classmethod se usan para la Gantt
+
+    @classmethod
+    def get_staff(cls):
+        query = """
+                SELECT rut_personal, nombres, apellido_p, apellido_m, id_especialidad, color FROM maestro_personal
+                WHERE estado = 1
+                """
+        return connectToMySQL(DATA_BASE).query_db(query)
+    
+    @classmethod
+    def get_specialty_staff_by_rut(cls, data):
+        query = """
+                SELECT id_especialidad FROM maestro_personal
+                WHERE rut_personal = %(rut_personal)s
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def select_color_by_rut(cls, data):
+        query = """
+                SELECT color FROM maestro_personal
+                WHERE rut_personal = %(rut_personal)s
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def update_color_by_rut(cls, data):
+        query = """
+                UPDATE maestro_personal SET color = %(color)s
+                WHERE rut_personal = %(rut_personal)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)

@@ -21,6 +21,7 @@ class User:
         self.id_especialidad = data.get('id_especialidad')
         self.id_empresa = data.get('id_empresa')
         self.reporta_hh = data.get('reporta_hh')
+        self.color = data.get('color')
         self.creado_en = data.get('creado_en')
         self.modificado_en= data.get('modificado_en')
 
@@ -60,7 +61,6 @@ class User:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @staticmethod
-
     def validate_login(data):
 
         is_valid = True
