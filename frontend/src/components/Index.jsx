@@ -51,7 +51,7 @@ export function Index() {
                     <div id={styles['welcome-container']}>
                         <div id={styles['top-welcome-subcontainer']}>
                             <span>SOLUTIVA</span>
-                            <h1>¡Bienvenido {sessionData.nombres}!</h1>
+                            <h1 id={styles['welcome-h1']}>¡Bienvenido {sessionData.nombres}!</h1>
                             <a href="/index" id={styles['btn']}>Mi Perfil</a>
                         </div>
                         <img src={icon} alt="icon" id={styles['icon']} draggable="false" />
