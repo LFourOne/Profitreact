@@ -1,8 +1,6 @@
 from app_flask import app
 from flask import Flask, request, jsonify
 from flask import session
-from flask_bcrypt import Bcrypt
-from app_flask.models.user_models import User
 from app_flask.models.project_models import Project
 from app_flask.models.staff_models import Staff
 from app_flask.models.specialty_models import Specialty
