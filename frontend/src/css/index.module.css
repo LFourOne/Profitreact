@@ -199,7 +199,7 @@
     #main{
         display: flex;
         justify-content: center;
-        padding-top: 150px;
+        padding-top: 120px;
     }
     .side-section{
         display: flex;

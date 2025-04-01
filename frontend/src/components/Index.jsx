@@ -64,11 +64,14 @@ export function Index() {
 
                         </div>
                         <div className={styles['info-container']}>
-
+                        
                         </div>
                     </div>
                     <div id={styles['last-commitments-container']}>
                         <h2>Lorem ipsum dolor sit amet</h2>
+                        <div className={styles['commitments-container']}>
+
+                        </div>
                         <div className={styles['commitments-container']}>
 
                         </div>
