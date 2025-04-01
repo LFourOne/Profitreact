@@ -1,92 +1,102 @@
-.main{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  padding: 0;
-  margin: 0;
+@media (min-width: 700px) and (max-width: 1024px){
+
 }
-.background{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  border-right: 3px solid rgb(68, 68, 68);
-  --s: 37px; /* control the size */
-  --c: #0000, #282828 0.5deg 119.5deg, #0000 120deg;
-  --g1: conic-gradient(from 60deg at 56.25% calc(425% / 6), var(--c));
-  --g2: conic-gradient(from 180deg at 43.75% calc(425% / 6), var(--c));
-  --g3: conic-gradient(from -60deg at 50% calc(175% / 12), var(--c));
-  background: var(--g1), var(--g1) var(--s) calc(1.73 * var(--s)), var(--g2),
-      var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
-      var(--g3) 0 calc(1.73 * var(--s)) #1e1e1e;
-  background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
+
+@media (min-width: 1025px) and (max-width: 1440px){
+
 }
-.form-section{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: white;
-  width: 700px;
-  height: 500px;
-  border-radius: 16px;
-}
-#logo{
-  height: 90px;
-  margin-bottom: 40px;
-}
-.form{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 50vw;
-  gap: 30px;
-}
-.field-container{
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  width: 500px;
-}
-.label{
-  font-size: 17px;
-}
-.input{
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid gray;
-  box-sizing: border-box;
-  padding: 10px;
-}
-.btn-container{
-  display: flex;
-  justify-content: center;
-}
-#btn{
-  height: 40px;
-  width: 150px;
-  background-color: rgb(115, 167, 39);
-  border-radius: 5px;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-}
-#btn:hover{
-  background-color: rgb(101, 146, 33);
-}
-.error-container{
-  display: flex;
-  align-items: center;
-  width: 500px;
-  height: 40px;
-  border: 1px solid red;
-  border-radius: 8px;
-  color: red;
-  font-size: 14px;
-  box-sizing: border-box;
-  padding-left: 8px;
+
+@media (min-width: 1441px){
+    .main{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      padding: 0;
+      margin: 0;
+    }
+    .background{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      border-right: 3px solid rgb(68, 68, 68);
+      --s: 37px; /* control the size */
+      --c: #0000, #282828 0.5deg 119.5deg, #0000 120deg;
+      --g1: conic-gradient(from 60deg at 56.25% calc(425% / 6), var(--c));
+      --g2: conic-gradient(from 180deg at 43.75% calc(425% / 6), var(--c));
+      --g3: conic-gradient(from -60deg at 50% calc(175% / 12), var(--c));
+      background: var(--g1), var(--g1) var(--s) calc(1.73 * var(--s)), var(--g2),
+          var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
+          var(--g3) 0 calc(1.73 * var(--s)) #1e1e1e;
+      background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
+    }
+    .form-section{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: white;
+      width: 700px;
+      height: 500px;
+      border-radius: 16px;
+    }
+    #logo{
+      height: 90px;
+      margin-bottom: 40px;
+    }
+    .form{
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 50vw;
+      gap: 30px;
+    }
+    .field-container{
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      width: 500px;
+    }
+    .label{
+      font-size: 17px;
+    }
+    .input{
+      height: 40px;
+      border-radius: 8px;
+      border: 1px solid gray;
+      box-sizing: border-box;
+      padding: 10px;
+    }
+    .btn-container{
+      display: flex;
+      justify-content: center;
+    }
+    #btn{
+      height: 40px;
+      width: 150px;
+      background-color: rgb(115, 167, 39);
+      border-radius: 5px;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    #btn:hover{
+      background-color: rgb(101, 146, 33);
+    }
+    .error-container{
+      display: flex;
+      align-items: center;
+      width: 500px;
+      height: 40px;
+      border: 1px solid red;
+      border-radius: 8px;
+      color: red;
+      font-size: 14px;
+      box-sizing: border-box;
+      padding-left: 8px;
+    }
 }

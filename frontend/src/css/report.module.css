@@ -1,51 +1,179 @@
-#main{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+@media (min-width: 700px) and (max-width: 1024px){
+    #main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 120px;
+    }
+    #section{
+        max-height: 667px;
+        margin-top: 35px;
+        border: 1px solid lightgray;
+        overflow-y: scroll;
+    }
+    #project-filter{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #table{
+        border-collapse: collapse;
+        width: 700px;
+        border: 1px solid lightgray;
+        text-align: left;
+    }
+    #thead{
+        height: 66px;
+    }
+    .th{
+        background-color: rgb(131, 170, 73);
+        color: white;
+        font-size: 15px;
+        text-align: center;
+        font-weight: 500;
+        width: 164px;
+    }
+    #th-meeting{
+        width: 259px;
+    }
+    .td{
+        padding: 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: center;
+    }
+    #tipo_reunion_td{
+        text-align: left;
+    }
+    #meeting-tr{
+        cursor: pointer;
+    }
+    #meeting-tr:hover{
+        background-color: rgba(136, 197, 45, 0.233)
+    }
+    #delete-button{
+        cursor: pointer;
+    }
+    #delete-button:hover{
+        background-color: rgba(255, 0, 0, 0.158);
+    }
 }
-#section{
-    max-height: 667px;
-    margin-top: 35px;
-    border: 1px solid lightgray;
-    overflow-y: scroll;
+
+@media (min-width: 1025px) and (max-width: 1440px){
+    #main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 120px;
+    }
+    #section{
+        max-height: 667px;
+        margin-top: 35px;
+        border: 1px solid lightgray;
+        overflow-y: scroll;
+    }
+    #project-filter{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #table{
+        border-collapse: collapse;
+        width: 1000px;
+        border: 1px solid lightgray;
+        text-align: left;
+    }
+    #thead{
+        height: 66px;
+    }
+    .th{
+        background-color: rgb(131, 170, 73);
+        color: white;
+        font-size: 15px;
+        text-align: center;
+        font-weight: 500;
+        width: 164px;
+    }
+    #th-meeting{
+        width: 259px;
+    }
+    .td{
+        padding: 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: center;
+    }
+    #tipo_reunion_td{
+        text-align: left;
+    }
+    #meeting-tr{
+        cursor: pointer;
+    }
+    #meeting-tr:hover{
+        background-color: rgba(136, 197, 45, 0.233)
+    }
+    #delete-button{
+        cursor: pointer;
+    }
+    #delete-button:hover{
+        background-color: rgba(255, 0, 0, 0.158);
+    }
 }
-#table{
-    border-collapse: collapse;
-    width: 939px;
-    border: 1px solid lightgray;
-    text-align: left;
-}
-#thead{
-    height: 66px;
-}
-.th{
-    background-color: rgb(131, 170, 73);
-    color: white;
-    font-size: 17px;
-    text-align: center;
-    font-weight: 500;
-    width: 164px;
-}
-#th-meeting{
-    width: 259px;
-}
-.td{
-    padding: 20px;
-    border-bottom: 1px solid lightgray;
-    text-align: center;
-}
-#tipo_reunion_td{
-    text-align: left;
-}
-#meeting-tr{
-    cursor: pointer;
-}
-#meeting-tr:hover{
-    background-color: rgba(136, 197, 45, 0.233)
-}
-#delete-button{
-    cursor: pointer;
-}
-#delete-button:hover{
-    background-color: rgba(255, 0, 0, 0.158);
+
+@media (min-width: 1441px){
+    #main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 120px;
+    }
+    #section{
+        max-height: 667px;
+        margin-top: 35px;
+        border: 1px solid lightgray;
+        overflow-y: scroll;
+    }
+    #project-filter{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    #table{
+        border-collapse: collapse;
+        width: 939px;
+        border: 1px solid lightgray;
+        text-align: left;
+    }
+    #thead{
+        height: 66px;
+    }
+    .th{
+        background-color: rgb(131, 170, 73);
+        color: white;
+        font-size: 17px;
+        text-align: center;
+        font-weight: 500;
+        width: 164px;
+    }
+    #th-meeting{
+        width: 259px;
+    }
+    .td{
+        padding: 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: center;
+    }
+    #tipo_reunion_td{
+        text-align: left;
+    }
+    #meeting-tr{
+        cursor: pointer;
+    }
+    #meeting-tr:hover{
+        background-color: rgba(136, 197, 45, 0.233)
+    }
+    #delete-button{
+        cursor: pointer;
+    }
+    #delete-button:hover{
+        background-color: rgba(255, 0, 0, 0.158);
+    }
 }
