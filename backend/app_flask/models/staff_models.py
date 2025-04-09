@@ -1,6 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from flask import flash
-from app_flask import DATA_BASE
+from flask import flash, session
 
 class Staff:
     def __init__(self, data):
@@ -23,6 +22,7 @@ class Staff:
 
     @classmethod
     def obtain_name_and_last_name(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT rut_personal, nombres, apellido_p, apellido_m, iniciales_nombre FROM maestro_personal
                 WHERE estado = 1;
@@ -31,6 +31,7 @@ class Staff:
     
     @classmethod
     def obtain_staff_rut(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT rut_personal FROM maestro_personal
                 WHERE iniciales_nombre = %(iniciales_nombre)s;
@@ -39,6 +40,7 @@ class Staff:
 
     @classmethod
     def obtain_all_with_rut(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT nombres, apellido_p, apellido_m, id_especialidad, iniciales_nombre FROM maestro_personal
                 WHERE rut_personal = %(rut_personal)s;
@@ -47,6 +49,7 @@ class Staff:
     
     @classmethod
     def obtain_boss(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT jefe_especialidad FROM especialidades
                 WHERE id_especialidad = %(id_especialidad)s;
@@ -57,6 +60,7 @@ class Staff:
 
     @classmethod
     def get_staff(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT rut_personal, nombres, apellido_p, apellido_m, id_especialidad, color FROM maestro_personal
                 WHERE estado = 1
@@ -65,6 +69,7 @@ class Staff:
     
     @classmethod
     def get_specialty_staff_by_rut(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT id_especialidad FROM maestro_personal
                 WHERE rut_personal = %(rut_personal)s
@@ -73,6 +78,7 @@ class Staff:
     
     @classmethod
     def select_color_by_rut(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT color FROM maestro_personal
                 WHERE rut_personal = %(rut_personal)s
@@ -81,6 +87,7 @@ class Staff:
     
     @classmethod
     def update_color_by_rut(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE maestro_personal SET color = %(color)s
                 WHERE rut_personal = %(rut_personal)s

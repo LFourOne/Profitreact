@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import styles from '../css/report.module.css';
+import styles from './report.module.css';
 
 export function Report() {
 
@@ -27,8 +26,7 @@ export function Report() {
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.error('No autorizado. Redirigiendo al login.');
-                navigate('/'); // Redirige al login
+                navigate('/');
             } else {
                 console.error('Error inesperado:', error); // Maneja otros errores
             }

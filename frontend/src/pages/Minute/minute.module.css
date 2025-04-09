@@ -145,10 +145,10 @@
         align-items: center;
         position: fixed;
         top: 55%;
-        left: 50.5%;
+        left: 50%;
         transform: translate(-50%, -50%);
         height: 450px;
-        width: 1500px;
+        width: 750px;
         background-color: white;
         border: 1px solid black;
         border-radius: 12px;
@@ -170,13 +170,16 @@
         font-weight: 500;
     }
     .modal-thead-th{
-        width: 150px;
+        width: 100px;
     }
     .modal-thead-th-large{
-        width: 300px;
+        width: 200px;
     }
     #modal-thead-th-commitment-text{
-        width: 600px;
+        width: 200px;
+    }
+    #commitment-date{
+        width: 80px;
     }
     #modal-tbody{
         height: 50px;
@@ -184,6 +187,13 @@
     .modal-td{
         border: 1px solid black;
         text-align: center;
+    }
+    #name_and_last_name_form{
+        width: 190px;
+    }
+    #commitment-text{
+        width: 190px;
+        height: 59px;
     }
     #modal-buttons{
         display: flex;
@@ -277,7 +287,291 @@
 }
 
 @media (min-width: 1025px) and (max-width: 1440px){
-
+    #main-section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        width: 100vw;
+        overflow-y: auto;
+    }
+    #filters-section{
+        display: flex;
+        justify-content: flex-start;
+        gap: 20px;
+        margin-top: 150px;
+        width: 1025px;
+    }
+    #state-filter{
+        display: flex;
+        gap: 10px;
+    }
+    #project-filter{
+        display: flex;
+        gap: 10px;
+    }
+    .commitment-section{
+        display: flex;
+        justify-content: center;
+    }
+    .top-table{
+        border-collapse: collapse;
+        border: 1px solid black;
+        margin-top: 12px;
+        width: 1025px;
+    }
+    #tr-table-head{
+        height: 50px;
+    }
+    .th-large-head{
+        width: 100px;
+    }
+    #th-commitment-data{
+        width: 100px;
+    }
+    .th-head{
+        width: 100px;
+    }
+    .th-head, .td, .th-large-head, #th-commitment-data {
+        border: 1px solid black;
+        text-align: center;
+        font-weight: 500;
+    }
+    #commitment-list{
+        border-collapse: collapse;
+        border: 1px solid black;
+        margin-top: 20px;
+    }
+    #thead-commitment{
+        background-color: rgb(131, 170, 73);
+        font-weight: 500;
+        color: white;
+    }
+    #td-commitment-text{
+        width: 500px;
+    }
+    #td-texto-compromiso{
+        width: 100px;
+        max-width: 100px;
+        font-size: 14px;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+    #commitment-text{
+        width: 100px;
+        height: 59px;
+        font-size: 14px;
+        outline: none;
+        border: none;
+    }
+    #commitment-list-section{
+        display: flex;
+        justify-content: center;
+        width: 1025px;
+        margin-top: 20px;
+        height: 422px;
+        max-height: 422px;
+        overflow-y: hidden;
+    }
+    #commitment-list-table{
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+    #commitment-list-wrapper {
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+    }
+    #thead-commitment-list{
+        height: 50px;
+        background-color: rgb(131, 170, 73);
+        color: white;
+    }
+    #th-speciality-boss-list, #th-speciality-list, #th-commitment-text-list, .th-short-space-list{
+        border: 1px solid black;
+        text-align: center;
+        font-weight: 500;
+    }
+    #th-speciality-boss-list{
+        width: 90px;
+    }
+    #th-speciality-list{
+        width: 300px;
+    }
+    #th-commitment-text-list{
+        width: 600px;
+    }
+    .th-short-space-list{
+        width: 100px;
+    }
+    #td-priority{
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+    }
+    .tr-list{
+        height: 50px;
+    }
+    #current{
+        color: rgb(96, 160, 0);
+    }
+    #completed{
+        font-size: 14px;
+        color: rgb(0, 129, 6);
+    }
+    #deleted{
+        color: rgb(138, 0, 0);
+    }
+    .pointer{
+        cursor: pointer;
+    }
+    .modal{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: fixed;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        height: 450px;
+        width: 750px;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 12px;
+        z-index: 1000;
+    }
+    #modal-table{
+        border-collapse: collapse;
+        margin-top: 75px;
+        border: 1px solid black;
+    }
+    #modal-thead{
+        background-color: rgb(131, 170, 73);
+        color: white;
+        height: 50px;
+    }
+    .modal-thead-th, .modal-thead-th-large, #modal-thead-th-commitment-text{
+        border: 1px solid black;
+        text-align: center;
+        font-weight: 500;
+    }
+    .modal-thead-th{
+        width: 100px;
+    }
+    .modal-thead-th-large{
+        width: 200px;
+    }
+    #modal-thead-th-commitment-text{
+        width: 200px;
+    }
+    #commitment-date{
+        width: 80px;
+    }
+    #modal-tbody{
+        height: 50px;
+    }
+    .modal-td{
+        border: 1px solid black;
+        text-align: center;
+    }
+    #name_and_last_name_form{
+        width: 190px;
+    }
+    #commitment-text{
+        width: 190px;
+        height: 59px;
+    }
+    #modal-buttons{
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+        gap: 50px;
+    }
+    .primary-btn{
+        height: 40px;
+        width: 150px;
+        background-color: rgb(115, 167, 39);
+        border-radius: 5px;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .primary-btn:hover{
+        background-color: rgb(101, 146, 33);
+    }
+    #secondary-btn{
+        height: 40px;
+        width: 100px;
+        border-radius: 5px;
+        background-color: white;
+        border: 1px solid gray;
+        color: black;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    #secondary-btn:hover{
+        background-color: rgb(240, 240, 240);
+    }
+    #close-meeting-section{
+        margin-top: 50px;
+    }
+    
+    /* Topics */
+    
+    #topics-agreements-container{
+        display: flex;
+        justify-content: space-between;
+        width: 1025px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+        border: 1px solid lightgray;
+    }
+    
+    .topic-agreement-table-section{
+        margin-top: 30px;
+        height: 250px;
+        overflow-y: scroll;
+    }
+    .add-agreement-container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .head-th-agreement-topic-text{
+        background-color: rgb(131, 170, 73);
+        font-weight: 500;
+        color: white;
+        width: 800px;
+        border: 1px solid black;
+    }
+    .topic-agreement-form{
+        display: flex;
+        align-items: center;
+        gap: 25px;
+        margin-top: 25px;
+    }
+    .topic-agreement-input{
+        display: flex;
+        gap: 12px;
+    }
+    .head-th-created-at{
+        background-color: rgb(131, 170, 73);
+        font-weight: 500;
+        color: white;
+        width: 200px;
+    }
+    .agreement-topic-text{
+        word-break: break-all;
+        word-wrap: break-word;
+        text-align: center;
+        border: 1px solid black;
+    }
+    .topic-agreement-table{
+        border-collapse: collapse;
+    }
 }
 
 @media (min-width: 1441px){

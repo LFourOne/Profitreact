@@ -1,5 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from app_flask import DATA_BASE
+from flask import session
 
 class Ot:
     def __init__(self, data):
@@ -8,6 +8,7 @@ class Ot:
 
     @classmethod
     def select_ot(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT * FROM numero_ot
                 """
@@ -21,6 +22,7 @@ class Ot_Proyecto:
     
     @classmethod
     def insert_ot_proyecto(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO gantt_ot_proyecto (id_gantt_entrega, id_numero_ot)
                 VALUES (%(id_gantt_entrega)s, %(id_numero_ot)s);
@@ -29,6 +31,7 @@ class Ot_Proyecto:
     
     @classmethod
     def select_ot_proyecto(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT gantt_ot_proyecto.*, numero_ot.numero_ot FROM gantt_ot_proyecto
                 JOIN numero_ot ON gantt_ot_proyecto.id_numero_ot = numero_ot.id_numero_ot
@@ -50,6 +53,7 @@ class Ot_Proyecto:
     
     @classmethod
     def remove_ot_proyecto(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 DELETE FROM gantt_ot_proyecto
                 WHERE id_numero_ot = %(id_numero_ot)s AND id_gantt_entrega = %(id_gantt_entrega)s
@@ -58,6 +62,7 @@ class Ot_Proyecto:
     
     @classmethod
     def remove_all_ot_proyecto(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 DELETE FROM gantt_ot_proyecto
                 WHERE id_gantt_entrega = %(id_gantt_entrega)s

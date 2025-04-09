@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 import Modal from 'react-modal';
-import styles from '../css/minute.module.css';
+import styles from './minute.module.css';
 
 export function Minute() {
 
@@ -55,8 +55,7 @@ export function Minute() {
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.error('No autorizado. Redirigiendo al login.');
-                navigate('/'); // Redirige al login
+                navigate('/');
             } else {
                 console.error('Error inesperado:', error); // Maneja otros errores
             }

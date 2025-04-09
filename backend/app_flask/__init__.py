@@ -11,5 +11,4 @@ app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
 cors = CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
 
-DATA_BASE = "profit2"
 EMAIL_REGEX = re.compile(r'^[a-zA-Z0-9.+-]+@[a-zA-Z0-9._-]+.[a-zA-Z]+$')

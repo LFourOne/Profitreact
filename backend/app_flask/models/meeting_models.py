@@ -1,5 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from app_flask import DATA_BASE
+from flask import session
 
 class Meeting:
     def __init__(self, data):
@@ -14,6 +14,7 @@ class Meeting:
     
     @classmethod
     def create_meeting(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO reunion(id_proyecto, id_tipo_reunion, fecha, hora_inicio, estado)
                 VALUES(%(id_proyecto)s, %(id_tipo_reunion)s, %(fecha)s, %(hora_inicio)s, 0)
@@ -22,6 +23,7 @@ class Meeting:
     
     @classmethod
     def delete_meeting(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE reunion SET estado = 1
                 WHERE id_reunion = %(id_reunion)s
@@ -30,6 +32,7 @@ class Meeting:
     
     @classmethod
     def select_meeting_type(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT * FROM tipo_reunion
                 """
@@ -37,6 +40,7 @@ class Meeting:
 
     @classmethod
     def select_all(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT id_proyecto, id_tipo_reunion, hora_termino FROM reunion
                 WHERE id_reunion = %(id_reunion)s
@@ -45,6 +49,7 @@ class Meeting:
     
     @classmethod
     def select_all_meetings(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT * FROM reunion
                 JOIN tipo_reunion ON reunion.id_tipo_reunion = tipo_reunion.id_tipo_reunion
@@ -55,6 +60,7 @@ class Meeting:
     
     @classmethod
     def close_meeting(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE reunion SET hora_termino = %(hora_termino)s
                 WHERE id_reunion = %(id_reunion)s
@@ -63,6 +69,7 @@ class Meeting:
     
     @classmethod
     def select_id_proyecto(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT id_proyecto FROM reunion
                 WHERE id_reunion = %(id_reunion)s

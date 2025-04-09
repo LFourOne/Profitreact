@@ -89,6 +89,13 @@ def gantt():
 
     consolidated_planification = list(grouped_planification.values())
 
+    company = session['data_base']
+    
+    if company == 'profit2':
+        company = 1
+    elif company == 'profit2_sistemas':
+        company = 2
+
     response_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
@@ -96,8 +103,8 @@ def gantt():
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
-        'id_empresa': session['id_empresa'], 
-        'color' : session['color']
+        'color' : session['color'],
+        'company': company
     }
 
     # Todo el código para abajo corresponde al código para renderizar posteriormente la entrega
@@ -131,7 +138,6 @@ def gantt():
                 'id_especialidad': delivery['id_especialidad'],
                 'especialidad': delivery['especialidad'],
                 'color_especialidad': delivery['color_especialidad'],
-                'id_empresa': delivery['id_empresa'],
                 'comentarios': delivery['comentarios'],
                 'id_ot': delivery['id_ot'],
                 'fecha': delivery['fecha'].strftime('%Y-%m-%d'),
@@ -389,7 +395,6 @@ def gantt_delivery():
                 'id_especialidad': delivery['id_especialidad'],
                 'especialidad': delivery['especialidad'],
                 'color_especialidad': delivery['color_especialidad'],
-                'id_empresa': delivery['id_empresa'],
                 'comentarios': delivery['comentarios'],
                 'id_ot': delivery['id_ot'],
                 'fecha': delivery['fecha'].strftime('%Y-%m-%d'),
@@ -400,6 +405,13 @@ def gantt_delivery():
     
     consolidated_delivery = list(grouped_delivery.values())
 
+    company = session['data_base']
+    
+    if company == 'profit2':
+        company = 1
+    elif company == 'profit2_sistemas':
+        company = 2
+
     response_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
@@ -407,7 +419,7 @@ def gantt_delivery():
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
-        'id_empresa': session['id_empresa'] 
+        'company': company
     }
 
     return jsonify(
@@ -447,7 +459,6 @@ def insert_delivery():
     delivery_data = {
         'id_proyecto': data['project'],
         'id_informe': data['informe'],
-        'id_empresa': data['empresa'],
         'id_version': data.get('version'),
         'adenda': data['adenda'],
         'id_especialidad': data['especialidad'],

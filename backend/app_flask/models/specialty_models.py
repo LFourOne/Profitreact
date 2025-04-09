@@ -1,5 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from app_flask import DATA_BASE
+from flask import session
 
 class Specialty:
     def __init__(self, data):
@@ -10,6 +10,7 @@ class Specialty:
 
     @classmethod
     def get_specialities(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT id_especialidad, especialidad, color_especialidad, jefe_especialidad FROM especialidades
                 """
@@ -17,6 +18,7 @@ class Specialty:
     
     @classmethod
     def get_specialty_bosses(cls):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT jefe_especialidad FROM especialidades
                 """
@@ -24,6 +26,7 @@ class Specialty:
     
     @classmethod
     def select_specialty_color_by_id(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT color_especialidad FROM especialidades
                 WHERE id_especialidad = %(id_especialidad)s
@@ -32,6 +35,7 @@ class Specialty:
 
     @classmethod
     def update_specialty_color_by_id(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE especialidades SET color_especialidad = %(color_especialidad)s
                 WHERE id_especialidad = %(id_especialidad)s

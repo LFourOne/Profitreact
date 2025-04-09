@@ -1,5 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from app_flask import DATA_BASE
+from flask import session
 
 class Agreements:
     def __init__(self, data):
@@ -10,6 +10,7 @@ class Agreements:
 
     @classmethod
     def create_agreements(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO acuerdos(id_reunion, texto_acuerdo)
                 VALUES(%(id_reunion)s, %(texto_acuerdo)s)
@@ -18,6 +19,7 @@ class Agreements:
     
     @classmethod
     def select_agreements(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT acuerdos.*, reunion.id_proyecto FROM acuerdos
                 JOIN reunion ON acuerdos.id_reunion = reunion.id_reunion
@@ -33,6 +35,7 @@ class Topics:
 
     @classmethod
     def create_topics(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO temas_tratados(id_reunion, texto_tema_tratado)
                 VALUES(%(id_reunion)s, %(texto_tema_tratado)s)
@@ -41,6 +44,7 @@ class Topics:
     
     @classmethod
     def select_topics(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT temas_tratados.*, reunion.id_proyecto FROM temas_tratados
                 JOIN reunion ON temas_tratados.id_reunion = reunion.id_reunion

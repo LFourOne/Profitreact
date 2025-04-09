@@ -1,6 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from flask import flash
-from app_flask import DATA_BASE
+from flask import session
 
 class Attendant:
     def __init__(self, data):
@@ -10,6 +9,7 @@ class Attendant:
 
     @classmethod
     def create_attendant(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO asistentes(id_reunion, rut_personal)
                 VALUES(%(id_reunion)s, %(rut_personal)s);

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import styles from '../css/index.module.css';
-import icon from '../assets/icon1.png'
+import styles from './index.module.css';
+import icon from '../../assets/icon1.png'
 import { useState, useEffect } from 'react';
 
 export function Index() {
@@ -21,10 +21,9 @@ export function Index() {
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.error('No autorizado. Redirigiendo al login.');
-                navigate('/'); // Redirige al login
+                navigate('/');
             } else {
-                console.error('Error inesperado:', error); // Maneja otros errores
+                console.error('Error inesperado:', error);
             }
         } finally {
             setLoading(false);

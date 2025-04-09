@@ -4,7 +4,7 @@ import { v4 as uuidvd4 } from 'uuid';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router';
-import ganttStyles from '../css/gantt.module.css';
+import ganttStyles from './gantt.module.css';
 
 export function Gantt() {
     
@@ -37,7 +37,6 @@ export function Gantt() {
     const [version, setVersion] = useState([]);
     const [ot, setOt] = useState([]);
     const [deliveryType, setDeliveryType] = useState([]);
-    const [selectedOts, setSelectedOts] = useState([]);
 
     const fetchApi = async () => {
         try {
@@ -54,15 +53,14 @@ export function Gantt() {
             setOt(response.data.ot);
             setDeliveryType(response.data.delivery_type);
             setSessionData(response.data.session);
-
+            
             console.log(response.data);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.error('No autorizado. Redirigiendo al login.');
-                navigate('/'); // Redirige al login
+                navigate('/');
             } else {
-                console.error('Error inesperado:', error); // Maneja otros errores
+                console.error('Error inesperado:', error);
             }
         }
     };
@@ -201,7 +199,7 @@ export function Gantt() {
         setStaffInputs([...staffInputs, { id: uuidvd4(), rut_personal: "" }]); // Añade un nuevo índice
     };
 
-    const removeStaffInputAdd = (id) => {
+    const removeStaffInputAdd = (id) => { 
         setStaffInputs(staffInputs.filter((input) => input.id !== id))
 
         setValueAdd("staff", (currentValues) => {
@@ -279,9 +277,23 @@ export function Gantt() {
                 <div className={ganttStyles['gantt-header-subcontainer']}>
                     <select name="filter-specialty" id={ganttStyles['filter-specialty']} value={selectedFilterSpecialty} onChange={handleSpecialtyChange}>
                         <option value="" disabled>Seleccione una especialidad</option>
-                        {specialty.map((specialty) => (
-                            <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
-                        ))}
+                        {
+                            sessionData.company === 1 ? (
+                                specialty
+                                .filter((specialty) => (specialty.id_especialidad !== 10 && specialty.id_especialidad !== 8))
+                                .map((specialty) => (
+                                    <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
+                                ))
+                            )
+                            :
+                            sessionData.company === 2 && (
+                                specialty
+                                .filter((specialty) => specialty.id_especialidad !== 2)
+                                .map((specialty) => (
+                                    <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
+                                ))
+                            )
+                        }
                     </select>
                 </div>
                 <div id={ganttStyles['date-container']} className={ganttStyles['gantt-header-subcontainer']}>
@@ -676,7 +688,9 @@ export function Gantt() {
                                     <span className={ganttStyles['span-block']}>Área:</span>
                                     <select name="specialty" id={ganttStyles['specialty']} {...registerAdd("specialty", { required: true })} value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
                                         <option disabled>Seleccione una especialidad / área</option>
-                                        {specialty.map((specialty) => (
+                                        {specialty
+                                        .filter((specialty) => specialty.id_especialidad !== 10)
+                                        .map((specialty) => (
                                             <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
                                         ))}
                                     </select>
@@ -758,7 +772,9 @@ export function Gantt() {
                                                     <div key={input.id} className={ganttStyles['staff-input']}>
                                                         <select name={`staff[${input.id}]`} id={`staff-${input.id}`} value={watchEdit(`staff.${input.id}`) || input.rut_personal || ''} onChange={(e) => handleSelectChange(input.id, e.target.value)} {...registerEdit(`staff.${input.id}`, { required: true })} className={ganttStyles['staff-select']}>
                                                             <option value="" disabled>Seleccione un/a asignad@</option>
-                                                            {staff.filter((s) => s.id_especialidad === selectedPlan.id_especialidad).map((filteredStaff) => (
+                                                            {staff
+                                                            .filter((s) => s.id_especialidad === selectedPlan.id_especialidad)
+                                                            .map((filteredStaff) => (
                                                                 <option key={filteredStaff.rut_personal} value={filteredStaff.rut_personal}>
                                                                     {filteredStaff.nombres} {filteredStaff.apellido_p} {filteredStaff.apellido_m}
                                                                 </option>

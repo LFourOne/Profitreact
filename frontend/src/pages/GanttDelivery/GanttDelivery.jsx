@@ -4,7 +4,7 @@ import { MultiSelect } from "react-multi-select-component";
 import axios from 'axios';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router';
-import ganttStyles from '../css/ganttdelivery.module.css';
+import ganttStyles from './ganttdelivery.module.css';
 
 export function GanttDelivery() {
     
@@ -54,10 +54,9 @@ export function GanttDelivery() {
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.error('No autorizado. Redirigiendo al login.');
-                navigate('/'); // Redirige al login
+                navigate('/');
             } else {
-                console.error('Error inesperado:', error); // Maneja otros errores
+                console.error('Error inesperado:', error);
             }
         }
     };
@@ -846,14 +845,29 @@ export function GanttDelivery() {
                     <form onSubmit={handleSubmitCustomize(customizeSubmit)}>
                         <div id={ganttStyles['modal-customize-container']}>
                             {
-                                specialty.map((specialty, index) => (
-                                    <div key={specialty.id_especialidad} className={ganttStyles['customize-item']}>
-                                        <label htmlFor={specialty.id_especialidad}>{specialty.especialidad}</label>
-                                        <input type="color" id={specialty.id_especialidad} name={specialty.especialidad} defaultValue={specialty.color_especialidad} {...registerCustomize(`specialty.${index}.color_especialidad`)} />
-                                        <input type="hidden" defaultValue={specialty.id_especialidad} {...registerCustomize(`specialty.${index}.id_especialidad`)} />
-                                    </div>
-                                ))
-                            }                     
+                                sessionData.company === 1 ? (
+                                    specialty
+                                    .filter((specialty) => specialty.id_especialidad !== 10)
+                                    .map((specialty, index) => (
+                                        <div key={specialty.id_especialidad} className={ganttStyles['customize-item']}>
+                                            <label htmlFor={specialty.id_especialidad}>{specialty.especialidad}</label>
+                                            <input type="color" id={specialty.id_especialidad} name={specialty.especialidad} defaultValue={specialty.color_especialidad} {...registerCustomize(`specialty.${index}.color_especialidad`)} />
+                                            <input type="hidden" defaultValue={specialty.id_especialidad} {...registerCustomize(`specialty.${index}.id_especialidad`)} />
+                                        </div>
+                                    ))
+                                )
+                                :
+                                sessionData.company === 2 && (
+                                    specialty
+                                    .filter((specialty) => specialty.id_especialidad !== 2)
+                                    .map((specialty, index) => (
+                                        <div key={specialty.id_especialidad} className={ganttStyles['customize-item']}>
+                                            <label htmlFor={specialty.id_especialidad}>{specialty.especialidad}</label>
+                                            <input type="color" id={specialty.id_especialidad} name={specialty.especialidad} defaultValue={specialty.color_especialidad} {...registerCustomize(`specialty.${index}.color_especialidad`)} />
+                                            <input type="hidden" defaultValue={specialty.id_especialidad} {...registerCustomize(`specialty.${index}.id_especialidad`)} />
+                                        </div>
+                                    )))
+                            }
                             {
                                 deliveryType.map((deliveryType, index) => (
                                     <div key={deliveryType.id_gantt_tipo_entrega} className={ganttStyles['customize-item']}>

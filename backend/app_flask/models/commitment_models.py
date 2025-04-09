@@ -1,5 +1,5 @@
 from app_flask.config.mysqlconnections import connectToMySQL
-from app_flask import DATA_BASE
+from flask import session
 
 class Commitment:
     def __init__(self, data):
@@ -15,6 +15,7 @@ class Commitment:
 
     @classmethod
     def create_commitment(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO compromiso(id_reunion, id_proyecto, texto_compromiso, fecha_comprometida, responsable, prioridad, id_estado_compromiso)
                 VALUES(%(id_reunion)s, %(id_proyecto)s, %(texto_compromiso)s, %(fecha_comprometida)s, %(responsable)s, %(prioridad)s, %(id_estado_compromiso)s);
@@ -23,6 +24,7 @@ class Commitment:
     
     @classmethod
     def select_all(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT * FROM compromiso WHERE id_reunion = %(id_reunion)s
                 ORDER BY prioridad DESC, fecha_comprometida ASC;
@@ -31,6 +33,7 @@ class Commitment:
     
     @classmethod
     def complete_commitment(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE compromiso
                 SET id_estado_compromiso = 2, fecha_cumplimiento = %(fecha_cumplimiento)s
@@ -40,6 +43,7 @@ class Commitment:
     
     @classmethod
     def delete_commitment(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE compromiso
                 SET id_estado_compromiso = 3
@@ -49,6 +53,7 @@ class Commitment:
     
     @classmethod
     def select_one_commitment(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT * FROM compromiso
                 WHERE id_compromiso = %(id_compromiso)s;
@@ -57,6 +62,7 @@ class Commitment:
     
     @classmethod
     def update_commitment(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE compromiso
                 SET texto_compromiso = %(texto_compromiso)s, fecha_comprometida = %(fecha_comprometida)s, responsable = %(responsable)s, prioridad = %(prioridad)s
@@ -66,6 +72,7 @@ class Commitment:
     
     @classmethod
     def update_commitment_by_meeting_type(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 UPDATE compromiso
                 SET texto_compromiso = %(texto_compromiso)s, id_proyecto = %(id_proyecto)s, fecha_comprometida = %(fecha_comprometida)s, responsable = %(responsable)s, prioridad = %(prioridad)s
@@ -75,6 +82,7 @@ class Commitment:
     
     @classmethod
     def select_all_and_previous(cls, data):
+        DATA_BASE = session.get('data_base')
         query = """
                 SELECT compromiso.*, reunion.id_tipo_reunion FROM compromiso 
                 JOIN reunion ON compromiso.id_reunion = reunion.id_reunion
