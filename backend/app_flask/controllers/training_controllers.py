@@ -1,7 +1,7 @@
 from app_flask import app
 from flask import Flask, request, jsonify, session
 from app_flask.models.staff_models import Staff
-from backend.app_flask.models.training_models.training_models import Training
+from app_flask.models.training_models.training_models import Training
 
 @app.route('/training')
 def training():
