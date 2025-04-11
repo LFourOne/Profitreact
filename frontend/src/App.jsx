@@ -1,5 +1,5 @@
-import { Routes, Route, useLocation, BrowserRouter } from 'react-router-dom';
-import { Navbar } from './components/NavBar/Navbar';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { NavBar } from './components/NavBar/NavBar';
 import { CompanySelect } from './pages/CompanySelect/CompanySelect';
 import { Index } from './pages/Index/Index';
 import { Login } from './pages/Login/Login';
@@ -10,15 +10,16 @@ import { Training } from './pages/Training/Training';
 import { Gantt } from './pages/Gantt/Gantt';
 import { GanttDelivery } from './pages/GanttDelivery/GanttDelivery';
 import { Register } from './pages/Register/Register';
+import { CreateTraining } from './pages/CreateTraining/CreateTraining';
 
 export function App() {
 
   const location = useLocation();
-  const showNavbar = location.pathname !== '/login' && location.pathname !=='/';
+  const showNavBar = location.pathname !== '/login' && location.pathname !=='/';
 
   return (
     <>
-        {showNavbar && <Navbar />}
+        {showNavBar && <NavBar />}
         <Routes>
           <Route path="/" element={<CompanySelect />} />
           <Route path="/login" element={<Login />} />
@@ -30,6 +31,7 @@ export function App() {
           <Route path="/gantt/delivery" element={<GanttDelivery />} />
           <Route path="/register" element={<Register />} />
           <Route path="/training" element={<Training />} />
+          <Route path="/training/create" element={<CreateTraining />} />
         </Routes>
     </>
   );

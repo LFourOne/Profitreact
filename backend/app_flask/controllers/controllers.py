@@ -237,7 +237,7 @@ def insert_meeting():
 
         attendant_data = {
             'id_reunion' : meeting_id,
-            'rut_personal' : attendant['value'],
+            'rut_asistente' : attendant['value'],
         }
 
         Attendant.create_attendant(attendant_data)

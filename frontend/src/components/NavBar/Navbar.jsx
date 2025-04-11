@@ -3,9 +3,9 @@ import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
 import logo from '../../assets/solutiva-logo-solo.png'
-import styles from './navbar.module.css';
+import styles from './NavBar.module.css';
 
-export function Navbar() {
+export function NavBar() {
 
   const [activeDropdown, setActiveDropdown] = useState(null);
 

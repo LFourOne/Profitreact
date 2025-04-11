@@ -14,7 +14,7 @@
         width: 700px;
         max-height: 560px;
         border-radius: 12px;
-        border: 1px solid black;
+        border: 1px solid lightgray;
         gap: 10px;
         background-color: white;
         overflow-y: auto;
@@ -91,7 +91,7 @@
         width: 700px;
         max-height: 650px;
         border-radius: 12px;
-        border: 1px solid black;
+        border: 1px solid lightgray;
         gap: 10px;
         background-color: white;
         overflow-y: auto;
@@ -168,7 +168,7 @@
         width: 1100px;
         max-height: 780px;
         border-radius: 12px;
-        border: 1px solid black;
+        border: 1px solid lightgray;
         gap: 10px;
         background-color: white;
         overflow-y: auto;

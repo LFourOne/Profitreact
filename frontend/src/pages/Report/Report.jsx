@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import styles from './report.module.css';
+import styles from './Report.module.css';
 
 export function Report() {
 

@@ -4,7 +4,7 @@ import { v4 as uuidvd4 } from 'uuid';
 import axios from 'axios';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router';
-import ganttStyles from './gantt.module.css';
+import styles from './Gantt.module.css';
 
 export function Gantt() {
     
@@ -272,10 +272,10 @@ export function Gantt() {
 
     return (
         <>
-        <main id={ganttStyles['gantt-body-main']}>
-            <section className={ganttStyles['gantt-header']}>
-                <div className={ganttStyles['gantt-header-subcontainer']}>
-                    <select name="filter-specialty" id={ganttStyles['filter-specialty']} value={selectedFilterSpecialty} onChange={handleSpecialtyChange}>
+        <main id={styles['gantt-body-main']}>
+            <section className={styles['gantt-header']}>
+                <div className={styles['gantt-header-subcontainer']}>
+                    <select name="filter-specialty" id={styles['filter-specialty']} value={selectedFilterSpecialty} onChange={handleSpecialtyChange}>
                         <option value="" disabled>Seleccione una especialidad</option>
                         {
                             sessionData.company === 1 ? (
@@ -296,22 +296,22 @@ export function Gantt() {
                         }
                     </select>
                 </div>
-                <div id={ganttStyles['date-container']} className={ganttStyles['gantt-header-subcontainer']}>
-                    <button id={ganttStyles['previous-date']} className={ganttStyles['date-btn']} onClick={handlePreviousMonth}>
+                <div id={styles['date-container']} className={styles['gantt-header-subcontainer']}>
+                    <button id={styles['previous-date']} className={styles['date-btn']} onClick={handlePreviousMonth}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#000000"} fill={"none"}>
                             <path d="M15 6C15 6 9.00001 10.4189 9 12C8.99999 13.5812 15 18 15 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
-                    <input type="month" value={selectedMonth} id={ganttStyles['input-month']} onChange={handleMonthChange}/>
-                    <button id={ganttStyles['next-date']} className={ganttStyles['date-btn']} onClick={handleNextMonth}>
+                    <input type="month" value={selectedMonth} id={styles['input-month']} onChange={handleMonthChange}/>
+                    <button id={styles['next-date']} className={styles['date-btn']} onClick={handleNextMonth}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#000000"} fill={"none"}>
                             <path d="M9.00005 6C9.00005 6 15 10.4189 15 12C15 13.5812 9 18 9 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
                 </div>
-                <div className={ganttStyles['gantt-header-subcontainer']} id={ganttStyles['gantt-header-customize-container']}>
+                <div className={styles['gantt-header-subcontainer']} id={styles['gantt-header-customize-container']}>
                     {(specialty.some((specialtyItem) => specialtyItem.jefe_especialidad === sessionData.rut_personal) || sessionData.rut_personal == 21674304) && (
-                        <button id={ganttStyles['customize-btn']} onClick={openCustomizeModal}>
+                        <button id={styles['customize-btn']} onClick={openCustomizeModal}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={32} height={32} fill={"none"}>
                                 <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C12.8417 22 14 22.1163 14 21C14 20.391 13.6832 19.9212 13.3686 19.4544C12.9082 18.7715 12.4523 18.0953 13 17C13.6667 15.6667 14.7778 15.6667 16.4815 15.6667C17.3334 15.6667 18.3334 15.6667 19.5 15.5C21.601 15.1999 22 13.9084 22 12Z" stroke="currentColor" strokeWidth="1.5" />
                                 <path d="M7 15.002L7.00868 14.9996" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -322,13 +322,13 @@ export function Gantt() {
                     )}
                 </div>
             </section>
-            <section className={ganttStyles['table-container']}>
-                <table id={ganttStyles['gantt-table']}>
-                    <thead id={ganttStyles['gantt-thead']}>
-                        <tr id={ganttStyles['gantt-tr']}>
-                            <th id={ganttStyles['project-th']}>Proyecto</th>
+            <section className={styles['table-container']}>
+                <table id={styles['gantt-table']}>
+                    <thead id={styles['gantt-thead']}>
+                        <tr id={styles['gantt-tr']}>
+                            <th id={styles['project-th']}>Proyecto</th>
                             {dates.map((date, index) => (
-                                <th key={index} id={date.getDay() === 0 || date.getDay() === 6 ? ganttStyles['weekend'] : ganttStyles['date-th']} className={ganttStyles['gantt-th']}>
+                                <th key={index} id={date.getDay() === 0 || date.getDay() === 6 ? styles['weekend'] : styles['date-th']} className={styles['gantt-th']}>
                                     {date.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit' })}
                                 </th>
                             ))}
@@ -337,7 +337,7 @@ export function Gantt() {
                     <tbody>
                         {array.map((projects) => (
                             <tr key={projects.id_proyecto}>
-                                <td id={ganttStyles['gantt-project']}>{projects.id_proyecto}</td>
+                                <td id={styles['gantt-project']}>{projects.id_proyecto}</td>
                                 {dates.map((date, index) => {
                                     const dateString = date.toISOString().split('T')[0];
 
@@ -366,15 +366,15 @@ export function Gantt() {
                                     return (
                                         <td
                                             key={`${projects.id_proyecto}-${index}`}
-                                            id={ganttStyles['gantt-cell']}
+                                            id={styles['gantt-cell']}
                                             className={`
-                                                ${date.getDay() === 0 || date.getDay() === 6 ? ganttStyles['weekend'] : ganttStyles['']}
+                                                ${date.getDay() === 0 || date.getDay() === 6 ? styles['weekend'] : styles['']}
                                             `}
                                             onClick={() => isPlanned ? openEditModal(projects, date, plan) : openModal(projects, date)}
                                         >
                                             {isPlanned && (
                                                 plan.asignados.map((asignado) => (
-                                                    <div className={ganttStyles['asignados']} key={asignado.rut_personal} style={{backgroundColor: asignado.color}}>
+                                                    <div className={styles['asignados']} key={asignado.rut_personal} style={{backgroundColor: asignado.color}}>
                                                         <span key={asignado.rut_personal}>{asignado.iniciales_nombre}</span>
                                                     </div>
                                                 ))
@@ -673,20 +673,20 @@ export function Gantt() {
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
                     contentLabel="Detalles de Planificación"
-                    className={ganttStyles['modal']}
+                    className={styles['modal']}
                     style={{overlay: {zIndex:9999}}}
                 >
                     {selectedProject && selectedDate && (
                         <>
-                            <div id={ganttStyles['modal-header-add']}>
+                            <div id={styles['modal-header-add']}>
                                 <h2>{selectedProject.id_proyecto}</h2>
                             </div>
                             <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
-                                <div id={ganttStyles['modal-body']}>
-                                    <span className={ganttStyles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
-                                    <span className={ganttStyles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
-                                    <span className={ganttStyles['span-block']}>Área:</span>
-                                    <select name="specialty" id={ganttStyles['specialty']} {...registerAdd("specialty", { required: true })} value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
+                                <div id={styles['modal-body']}>
+                                    <span className={styles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
+                                    <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
+                                    <span className={styles['span-block']}>Área:</span>
+                                    <select name="specialty" id={styles['specialty']} {...registerAdd("specialty", { required: true })} value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
                                         <option disabled>Seleccione una especialidad / área</option>
                                         {specialty
                                         .filter((specialty) => specialty.id_especialidad !== 10)
@@ -694,14 +694,14 @@ export function Gantt() {
                                             <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
                                         ))}
                                     </select>
-                                    <div className={ganttStyles['staff-top-container']}>
-                                        <span className={ganttStyles['span-block']}>Asignad@/s:</span>
-                                        <button type="button" onClick={() => addStaffInput()} className={ganttStyles['add-staff-btn']}>Añadir Encargado</button>
+                                    <div className={styles['staff-top-container']}>
+                                        <span className={styles['span-block']}>Asignad@/s:</span>
+                                        <button type="button" onClick={() => addStaffInput()} className={styles['add-staff-btn']}>Añadir Encargado</button>
                                     </div>
-                                    <div className={ganttStyles['staff-input-container-plan']}>
+                                    <div className={styles['staff-input-container-plan']}>
                                         {staffInputs.map((input) => (
-                                            <div key={input.id} className={ganttStyles['staff-input']}>
-                                                <select name={`staff[${input.id}]`} id={`staff-${input.id}`} {...registerAdd(`staff.${input.id}`, { required: "Seleccione un asignado válido" })} className={ganttStyles['staff-select']}>
+                                            <div key={input.id} className={styles['staff-input']}>
+                                                <select name={`staff[${input.id}]`} id={`staff-${input.id}`} {...registerAdd(`staff.${input.id}`, { required: "Seleccione un asignado válido" })} className={styles['staff-select']}>
                                                     <option disabled value="">Seleccione un/a asignad@</option>
                                                     {staff.filter((s) => s.id_especialidad === parseInt(selectedSpecialty)).map((filteredStaff) => (
                                                         <option key={filteredStaff.rut_personal} value={filteredStaff.rut_personal}>
@@ -710,16 +710,16 @@ export function Gantt() {
                                                     ))}
                                                 </select>
                                                 {staffInputs.length > 1 && (
-                                                    <button type="button" onClick={() => removeStaffInputAdd(input.id)} className={ganttStyles['remove-staff-btn']}>X</button>
+                                                    <button type="button" onClick={() => removeStaffInputAdd(input.id)} className={styles['remove-staff-btn']}>X</button>
                                                 )}
                                             </div>
                                         ))}
                                     </div>
                                     <input type="hidden" {...registerAdd("date")} value={selectedDate.toLocaleDateString('es-ES')} />
                                     <input type="hidden" {...registerAdd("project")} value={selectedProject.id_proyecto} />
-                                    <div id={ganttStyles['buttons-container']}>
-                                        <button onClick={closeModal} id={ganttStyles['secondary-btn']}>Cerrar</button>
-                                        <button type='submit' id={ganttStyles['primary-btn']}>Agregar</button>
+                                    <div id={styles['buttons-container']}>
+                                        <button onClick={closeModal} id={styles['secondary-btn']}>Cerrar</button>
+                                        <button type='submit' id={styles['primary-btn']}>Agregar</button>
                                     </div>
                                 </div>
                             </form>
@@ -730,19 +730,19 @@ export function Gantt() {
                     isOpen={editModalIsOpen}
                     onRequestClose={closeModal}
                     contentLabel="Editar Planificación"
-                    className={ganttStyles['modal']}
+                    className={styles['modal']}
                     style={{overlay: {zIndex:9999}}}
                 >
                     {selectedProject && selectedDate && selectedPlan && (
                         <>
-                            <div id={ganttStyles['modal-header-edit']}>
-                                <div id={ganttStyles['title-container']}>
+                            <div id={styles['modal-header-edit']}>
+                                <div id={styles['title-container']}>
                                     <h2>{selectedProject.id_proyecto}</h2>
                                 </div>
-                                <form onSubmit={handleSubmitDelete(deleteSubmit)} id={ganttStyles['delete-form']}>
+                                <form onSubmit={handleSubmitDelete(deleteSubmit)} id={styles['delete-form']}>
                                     {
                                         !isEditing && 
-                                            <button type='submit' id={ganttStyles['delete-btn']}>
+                                            <button type='submit' id={styles['delete-btn']}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ff4d4d"} fill={"none"}>
                                                     <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                                                     <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -756,21 +756,21 @@ export function Gantt() {
                                 </form>
                             </div>
                             <form onSubmit={handleSubmitEdit(editSubmit)}>
-                                <div id={ganttStyles['modal-body']}>
-                                    <span className={ganttStyles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
-                                    <span className={ganttStyles['span-block']}>Responsable: Sergio Dávila </span>
-                                    <span className={ganttStyles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
-                                    <span className={ganttStyles['span-block']}>Área: {selectedPlan.especialidad}</span>
+                                <div id={styles['modal-body']}>
+                                    <span className={styles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
+                                    <span className={styles['span-block']}>Responsable: Sergio Dávila </span>
+                                    <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
+                                    <span className={styles['span-block']}>Área: {selectedPlan.especialidad}</span>
                                     {isEditing ? (
                                         <>
-                                            <div className={ganttStyles['staff-top-container']}>
-                                                <span className={ganttStyles['span-block']}>Asignad@/s:</span>
-                                                <button type="button" onClick={addStaffInput} className={ganttStyles['add-staff-btn']}>Añadir Encargado</button>
+                                            <div className={styles['staff-top-container']}>
+                                                <span className={styles['span-block']}>Asignad@/s:</span>
+                                                <button type="button" onClick={addStaffInput} className={styles['add-staff-btn']}>Añadir Encargado</button>
                                             </div>
-                                            <div className={ganttStyles['staff-input-container-plan']}>
+                                            <div className={styles['staff-input-container-plan']}>
                                                 {staffInputs.map((input) => (
-                                                    <div key={input.id} className={ganttStyles['staff-input']}>
-                                                        <select name={`staff[${input.id}]`} id={`staff-${input.id}`} value={watchEdit(`staff.${input.id}`) || input.rut_personal || ''} onChange={(e) => handleSelectChange(input.id, e.target.value)} {...registerEdit(`staff.${input.id}`, { required: true })} className={ganttStyles['staff-select']}>
+                                                    <div key={input.id} className={styles['staff-input']}>
+                                                        <select name={`staff[${input.id}]`} id={`staff-${input.id}`} value={watchEdit(`staff.${input.id}`) || input.rut_personal || ''} onChange={(e) => handleSelectChange(input.id, e.target.value)} {...registerEdit(`staff.${input.id}`, { required: true })} className={styles['staff-select']}>
                                                             <option value="" disabled>Seleccione un/a asignad@</option>
                                                             {staff
                                                             .filter((s) => s.id_especialidad === selectedPlan.id_especialidad)
@@ -781,7 +781,7 @@ export function Gantt() {
                                                             ))}
                                                         </select>
                                                         {staffInputs.length > 1 && (
-                                                            <button type="button" onClick={() => removeStaffInputEdit(input.id)} className={ganttStyles['remove-staff-btn']}>X</button>
+                                                            <button type="button" onClick={() => removeStaffInputEdit(input.id)} className={styles['remove-staff-btn']}>X</button>
                                                         )}
                                                     </div>
                                                 ))}
@@ -789,10 +789,10 @@ export function Gantt() {
                                         </>
                                     ) : (
                                         <>
-                                            <span className={ganttStyles['span-block']}>Asignad@/s:</span>
-                                            <div className={ganttStyles['staff-input-container']}>
+                                            <span className={styles['span-block']}>Asignad@/s:</span>
+                                            <div className={styles['staff-input-container']}>
                                                 {selectedPlan.asignados.map((asignado) => (
-                                                    <div className={ganttStyles['staff-input']} key={asignado.rut_personal}>
+                                                    <div className={styles['staff-input']} key={asignado.rut_personal}>
                                                         <span>{asignado.nombres} {asignado.apellido_p} {asignado.apellido_m}</span>
                                                     </div>
                                                 ))}
@@ -802,16 +802,16 @@ export function Gantt() {
                                     <input type="hidden" {...registerEdit("date")} value={selectedDate.toLocaleDateString('es-ES')} />
                                     <input type="hidden" {...registerEdit("project")} value={selectedProject.id_proyecto} />
                                 </div>
-                                <div id={ganttStyles['buttons-container']}>
+                                <div id={styles['buttons-container']}>
                                     {
                                         isEditing 
-                                        ? <button onClick={backEdit} id={ganttStyles['secondary-btn']} type='button'>Cancelar</button> 
-                                        : <button onClick={closeModal} id={ganttStyles['secondary-btn']} type='button'>Cerrar</button>
+                                        ? <button onClick={backEdit} id={styles['secondary-btn']} type='button'>Cancelar</button> 
+                                        : <button onClick={closeModal} id={styles['secondary-btn']} type='button'>Cerrar</button>
                                     }
                                     {
                                         isEditing
-                                        ? <button type='submit' id={ganttStyles['primary-btn']}>Aplicar</button>
-                                        : <button onClick={(e) => {e.preventDefault(); switchEdit(); }} id={ganttStyles['primary-btn']} type='button'>Editar</button>
+                                        ? <button type='submit' id={styles['primary-btn']}>Aplicar</button>
+                                        : <button onClick={(e) => {e.preventDefault(); switchEdit(); }} id={styles['primary-btn']} type='button'>Editar</button>
                                     }
                                 </div>
                             </form>
@@ -822,7 +822,7 @@ export function Gantt() {
                     isOpen={customizeModalIsOpen}
                     onRequestClose={closeModal}
                     contentLabel="Personalizar Planificación"
-                    className={ganttStyles['modal']}
+                    className={styles['modal']}
                     style={{overlay: {zIndex:9999}}}
                 >
                     <form onSubmit={handleSubmitCustomize(customizeSubmit)}>
@@ -832,12 +832,12 @@ export function Gantt() {
                                 .map((staff, index) => (
                                     <div key={staff.rut_personal}>
                                         <label htmlFor="color-input">{`${staff.nombres} ${staff.apellido_p} ${staff.apellido_m}`}</label>
-                                        <input type="color" id={ganttStyles['color-input']} defaultValue={staff.color} {...registerCustomize(`${index}.color`)} />
+                                        <input type="color" id={styles['color-input']} defaultValue={staff.color} {...registerCustomize(`${index}.color`)} />
                                         <input type="hidden" defaultValue={staff.rut_personal} {...registerCustomize(`${index}.rut_personal`)} />
                                     </div>
                                 ))
                         }
-                        <button type='submit' className={ganttStyles['primary-btn']}>Guardar cambios</button>
+                        <button type='submit' className={styles['primary-btn']}>Guardar cambios</button>
                     </form>
                 </Modal>
             </section>

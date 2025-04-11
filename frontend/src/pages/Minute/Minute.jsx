@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 import Modal from 'react-modal';
-import styles from './minute.module.css';
+import styles from './Minute.module.css';
 
 export function Minute() {
 

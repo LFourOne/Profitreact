@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import styles from './login.module.css';
+import styles from './Login.module.css';
 import logoC from '../../assets/solutiva-consultores-logo.png'
 import logoS from '../../assets/solutiva-sistemas-logo.png'
 

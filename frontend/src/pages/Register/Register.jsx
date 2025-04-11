@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import logo from '../../assets/grupo-solutiva-logo.png'
-import styles from './register.module.css';
+import styles from './Register.module.css';
 import axios from 'axios';
 
 export function Register() {

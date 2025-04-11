@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import styles from './companyselect.module.css';
+import styles from './CompanySelect.module.css';
 import groupLogo from '../../assets/icon1.png'
 
 

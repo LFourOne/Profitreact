@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import axios from 'axios';
-import styles from './index.module.css';
+import styles from './Index.module.css';
 import icon from '../../assets/icon1.png'
 import { useState, useEffect } from 'react';
 
