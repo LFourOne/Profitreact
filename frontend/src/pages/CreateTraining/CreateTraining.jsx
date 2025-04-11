@@ -50,6 +50,7 @@ export function CreateTraining() {
         });
 
         reset();
+        navigate('/training');
 
     }
 
@@ -57,19 +58,6 @@ export function CreateTraining() {
         value: staff.rut_personal,
         label: `${staff.nombres} ${staff.apellido_p} ${staff.apellido_m}`
     }));
-
-    const colourStyles = {
-        control: styles => ({ ...styles, backgroundColor: 'white' }),
-        option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-          const color = chroma(data.color);
-          return {
-            ...styles,
-            backgroundColor: isDisabled ? 'red' : blue,
-            color: '#FFF',
-            cursor: isDisabled ? 'not-allowed' : 'default',
-          };
-        },
-      };
 
     return(
         <>
@@ -99,11 +87,11 @@ export function CreateTraining() {
                                 <label htmlFor="format" className={styles['fieldset-label']}> Modalidad</label>
                                 <div id={styles['format-container']}>
                                     <label className={styles['format-label']}>
-                                        <input type="radio" name='format' value="in_person" {...register('format', {required: true})} />
+                                        <input type="radio" name='format' value={1} {...register('format', {required: true})} />
                                         Presencial
                                     </label>
                                     <label className={styles['format-label']}>
-                                        <input type="radio" name='format' value="telematics" {...register('format', {required: true})} />
+                                        <input type="radio" name='format' value={2} {...register('format', {required: true})} />
                                         Telemática
                                     </label>
                                 </div>
@@ -139,7 +127,7 @@ export function CreateTraining() {
                             </fieldset>
                             <fieldset className={styles['fieldset']}>
                                 <label htmlFor="objective" className={styles['fieldset-label']}>Objetivos de la Capacitación</label>
-                                <textarea id={styles['objective-input']} {...register('objective', {required: true})} maxLength={800}/>
+                                <textarea id={styles['objective-input']} {...register('objectives', {required: true})} maxLength={800}/>
                             </fieldset>
                             <fieldset className={styles['fieldset']}>
                                 <label htmlFor="content" className={styles['fieldset-label']}>Contenido de la Capacitación</label>

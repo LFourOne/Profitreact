@@ -1,6 +1,7 @@
 from app_flask import app
 from flask import Flask, request, jsonify, session
 from app_flask.models.staff_models import Staff
+from backend.app_flask.models.training_models.training_models import Training
 
 @app.route('/training')
 def training():
@@ -24,8 +25,17 @@ def create_training():
     
     data = request.get_json()
     
-    print(f"Esto es data: {data}")
+    training_data = {
+        'nombre_capacitacion': data['name'],
+        'fecha': data['date'],
+        'id_modalidad': data['format'],
+        'hora_inicio': data['start-duration'],
+        'hora_termino': data['end-duration'],
+        'rut_instructor': data['instructor']['value'],
+        'objetivos': data['objectives'],
+        'contenido': data['content']
+    }
 
-    print(data['instructor']['value'])
+    Training.create_training(training_data)
 
-    return jsonify({'status': 'success', 'message': 'Proceso de entrenamiento creado exitosamente'}), 200
+    return jsonify({'status': 'success', 'message': 'Capacitación creada exitosamente'}), 200
