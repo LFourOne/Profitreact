@@ -35,23 +35,29 @@ export function Login() {
     }, []);
 
     const onSubmitLogin = async (data) => {
-        const formData = new URLSearchParams();
-        formData.append('email', data.email);
-        formData.append('password', data.password);
-
-        const response = await axios.post('http://localhost:5500/login/process', formData, {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        });
-
-        if (response.data.status === 'success') {
-            navigate('/index');
-        } else {
-            setErrorMessages('Por favor, ingrese credenciales válidas.');
+        try {
+            const formData = new URLSearchParams();
+            formData.append('email', data.email);
+            formData.append('password', data.password);
+    
+            const response = await axios.post('http://localhost:5500/login/process', formData, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            });
+    
+            if (response.status === 200) {
+                navigate('/index');
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                setErrorMessages('Por favor, ingrese credenciales válidas.');
+            } else {
+                setErrorMessages('Ocurrió un error inesperado. Inténtalo de nuevo más tarde.');
+            }
         }
-    }
+    };
 
     return (
         <>

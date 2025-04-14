@@ -8,6 +8,20 @@ def training():
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    trainings = Training.get_all_trainings()
+
+    return jsonify({
+        'status': 'success', 
+        'message': 'Usuario autorizado',
+        'trainings': trainings
+        }), 200
+
+@app.route('/training/create')
+def create_training():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
     staff = Staff.get_staff()
 
@@ -18,7 +32,7 @@ def training():
         }), 200
 
 @app.route('/training/create/process', methods=['POST'])
-def create_training():
+def create_training_process():
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401

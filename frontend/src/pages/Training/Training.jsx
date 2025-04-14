@@ -10,10 +10,14 @@ export function Training() {
 
     const navigate = useNavigate();
 
+    const [training, setTraining] = useState([]);
+
     const fetchApi = async () => {
         try {
             const response = await axios.get('http://localhost:5500/training', { withCredentials: true });
+            setTraining(response.data.trainings);
             setLoading(false);
+            console.log(response.data);
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
@@ -53,95 +57,22 @@ export function Training() {
                     </section>
                 </section>
                 <section id={styles['bottom-section']}>
-                    <TrainingCard
-                        title="Ley Karin"
-                        date="09/04/2025"
-                        instructor="Miguel Borja"
-                        participants="38"
-                        length="15:00 - 15:30"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Curso de Marketing Digital"
-                        date="15/04/2025"
-                        instructor="Carlos Martínez"
-                        participants="50"
-                        length="09:00 - 12:00"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Capacitación en Desarrollo Web"
-                        date="10/04/2025"
-                        instructor="Laura Gómez"
-                        participants="45"
-                        length="14:00 - 16:00"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Fundamentos de Python"
-                        date="20/04/2025"
-                        instructor="Ana Pérez"
-                        participants="30"
-                        length="16:00 - 18:00"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Gestión de Proyectos Ágiles"
-                        date="25/04/2025"
-                        instructor="Juan Rodríguez"
-                        participants="40"
-                        length="10:00 - 13:00"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Seminario sobre Estrategias Avanzadas de Negociación Empresarial"
-                        date="16/04/2025"
-                        instructor="Alejandro Pérez"
-                        participants="60"
-                        length="17:30 - 18:30"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Taller de Liderazgo y Gestión de Equipos en el Entorno Empresarial"
-                        date="12/04/2025"
-                        instructor="Carolina Gómez"
-                        participants="40"
-                        length="12:00 - 13:30"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Introducción a la IA"
-                        date="25/04/2025"
-                        instructor="Carlos Gómez"
-                        participants="60"
-                        length="16:00 - 18:00"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Masterclass de Diseño UX/UI"
-                        date="30/04/2025"
-                        instructor="Rodrigo Ramírez"
-                        participants="60"
-                        length="10:00 - 10:30 Horas"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Conferencia Internacional sobre Innovación Empresarial y Tecnológica"
-                        date="20/04/2025"
-                        instructor="Francisco Rodríguez"
-                        participants="200"
-                        length="15:00 - 18:30"
-                        state="Validado"
-                    />
-                    <TrainingCard
-                        title="Seminario sobre Técnicas Avanzadas de Ventas y Marketing para Empresas"
-                        date="30/04/2025"
-                        instructor="Sandra Ruiz"
-                        participants="120"
-                        length="9:00 - 13:30"
-                        state="Validado"
-                    />
-                </section>
+                        {training.length > 0 ? (
+                            training.map((training) => (
+                                <TrainingCard
+                                    key={training.id_capacitacion}
+                                    title={training.nombre_capacitacion}
+                                    date={training.fecha}
+                                    instructor={training.rut_instructor}
+                                    participants={1}
+                                    length={`${training.hora_inicio} - ${training.hora_termino}`}
+                                    state="Validado"
+                                />
+                            ))
+                        ) : (
+                            <p>No hay capacitaciones disponibles.</p>
+                        )}
+                    </section>
             </main>
         )}
         </>

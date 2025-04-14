@@ -17,7 +17,7 @@ export function CreateTraining() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get('http://localhost:5500/training', { withCredentials: true });
+            const response = await axios.get('http://localhost:5500/training/create', { withCredentials: true });
             setStaff(response.data.staff);
             console.log(response.data);
             setLoading(false);

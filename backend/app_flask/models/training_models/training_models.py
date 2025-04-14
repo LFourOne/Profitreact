@@ -20,5 +20,12 @@ class Training:
                 INSERT INTO capacitaciones (nombre_capacitacion, fecha, id_modalidad, hora_inicio, hora_termino, rut_instructor, objetivos, contenido)
                 VALUES (%(nombre_capacitacion)s, %(fecha)s, %(id_modalidad)s, %(hora_inicio)s, %(hora_termino)s, %(rut_instructor)s, %(objetivos)s, %(contenido)s);
                 """
-        result = connectToMySQL(DATA_BASE).query_db(query, data)
-        return result
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def get_all_trainings(cls):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT * FROM capacitaciones
+                """
+        return connectToMySQL(DATA_BASE).query_db(query)
