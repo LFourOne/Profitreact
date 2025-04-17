@@ -26,6 +26,61 @@ class Training:
     def get_all_trainings(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT * FROM capacitaciones
+                SELECT capacitaciones.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, modalidad.modalidad FROM capacitaciones
+                JOIN maestro_personal ON capacitaciones.rut_instructor = maestro_personal.rut_personal
+                JOIN modalidad ON capacitaciones.id_modalidad =  modalidad.id_modalidad
+                ORDER BY capacitaciones.fecha DESC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
+    
+    @classmethod
+    def get_training_by_id(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT capacitaciones.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, modalidad.modalidad FROM capacitaciones 
+                JOIN maestro_personal ON capacitaciones.rut_instructor = maestro_personal.rut_personal
+                JOIN modalidad ON capacitaciones.id_modalidad = modalidad.id_modalidad
+                WHERE capacitaciones.id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+class TrainingAssistant:
+    def __init__(self, data):
+        self.id_asistente = data.get('id_asistente')
+        self.id_capacitacion = data.get('id_capacitacion')
+        self.rut_asistente = data.get('rut_asistente')
+        self.fecha = data.get('fecha')
+
+    @classmethod
+    def register_attendance(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                INSERT INTO asistentes_capacitaciones (id_capacitacion, rut_asistente, fecha)
+                VALUES (%(id_capacitacion)s, %(rut_asistente)s, %(fecha)s);
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def select_attendance(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT asistentes_capacitaciones.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, maestro_personal.id_especialidad, especialidades.especialidad FROM asistentes_capacitaciones
+                JOIN maestro_personal ON asistentes_capacitaciones.rut_asistente = maestro_personal.rut_personal
+                JOIN especialidades ON maestro_personal.id_especialidad = especialidades.id_especialidad
+                WHERE id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def select_attendant_by_rut(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT rut_asistente FROM asistentes_capacitaciones
+                WHERE id_capacitacion = %(id_capacitacion)s AND rut_asistente = %(rut_asistente)s;
+                """
+        boolean = connectToMySQL(DATA_BASE).query_db(query, data)
+
+        if boolean:
+            return True
+        else:
+            return False

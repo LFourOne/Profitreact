@@ -11,6 +11,7 @@ import { Gantt } from './pages/Gantt/Gantt';
 import { GanttDelivery } from './pages/GanttDelivery/GanttDelivery';
 import { Register } from './pages/Register/Register';
 import { CreateTraining } from './pages/CreateTraining/CreateTraining';
+import { TrainingDetails } from './pages/TrainingDetails/TrainingDetails';
 
 export function App() {
 
@@ -31,6 +32,7 @@ export function App() {
           <Route path="/gantt/delivery" element={<GanttDelivery />} />
           <Route path="/register" element={<Register />} />
           <Route path="/training" element={<Training />} />
+          <Route path="/training/:id_capacitacion" element={<TrainingDetails />} />
           <Route path="/training/create" element={<CreateTraining />} />
         </Routes>
     </>

@@ -1,5 +1,5 @@
 import styles from './CreateTraining.module.css';
-import { use, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select'
@@ -66,7 +66,7 @@ export function CreateTraining() {
                     <section id={styles['previous-page-container']}>
                         <button id={styles['previous-page-btn']} onClick={() => navigate(-1)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#808080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
-                            Volver atrás
+                            Volver a capacitaciones
                         </button>
                     </section>
                     <form onSubmit={handleSubmit(onSubmit)} id={styles['form']}>

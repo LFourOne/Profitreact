@@ -31,6 +31,16 @@ export function Training() {
         fetchApi();
     }, []);
 
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formatter = new Intl.DateTimeFormat('es-ES', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+        });
+        return formatter.format(date);
+    };
+
     return(
         <>
         {loading ? <p>Cargando</p> : (
@@ -62,11 +72,12 @@ export function Training() {
                                 <TrainingCard
                                     key={training.id_capacitacion}
                                     title={training.nombre_capacitacion}
-                                    date={training.fecha}
-                                    instructor={training.rut_instructor}
-                                    participants={1}
+                                    date={formatDate(training.fecha)}
+                                    instructor={`${training.nombres} ${training.apellido_p} ${training.apellido_m}`}
+                                    format={training.modalidad}
                                     length={`${training.hora_inicio} - ${training.hora_termino}`}
                                     state="Validado"
+                                    onClick={() => navigate(`/training/${training.id_capacitacion}`)}
                                 />
                             ))
                         ) : (

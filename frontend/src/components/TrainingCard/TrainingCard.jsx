@@ -1,6 +1,6 @@
 import styles from './TrainingCard.module.css';
 
-export function TrainingCard ({ title, date, instructor, participants, length, state}) {
+export function TrainingCard ({ title, date, instructor, format, length, state, onClick}) {
     return (
         <article className={styles['card-container']}>
             <section className={styles['card-top-subcontainer']}>
@@ -13,8 +13,8 @@ export function TrainingCard ({ title, date, instructor, participants, length, s
                     <span className={styles['card-middle-subcontainer-span']}>{instructor}</span>
                 </div>
                 <div className={styles['card-middle-subcontainer-content']}>
-                    <span className={styles['card-middle-subcontainer-h3']}>Participantes:</span>
-                    <span className={styles['card-middle-subcontainer-span']}>{participants}</span>
+                    <span className={styles['card-middle-subcontainer-h3']}>Modalidad:</span>
+                    <span className={styles['card-middle-subcontainer-span']}>{format}</span>
                 </div>
                 <div className={styles['card-middle-subcontainer-content']}>
                     <span className={styles['card-middle-subcontainer-h3']}>Duración:</span>
@@ -23,7 +23,7 @@ export function TrainingCard ({ title, date, instructor, participants, length, s
             </section>
             <section className={styles['card-bottom-subcontainer']}>
                 <span className={styles['card-bottom-subcontainer-state']}>{state}</span>
-                <button className={styles['card-bottom-subcontainer-details-btn']}>Ver Detalles</button>
+                <button className={styles['card-bottom-subcontainer-details-btn']} onClick={onClick}>Ver Detalles</button>
             </section>
         </article>
     )
