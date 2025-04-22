@@ -5,7 +5,7 @@
     justify-content: center;
     height: 100vh;
     width: 100vw;
-    padding-top: 80px;
+    padding-top: 340px;
     box-sizing: border-box;
     gap: 10px;
 }
@@ -27,8 +27,9 @@
 }
 #training-container{
     display: flex;
-    min-height: 700px;
-    max-height: 750px;
+    min-height: 950px;
+    max-height: 1000px;
+    padding-bottom: 50px;
     gap: 24px;
 }
 #left-section{
@@ -54,6 +55,85 @@
 #bottom-section{
     height: 350px;
     padding-top: 20px;
+}
+#file-section{
+    display: flex;
+    flex-direction: column;
+    height: 185px;
+    padding-top: 40px;
+    gap: 14px;
+}
+#file-container{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+#file-attach-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.file-input{
+    display: none;
+}
+#file-label{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color: #444444;
+    height: 100%;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 8px 8px 0 0;
+    gap: 6px;
+    cursor: pointer;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#file-label:hover{
+    background-color: #f0f0f0;
+}
+#file-attach{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color: #444444;
+    height: 100%;
+    width: 100%;
+    border: 1px solid lightgray;
+    border-radius: 8px;
+    gap: 6px;
+    cursor: pointer;
+    overflow-x: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+#file-attach:hover, #file-attach:hover #file-attach-svg {
+    background-color: #f0f0f0;
+    color: black;
+    stroke: black;
+}
+#file-attach-btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border: none;
+    background-color: #73a727;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 0 0 6px 6px;
+    height: 50px;
+    width: 100%;
+}
+#file-attach-btn:hover{
+    background-color: #659221;
 }
 .top-info{
     display: flex;
@@ -115,11 +195,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 44px;
+    height: 82px;
     gap: 12px;
 }
 #right-middle-section{
-    height: 600px;
+    height: 750px;
     overflow-y: scroll;
 }
 #right-bottom-section{

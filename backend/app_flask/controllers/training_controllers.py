@@ -1,9 +1,11 @@
 from app_flask import app
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory
 from app_flask.models.staff_models import Staff
 from app_flask.models.training_models.training_models import Training
 from app_flask.models.training_models.training_models import TrainingAssistant
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 @app.route('/training')
 def training():
@@ -100,3 +102,43 @@ def register_attendance():
     TrainingAssistant.register_attendance(attendance_data)
     
     return jsonify({'status': 'success', 'message': 'Asistencia registrada exitosamente'}), 200
+
+@app.route('/training/upload-file', methods=['POST'])
+def upload_file():
+
+    if 'file' not in request.files:
+        print('No se envió ningún archivo')
+        return jsonify({'error': 'No se envió ningún archivo'}), 400
+    
+    file = request.files['file']
+
+    if not file.filename.endswith('.pdf'):
+        return jsonify({'error': 'Solo se permiten archivos PDF'}), 400
+    
+    if file.mimetype != 'application/pdf':
+        return jsonify({'error': 'El archivo no es un PDF válido'}), 400
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    id_capacitacion = request.form.get('id_capacitacion')
+
+    original_filename = secure_filename(file.filename)
+    filename, file_extension = os.path.splitext(original_filename)
+    new_filename = f"{filename}_{id_capacitacion}{file_extension}"
+
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
+    file.save(file_path)
+
+    print(f'Archivo guardado en: {file_path}')
+
+    Training.insert_path({'ruta': new_filename, 'id_capacitacion': id_capacitacion})
+
+    return jsonify({'status': 'success', 'message': 'Archivo subido exitosamente'}), 200
+
+@app.route('/training/files/<filename>', methods=['GET'])
+def get_file(filename):
+    try:
+        return send_from_directory(app.config['UPLOAD_FOLDER'], filename, as_attachment=False)
+    except FileNotFoundError:
+        return jsonify({'error': 'Archivo no encontrado'}), 404

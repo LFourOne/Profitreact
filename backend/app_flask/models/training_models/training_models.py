@@ -12,6 +12,7 @@ class Training:
         self.rut_instructor = data.get('rut_instructor')
         self.objetivos = data.get('objetivos')
         self.contenido = data.get('contenido')
+        self.ruta = data.get('ruta')
     
     @classmethod
     def create_training(cls, data):
@@ -32,6 +33,15 @@ class Training:
                 ORDER BY capacitaciones.fecha DESC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
+    
+    @classmethod
+    def insert_path(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE capacitaciones SET ruta = %(ruta)s 
+                WHERE id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
     def get_training_by_id(cls, data):
