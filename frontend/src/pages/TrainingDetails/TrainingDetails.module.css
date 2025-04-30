@@ -12,7 +12,8 @@
 #previous-page-container{
     display: flex;
     justify-content: flex-start;
-    width: 1100px;
+    width: 1144px;
+    gap: 16px;
 }
 #previous-page-btn{
     display: flex;
@@ -152,6 +153,10 @@
     color: #444444;
     height: 25px;
 }
+#objectives-container{
+    display: flex;
+    flex-direction: column;
+}
 #objectives{
     white-space: pre-wrap;
     height: 150px;
@@ -161,6 +166,10 @@
     border-radius: 8px;
     box-sizing: border-box;
     padding: 5px;
+}
+#content-container{
+    display: flex;
+    flex-direction: column;
 }
 #content{
     white-space: pre-wrap;
@@ -185,7 +194,7 @@
 }
 #right-section{
     height: 100%;
-    width: 400px;
+    width: 450px;
     padding: 20px;
     border-radius: 8px;
     border: 1px solid lightgray;
@@ -267,4 +276,33 @@
     border-radius: 5px;
     color: gray;
     font-size: 16px;
+}
+
+/* Edit Section */
+
+#top-section-title-input{
+    height: 91px;
+    width: 100%;
+}
+#top-section-date-input{
+    height: 74.81px;
+    width: 100px;
+}
+
+/* Right Section */
+#right-middle-participant-card-remove-subcontainer{
+    height: 100%;
+    width: 24px;
+}
+#right-middle-participant-card-remove-btn{
+    height: 100%;
+    width: 100%;
+    background-color: white;
+    border: none;
+    padding: 0;
+    margin: 0 0 0 0;
+    cursor: pointer;
+}
+#right-middle-participant-card-remove-btn:hover{
+    background-color: #ffdada;
 }

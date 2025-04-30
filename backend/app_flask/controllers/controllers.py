@@ -274,7 +274,7 @@ def reports():
         'projects' : project_list
         }), 200
 
-@app.route('/reports/delete-meeting', methods=['POST'])
+@app.route('/reports/delete-meeting', methods=['DELETE'])
 def delete_meeting():
     
     if 'rut_personal' not in session:
@@ -436,7 +436,7 @@ def edit_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/delete-commitment', methods=['POST'])
+@app.route('/reports/minute/delete-commitment', methods=['DELETE'])
 def delete_commitment():
     
     if 'rut_personal' not in session:

@@ -7,7 +7,6 @@ import re
 app = Flask(__name__)
 app.secret_key = "Shhh"
 app.permanent_session_lifetime = timedelta(hours=2)
-app.config['SESSION_COOKIE_SECURE'] = False
 app.config["SESSION_COOKIE_SAMESITE"] = "None"
 app.config["SESSION_COOKIE_SECURE"] = True
 cors = CORS(app, origins=["http://localhost:5173"], supports_credentials=True)

@@ -146,7 +146,7 @@
         height: 66px;
     }
     .th{
-        background-color: rgb(131, 170, 73);
+        background-color: #83aa49;
         color: white;
         font-size: 17px;
         text-align: center;
@@ -167,13 +167,15 @@
     #meeting-tr{
         cursor: pointer;
     }
-    #meeting-tr:hover{
-        background-color: rgba(136, 197, 45, 0.233)
+    #meeting-tr:hover, #meeting-tr:hover #delete-button{
+        background-color: #88c52d3b
     }
     #delete-button{
         cursor: pointer;
+        background-color: white;
+        border: 0;
     }
     #delete-button:hover{
-        background-color: rgba(255, 0, 0, 0.158);
+        stroke: #88c52d3b;
     }
 }

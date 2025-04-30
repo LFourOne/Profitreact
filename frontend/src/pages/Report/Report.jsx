@@ -48,7 +48,8 @@ export function Report() {
             return;
         }
 
-        const response = await axios.post('http://localhost:5500/reports/delete-meeting', { id_reunion }, {
+        const response = await axios.delete('http://localhost:5500/reports/delete-meeting', {
+            data: { id_reunion },
             headers: {
                 'Content-Type': 'application/json'
             },

@@ -24,6 +24,23 @@ class Training:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
+    def update_training(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE capacitaciones SET nombre_capacitacion = %(nombre_capacitacion)s, fecha = %(fecha)s, id_modalidad = %(id_modalidad)s, hora_inicio = %(hora_inicio)s, hora_termino = %(hora_termino)s, rut_instructor = %(rut_instructor)s, objetivos = %(objetivos)s, contenido = %(contenido)s
+                WHERE id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def delete_training(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                DELETE FROM capacitaciones WHERE id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
     def get_all_trainings(cls):
         DATA_BASE = session.get('data_base')
         query = """
@@ -94,3 +111,21 @@ class TrainingAssistant:
             return True
         else:
             return False
+        
+    @classmethod
+    def delete_attendance(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                DELETE FROM asistentes_capacitaciones
+                WHERE id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def remove_assistant(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                DELETE FROM asistentes_capacitaciones
+                WHERE id_capacitacion = %(id_capacitacion)s AND rut_asistente = %(rut_asistente)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)

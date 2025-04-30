@@ -132,7 +132,8 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.post('http://localhost:5500/reports/minute/delete-commitment', {id_compromiso}, {
+        const response = await axios.delete('http://localhost:5500/reports/minute/delete-commitment', {
+            data: {id_compromiso},
             headers: {
                 'Content-Type': 'application/json'
             },

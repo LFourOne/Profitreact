@@ -37,7 +37,7 @@ export function CreateTraining() {
 
     const onSubmit = async (data) => {
 
-        const confirmed = window.confirm('¿Estás seguro que deseas crear una reunión?');
+        const confirmed = window.confirm('¿Estás seguro que deseas crear la capacitación?');
         if (!confirmed) {
             return;
         }
