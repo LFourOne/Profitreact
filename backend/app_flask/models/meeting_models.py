@@ -10,14 +10,14 @@ class Meeting:
         self.fecha = data.get('fecha')
         self.hora_inicio = data.get('hora_inicio')
         self.hora_termino = data.get('hora_termino')
-        self.estado = data.get('estado')
+        self.id_estado = data.get('id_estado')
     
     @classmethod
     def create_meeting(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                INSERT INTO reunion(id_proyecto, id_tipo_reunion, fecha, hora_inicio, estado)
-                VALUES(%(id_proyecto)s, %(id_tipo_reunion)s, %(fecha)s, %(hora_inicio)s, 0)
+                INSERT INTO reuniones(id_proyecto, id_tipo_reunion, fecha, hora_inicio, id_estado)
+                VALUES(%(id_proyecto)s, %(id_tipo_reunion)s, %(fecha)s, %(hora_inicio)s, 1)
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
@@ -25,7 +25,7 @@ class Meeting:
     def delete_meeting(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                UPDATE reunion SET estado = 1
+                UPDATE reuniones SET id_estado = 3
                 WHERE id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
@@ -42,7 +42,7 @@ class Meeting:
     def select_all(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT id_proyecto, id_tipo_reunion, hora_termino FROM reunion
+                SELECT id_proyecto, id_tipo_reunion, id_estado FROM reuniones
                 WHERE id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
@@ -51,10 +51,10 @@ class Meeting:
     def select_all_meetings(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT * FROM reunion
-                JOIN tipo_reunion ON reunion.id_tipo_reunion = tipo_reunion.id_tipo_reunion
-                WHERE reunion.estado = 0
-                ORDER BY reunion.fecha DESC, reunion.hora_inicio DESC;
+                SELECT * FROM reuniones
+                JOIN tipo_reunion ON reuniones.id_tipo_reunion = tipo_reunion.id_tipo_reunion
+                WHERE reuniones.id_estado != 3
+                ORDER BY reuniones.fecha DESC, reuniones.hora_inicio DESC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
     
@@ -62,7 +62,7 @@ class Meeting:
     def close_meeting(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                UPDATE reunion SET hora_termino = %(hora_termino)s
+                UPDATE reuniones SET hora_termino = %(hora_termino)s, id_estado = 2
                 WHERE id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
@@ -71,7 +71,7 @@ class Meeting:
     def select_id_proyecto(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT id_proyecto FROM reunion
+                SELECT id_proyecto FROM reuniones
                 WHERE id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)

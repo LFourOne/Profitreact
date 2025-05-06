@@ -15,10 +15,15 @@ def training():
 
     trainings = Training.get_all_trainings()
 
+    session_data = {
+        'id_rol' : session['id_rol']
+    }
+
     return jsonify({
         'status': 'success', 
         'message': 'Usuario autorizado',
-        'trainings': trainings
+        'trainings': trainings,
+        'session': session_data
     }), 200
 
 @app.route('/training/create')
@@ -26,6 +31,9 @@ def create_training():
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     staff = Staff.get_staff()
 
@@ -40,6 +48,9 @@ def create_training_process():
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     data = request.get_json()
     
@@ -68,7 +79,10 @@ def training_details(id_capacitacion):
 
     assistants = TrainingAssistant.select_attendance({'id_capacitacion': id_capacitacion})
 
-    session_data = session['rut_personal']
+    session_data = {
+        'rut_personal': session['rut_personal'],
+        'id_rol' : session['id_rol'],
+    }
 
     return jsonify({
         'status': 'success', 
@@ -86,7 +100,9 @@ def register_attendance():
     
     data = request.get_json()
 
-    verificator = TrainingAssistant.select_attendant_by_rut({'id_capacitacion': data['id_capacitacion'], 'rut_asistente': data['session']})
+    print(f"ESTA ES LA DATA: {data}")
+    
+    verificator = TrainingAssistant.select_attendant_by_rut({'id_capacitacion': data['id_capacitacion'], 'rut_asistente': data['session']['rut_personal']})
 
     if verificator == True:
         return jsonify({'status': 'error', 'message': 'Ya has registrado asistencia en esta capacitación'}), 409
@@ -108,6 +124,9 @@ def edit_training(id_capacitacion):
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -130,11 +149,34 @@ def edit_training(id_capacitacion):
         'message': 'Usuario autorizado',
     }), 200
 
+@app.route('/training/complete/<int:id_capacitacion>', methods=['PATCH'])
+def complete_training(id_capacitacion):
+    
+        if 'rut_personal' not in session:
+            return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+        
+        if session['id_rol'] not in [1, 2, 3]:
+            return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
+        data = {
+            'id_capacitacion': id_capacitacion,
+        }
+    
+        Training.complete_training(data)
+    
+        return jsonify({
+            'status': 'success', 
+            'message': 'Usuario autorizado',
+        }), 200
+
 @app.route('/training/delete/<int:id_capacitacion>', methods=['DELETE'])
 def delete_training(id_capacitacion):
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     TrainingAssistant.delete_attendance({'id_capacitacion': id_capacitacion})
 
@@ -150,6 +192,9 @@ def remove_attendance():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     data = request.get_json()
 
@@ -168,6 +213,12 @@ def remove_attendance():
 
 @app.route('/training/upload-file', methods=['PATCH'])
 def upload_file():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     if 'file' not in request.files:
         print('No se envió ningún archivo')
@@ -193,8 +244,6 @@ def upload_file():
     file_path = os.path.join(app.config['UPLOAD_FOLDER'], new_filename)
     file.save(file_path)
 
-    print(f'Archivo guardado en: {file_path}')
-
     Training.insert_path({'ruta': new_filename, 'id_capacitacion': id_capacitacion})
 
     return jsonify({'status': 'success', 'message': 'Archivo subido exitosamente'}), 200
@@ -211,6 +260,9 @@ def get_staff():
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     staff = Staff.get_staff()
 

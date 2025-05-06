@@ -86,6 +86,7 @@ def login_process():
     session['apellido_m'] = user_login.apellido_m
     session['email'] = user_login.email
     session['id_especialidad'] = user_login.id_especialidad
+    session['id_rol'] = user_login.id_rol
     session['color'] = user_login.color
     session['data_base'] = data_base
     session.permanent = True
@@ -142,7 +143,7 @@ def register_process():
         'fecha_nacimiento': data['birthdate'],
         'fecha_contratacion': data['hiring-date'],
         'reporta_hh': data['report_hh'],
-        'estado': 1,
+        'id_estado': 1,
         'color': '#917CB1'
     }
 
@@ -156,12 +157,7 @@ def navbar():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    if session['rut_personal'] == 21674304:
-        role = "admin"
-    else:
-        role = "user"
-
-    print(f"Role: {role}")
+    role = session['id_rol']
 
     return jsonify({'role' : role}), 200
 
@@ -311,14 +307,6 @@ def minute(id_reunion):
 
     meeting_data = Meeting.select_all({'id_reunion' : id_reunion})
 
-    # 0 = Reunión en curso / 1 = Reunión finalizada 
-    if meeting_data[0]['hora_termino'] == None:
-        meeting_data[0]['hora_termino'] = 0
-    elif meeting_data[0]['hora_termino'] != None:
-        meeting_data[0]['hora_termino'] = 1
-
-    meeting_data[0]['id_reunion'] = id_reunion
-
     name_and_last_name = Staff.obtain_name_and_last_name()
     rut_jefe_proyecto = Project.select_rut_jefe_proyecto({'id_proyecto' : meeting_data[0]['id_proyecto']})
     nombre_jefe_proyecto = Staff.obtain_all_with_rut({'rut_personal' : rut_jefe_proyecto[0]['jefe_proyectos']})
@@ -368,7 +356,7 @@ def add_commitment():
         'fecha_comprometida' : data['commitment-date'],
         'responsable' : data['name_and_last_name_form'],
         'prioridad': data['priority'],
-        'id_estado_compromiso' : 1
+        'id_estado' : 1
     }
 
     Commitment.create_commitment(commitment_data)
@@ -452,8 +440,11 @@ def delete_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/close-meeting', methods=['POST'])
+@app.route('/reports/minute/close-meeting', methods=['PATCH'])
 def close_meeting():
+
+    data = request.get_json()
+    print(f"Data: {data}")
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
@@ -465,7 +456,7 @@ def close_meeting():
     hour_date = datetime.now().strftime('%H:%M:%S')
 
     meeting_data = {
-        'id_reunion' : data['id_meeting'],
+        'id_reunion' : data['id_reunion'],
         'hora_termino' : hour_date
     }
 

@@ -55,7 +55,19 @@
     justify-content: space-between;
     align-items: center;
 }
-.card-bottom-subcontainer-state{
+.card-bottom-subcontainer-state-current{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: #fff4b5;
+    color: #646046;
+    border-radius: 8px;
+    font-size: 14px;
+    height: 30px;
+    width: 110px;
+}
+.card-bottom-subcontainer-state-complete{
     display: flex;
     justify-content: center;
     align-items: center;

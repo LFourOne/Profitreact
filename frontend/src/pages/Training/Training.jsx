@@ -11,11 +11,13 @@ export function Training() {
     const navigate = useNavigate();
 
     const [training, setTraining] = useState([]);
+    const [rol, setRol] = useState([]);
 
     const fetchApi = async () => {
         try {
             const response = await axios.get('http://localhost:5500/training', { withCredentials: true });
             setTraining(response.data.trainings);
+            setRol(response.data.session);
             setLoading(false);
             console.log(response.data);
         } catch (error) {
@@ -41,6 +43,8 @@ export function Training() {
         return formatter.format(date);
     };
 
+
+    
     return(
         <>
         {loading ? <p>Cargando</p> : (
@@ -54,14 +58,16 @@ export function Training() {
                     </section>
                     <section id={styles['top-section-right-container']}>
                         <div id={styles['top-section-right-container-btn-container']}>
-                            <button id={styles['top-section-right-container-btn']} onClick={() => navigate('/training/create')}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Nueva Capacitación
-                            </button>
+                            {(rol.id_rol === 1 || rol.id_rol === 2 || rol.id_rol === 3 || rol.id_rol === 4 || rol.id_rol === 5 || rol.id_rol === 6) && (
+                                <button id={styles['top-section-right-container-btn']} onClick={() => navigate('/training/create')}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Nueva Capacitación
+                                </button>
+                            )}
                         </div>
                         <div id={styles['top-section-right-container-filter-container']}>
                             <button className={styles['top-section-right-container-filter-button']} id={styles['selected-filter']}>Todas</button>
-                            <button className={styles['top-section-right-container-filter-button']}>Validados</button>
+                            <button className={styles['top-section-right-container-filter-button']}>Completados</button>
                             <button className={styles['top-section-right-container-filter-button']}>Vigentes</button>
                         </div>
                     </section>
@@ -76,7 +82,7 @@ export function Training() {
                                     instructor={`${training.nombres} ${training.apellido_p} ${training.apellido_m}`}
                                     format={training.modalidad}
                                     length={`${training.hora_inicio} - ${training.hora_termino}`}
-                                    state="Validado"
+                                    state={training.estado}
                                     onClick={() => navigate(`/training/${training.id_capacitacion}`)}
                                 />
                             ))

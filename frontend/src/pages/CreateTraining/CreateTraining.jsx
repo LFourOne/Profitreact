@@ -24,7 +24,11 @@ export function CreateTraining() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
+            } 
+            else if (error.response && error.response.status === 403) {
+                navigate('/training');  
+            } 
+            else {
                 console.error('Error inesperado:', error);
             }
         }

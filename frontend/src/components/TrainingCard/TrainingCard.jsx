@@ -22,7 +22,17 @@ export function TrainingCard ({ title, date, instructor, format, length, state, 
                 </div>
             </section>
             <section className={styles['card-bottom-subcontainer']}>
-                <span className={styles['card-bottom-subcontainer-state']}>{state}</span>
+                {
+                    state === 'Vigente' ? 
+                    (
+                        <span className={styles['card-bottom-subcontainer-state-current']}>{state}</span>
+                    )
+                    :
+                    state === 'Completado' &&
+                    (
+                        <span className={styles['card-bottom-subcontainer-state-complete']}>{state}</span>
+                    )
+                }
                 <button className={styles['card-bottom-subcontainer-details-btn']} onClick={onClick}>Ver Detalles</button>
             </section>
         </article>

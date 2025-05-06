@@ -23,8 +23,6 @@ export function NavBar() {
       try {
           const response = await axios.get('http://localhost:5500/navbar', { withCredentials: true });
           setRole(response.data.role);
-          console.log(response.data);
-  
       }
       catch (error) {
         if (error.response && error.response.status === 401) {
@@ -80,7 +78,7 @@ export function NavBar() {
             </div>
             <NavLink to="/training" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
             {
-              role === 'admin' && (
+              (role === 1 || role === 2 || role === 3) && (
                 <NavLink to="/register" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Registrar</NavLink>
               )
             }

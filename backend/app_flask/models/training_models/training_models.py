@@ -13,13 +13,14 @@ class Training:
         self.objetivos = data.get('objetivos')
         self.contenido = data.get('contenido')
         self.ruta = data.get('ruta')
+        self.id_estado = data.get('id_estado')
     
     @classmethod
     def create_training(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                INSERT INTO capacitaciones (nombre_capacitacion, fecha, id_modalidad, hora_inicio, hora_termino, rut_instructor, objetivos, contenido)
-                VALUES (%(nombre_capacitacion)s, %(fecha)s, %(id_modalidad)s, %(hora_inicio)s, %(hora_termino)s, %(rut_instructor)s, %(objetivos)s, %(contenido)s);
+                INSERT INTO capacitaciones (nombre_capacitacion, fecha, id_modalidad, hora_inicio, hora_termino, rut_instructor, objetivos, contenido, id_estado)
+                VALUES (%(nombre_capacitacion)s, %(fecha)s, %(id_modalidad)s, %(hora_inicio)s, %(hora_termino)s, %(rut_instructor)s, %(objetivos)s, %(contenido)s, 1);
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
@@ -33,6 +34,15 @@ class Training:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
+    def complete_training(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE capacitaciones SET id_estado = 2
+                WHERE id_capacitacion = %(id_capacitacion)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+
+    @classmethod
     def delete_training(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
@@ -44,9 +54,10 @@ class Training:
     def get_all_trainings(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT capacitaciones.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, modalidad.modalidad FROM capacitaciones
+                SELECT capacitaciones.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, modalidad.modalidad, estados.estado FROM capacitaciones
                 JOIN maestro_personal ON capacitaciones.rut_instructor = maestro_personal.rut_personal
                 JOIN modalidad ON capacitaciones.id_modalidad =  modalidad.id_modalidad
+                JOIN estados ON capacitaciones.id_estado = estados.id_estado
                 ORDER BY capacitaciones.fecha DESC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query)

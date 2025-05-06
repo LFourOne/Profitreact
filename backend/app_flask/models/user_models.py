@@ -19,6 +19,7 @@ class User:
         self.fecha_contratacion = data.get('fecha_contratacion')
         self.estado = data.get('estado')
         self.id_especialidad = data.get('id_especialidad')
+        self.id_rol = data.get('id_rol')
         self.reporta_hh = data.get('reporta_hh')
         self.color = data.get('color')
         self.creado_en = data.get('creado_en')
@@ -28,8 +29,8 @@ class User:
     def create_one(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                INSERT INTO maestro_personal(rut_personal, digito_verificador, usuario, contraseña, nombres, apellido_p, apellido_m, iniciales_nombre, email, fecha_nacimiento, fecha_contratacion, estado, id_especialidad, reporta_hh, color)
-                VALUES (%(rut_personal)s, %(digito_verificador)s, %(usuario)s, %(contraseña)s, %(nombres)s, %(apellido_p)s, %(apellido_m)s, %(iniciales_nombre)s, %(email)s, %(fecha_nacimiento)s, %(fecha_contratacion)s, %(estado)s, %(id_especialidad)s, %(reporta_hh)s, %(color)s);
+                INSERT INTO maestro_personal(rut_personal, digito_verificador, usuario, contraseña, nombres, apellido_p, apellido_m, iniciales_nombre, email, fecha_nacimiento, fecha_contratacion, estado, id_especialidad, id_rol, reporta_hh, color)
+                VALUES (%(rut_personal)s, %(digito_verificador)s, %(usuario)s, %(contraseña)s, %(nombres)s, %(apellido_p)s, %(apellido_m)s, %(iniciales_nombre)s, %(email)s, %(fecha_nacimiento)s, %(fecha_contratacion)s, %(estado)s, %(id_especialidad)s, %(id_rol)s, %(reporta_hh)s, %(color)s);
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     

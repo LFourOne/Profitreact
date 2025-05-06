@@ -52,9 +52,13 @@
     }
     #delete-button{
         cursor: pointer;
+        background-color: inherit;
+        border: 0;
     }
-    #delete-button:hover{
-        background-color: rgba(255, 0, 0, 0.158);
+    #delete-button:hover svg{
+        stroke:rgb(255, 87, 87);
+        transform: scale(1.3);
+        transition: transform 0.1s ease-in-out;
     }
 }
 
@@ -112,9 +116,13 @@
     }
     #delete-button{
         cursor: pointer;
+        background-color: inherit;
+        border: 0;
     }
-    #delete-button:hover{
-        background-color: rgba(255, 0, 0, 0.158);
+    #delete-button:hover svg{
+        stroke:rgb(255, 87, 87);
+        transform: scale(1.3);
+        transition: transform 0.1s ease-in-out;
     }
 }
 
@@ -167,15 +175,17 @@
     #meeting-tr{
         cursor: pointer;
     }
-    #meeting-tr:hover, #meeting-tr:hover #delete-button{
+    #meeting-tr:hover{
         background-color: #88c52d3b
     }
     #delete-button{
         cursor: pointer;
-        background-color: white;
+        background-color: inherit;
         border: 0;
     }
-    #delete-button:hover{
-        stroke: #88c52d3b;
+    #delete-button:hover svg{
+        stroke:rgb(255, 87, 87);
+        transform: scale(1.3);
+        transition: transform 0.1s ease-in-out;
     }
 }

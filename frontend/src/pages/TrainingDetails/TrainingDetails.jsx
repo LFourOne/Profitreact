@@ -99,6 +99,34 @@ export function TrainingDetails() {
         }
     }
 
+    const onSubmitComplete = async (e) => {
+        
+        const confirmed = window.confirm('¿Estás seguro que deseas completar la capacitación?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await axios.patch(`http://localhost:5500/training/complete/${id_capacitacion}`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true
+            });
+
+            await fetchApi();
+
+        } catch (error) {
+
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            } else {
+                console.error('Error inesperado:', error);
+            }
+        }
+    }
+
     const onSubmitDelete = async (e) => {
         e.preventDefault();
         const confirmed = window.confirm('¿Estás seguro que deseas eliminar la capacitación?');
@@ -204,7 +232,7 @@ export function TrainingDetails() {
         formData.append('id_capacitacion', id_capacitacion);
 
         try {
-            const response = await axios.post('http://localhost:5500/training/upload-file', formData, {
+            const response = await axios.patch('http://localhost:5500/training/upload-file', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -235,18 +263,34 @@ export function TrainingDetails() {
                             <button type='submit' form='edit-form'>Confirmar Cambios</button>
                         </div>
                         <div>
+                            {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3) && (
                             <button id={styles['delete-btn']} onClick={(e) => {onSubmitDelete(e);}}>
                                 Eliminar Capacitación
                             </button>
+                            )}
                         </div>
                         </>
                     ) 
                     : 
                     (
-                        <button id={styles['edit-btn']} onClick={(e) => {e.preventDefault(); switchEdit();}}>
-                            Activar Edición
-                        </button>
+                        (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) && (
+                            <button id={styles['edit-btn']} onClick={(e) => {e.preventDefault(); switchEdit();}}>
+                                Activar Edición
+                            </button>
+                        )
                     )}
+                    {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3) &&
+                        <div id={styles['complete-training-container']}>
+                            {
+                                training[0].id_estado === 1 &&
+                                (
+                                    <button id={styles['complete-training-container-btn']} onClick={(e) => {e.preventDefault(); onSubmitComplete();}}>
+                                        Completar Capacitación
+                                    </button>
+                                )
+                            }
+                        </div>
+                    }   
                 </section>
                 <section id={styles['training-container']}>
                     { isEditing ?
@@ -261,7 +305,16 @@ export function TrainingDetails() {
                                             <input type="date" defaultValue={formatDateEdit(training[0].fecha)} {...registerEdit('date', {required: true})} />
                                         </div>
                                         <div>
-                                            <span id={styles['state']}>Completado</span>
+                                        {
+                                                training[0].id_estado === 2 ? 
+                                                (
+                                                    <span id={styles['complete-state']}>Completado</span>
+                                                ) 
+                                                : 
+                                                training[0].id_estado === 1 && (
+                                                    <span id={styles['current-state']}>Vigente</span>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -353,7 +406,16 @@ export function TrainingDetails() {
                                             <h2>{formatDate(training[0].fecha)}</h2>
                                         </div>
                                         <div>
-                                            <span id={styles['state']}>Completado</span>
+                                            {
+                                                training[0].id_estado === 2 ? 
+                                                (
+                                                    <span id={styles['complete-state']}>Completado</span>
+                                                ) 
+                                                : 
+                                                training[0].id_estado === 1 && (
+                                                    <span id={styles['current-state']}>Vigente</span>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -406,30 +468,36 @@ export function TrainingDetails() {
                                         </a>
                                     </div>
                                     ) 
-                                    : 
+                                    :
                                     (
-                                    <form onSubmit={handleSubmit(onSubmitFile)} id={styles['file-attach-container']}>
-                                        <label htmlFor="file-input" id={styles['file-label']}>
-                                            {fileName}
-                                            <input 
-                                                type="file" 
-                                                accept="application/pdf" 
-                                                id={'file-input'} 
-                                                className={styles['file-input']} 
-                                                {...register('file', {
-                                                    onChange: (e) => {
-                                                        const file = e.target.files[0];
-                                                        if (file) {
-                                                            setFileName(file.name);
-                                                        } else {
-                                                            setFileName('Seleccionar archivo PDF');
-                                                        }
-                                                    },
-                                                })}
-                                                />
-                                        </label>
-                                        <button type="submit" id={styles['file-attach-btn']}>Adjuntar</button>
-                                    </form>
+                                    (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) ? (
+                                        <form onSubmit={handleSubmit(onSubmitFile)} id={styles['file-attach-container']}>
+                                            <label htmlFor="file-input" id={styles['file-label']}>
+                                                {fileName}
+                                                <input 
+                                                    type="file" 
+                                                    accept="application/pdf" 
+                                                    id={'file-input'} 
+                                                    className={styles['file-input']} 
+                                                    {...register('file', {
+                                                        onChange: (e) => {
+                                                            const file = e.target.files[0];
+                                                            if (file) {
+                                                                setFileName(file.name);
+                                                            } else {
+                                                                setFileName('Seleccionar archivo PDF');
+                                                            }
+                                                        },
+                                                    })}
+                                                    />
+                                            </label>
+                                            <button type="submit" id={styles['file-attach-btn']}>Adjuntar</button>
+                                        </form>
+                                    )
+                                    :
+                                    <div id={styles['file-attach-container']}>
+                                        <span id={styles['file-attach']}>No hay archivo adjunto</span>
+                                    </div>
                                     )}
                             </section>
                         </section>
@@ -456,16 +524,18 @@ export function TrainingDetails() {
                                             </span>
                                         </div>
                                         <div id={styles['right-middle-participant-card-remove-subcontainer']}>
-                                            <button onClick={(e => {removeAttendance(e, assistant.rut_asistente)})} id={styles['right-middle-participant-card-remove-btn']}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a70000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                                            </button>
+                                            {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4) && (
+                                                <button onClick={(e => {removeAttendance(e, assistant.rut_asistente)})} id={styles['right-middle-participant-card-remove-btn']}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a70000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 ))
                             }
                         </section>
                         <section id={styles['right-bottom-section']}>
-                            {!assistant.some((assistant) => assistant.rut_asistente === sessionData) ? (
+                            {!assistant.some((assistant) => assistant.rut_asistente === sessionData.rut_personal) ? (
                                 <button type="submit" onClick={(e) => onSubmitAttendance(e, id_capacitacion, sessionData)} id={styles['right-bottom-btn']}>Registrar asistencia</button>
                             )
                             : 

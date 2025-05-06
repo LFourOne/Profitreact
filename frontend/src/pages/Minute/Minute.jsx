@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router';
+import { data, useNavigate, useParams } from 'react-router';
 import axios from 'axios';
 import Modal from 'react-modal';
 import styles from './Minute.module.css';
@@ -184,16 +184,16 @@ export function Minute() {
         resetTopic();
     }
 
-    const closeMeeting = async (event, id_meeting) => {
+    const closeMeeting = async (event) => {
 
         const confirmed = window.confirm('¿Estás segur@ que deseas cerrar la reunión? (No podrás agregar más compromisos en esta reunión)');
         if (!confirmed) {
             return;
         }
-
+        
         event.preventDefault();
 
-        const response = await axios.post('http://localhost:5500/reports/minute/close-meeting', {id_meeting}, {
+        const response = await axios.patch('http://localhost:5500/reports/minute/close-meeting', {id_reunion}, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -361,7 +361,7 @@ export function Minute() {
                             </thead>
                             <tbody className={styles['tbody-list']}>
                                 {commitments
-                                .filter(commitment => (stateFilter === 0 || commitment.id_estado_compromiso === stateFilter) && (projectFilter === "" || commitment.id_proyecto === projectFilter))
+                                .filter(commitment => (stateFilter === 0 || commitment.id_estado === stateFilter) && (projectFilter === "" || commitment.id_proyecto === projectFilter))
                                 .map((commitment) => (
                                     <tr className={styles['tr-list']} key={commitment.id_compromiso}>
                                         <td className={styles['td']}>{commitment.id_proyecto}</td>
@@ -375,69 +375,69 @@ export function Minute() {
                                                 <td id={styles['td-texto-compromiso']} className={styles['td']}>{commitment.texto_compromiso}</td>
                                             )}
                                         <td className={styles['td']}>
-                                            {commitment.id_estado_compromiso === 1 ? (
+                                            {commitment.id_estado === 1 ? (
                                                 <button type='submit' className={styles['pointer']} onClick={(e) => onSubmitComplete(e, commitment.id_compromiso)}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                 </button>
                                             )
                                             : 
                                             (
-                                            commitment.id_estado_compromiso === 2 ? (
+                                            commitment.id_estado === 2 ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#669225" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 3 && (
+                                            commitment.id_estado === 3 && (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#930000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                                             )))
                                             }
                                         </td>
                                         <td className={styles['td']}>
-                                            {commitment.id_estado_compromiso === 1 ? (
+                                            {commitment.id_estado === 1 ? (
                                                 <span id={styles['current']}>Vigente</span>
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 2 ? (
+                                            commitment.id_estado === 2 ? (
                                                 <span id={styles['completed']}>Completado</span>
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 3 && (
+                                            commitment.id_estado === 3 && (
                                                 <span id={styles['deleted']}>Eliminado</span>
                                             )))}
                                         </td>
                                         <td className={styles['td']}>
-                                            {commitment.id_estado_compromiso === 1 ? (
+                                            {commitment.id_estado === 1 ? (
                                                 <button onClick={() => openModal(commitment.id_compromiso)} className={styles['pointer']}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
                                                 </button>
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 2 ? (
+                                            commitment.id_estado === 2 ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#669225" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 3 && (
+                                            commitment.id_estado === 3 && (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#930000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                                             )))}
                                         </td>
                                         <td className={styles['td']}>
-                                            {commitment.id_estado_compromiso === 1 ? (
+                                            {commitment.id_estado === 1 ? (
                                                 <button type='submit' className={styles['pointer']} onClick={(e) => onSubmitDelete(e, commitment.id_compromiso)}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" className={styles['pointer']} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                                 </button>   
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 2 ? (
+                                            commitment.id_estado === 2 ? (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#669225" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                                             )
                                             :
                                             (
-                                            commitment.id_estado_compromiso === 3 && (
+                                            commitment.id_estado === 3 && (
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#930000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
                                             )))}
                                         </td>
@@ -448,8 +448,8 @@ export function Minute() {
                     </div>
                 </section>
                 <section id={styles['close-meeting-section']}>
-                    {meetingData.length > 0 && meetingData[0].hora_termino === 0 ? (
-                        <button type='submit' className={styles['primary-btn']} onClick={(e) => closeMeeting(e, meetingData[0].id_reunion)}>Cerrar Reunión</button>
+                    {meetingData.length > 0 && meetingData[0].id_estado === 1 ? (
+                        <button type='submit' className={styles['primary-btn']} onClick={(e) => closeMeeting(e)}>Cerrar Reunión</button>
                     )
                     :
                     (

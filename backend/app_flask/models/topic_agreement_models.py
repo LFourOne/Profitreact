@@ -21,8 +21,8 @@ class Agreements:
     def select_agreements(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT acuerdos.*, reunion.id_proyecto FROM acuerdos
-                JOIN reunion ON acuerdos.id_reunion = reunion.id_reunion
+                SELECT acuerdos.*, reuniones.id_proyecto FROM acuerdos
+                JOIN reuniones ON acuerdos.id_reunion = reuniones.id_reunion
                 WHERE acuerdos.id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
@@ -46,8 +46,8 @@ class Topics:
     def select_topics(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT temas_tratados.*, reunion.id_proyecto FROM temas_tratados
-                JOIN reunion ON temas_tratados.id_reunion = reunion.id_reunion
+                SELECT temas_tratados.*, reuniones.id_proyecto FROM temas_tratados
+                JOIN reuniones ON temas_tratados.id_reunion = reuniones.id_reunion
                 WHERE temas_tratados.id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
