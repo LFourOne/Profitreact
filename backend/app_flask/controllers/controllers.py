@@ -74,6 +74,10 @@ def login_process():
     # Si la contraseña no coincide, retornamos un error
     if not bcrypt.check_password_hash(user_login.contraseña, request.form['password']):
         return jsonify({'status': 'error', 'message': 'error'}), 401
+    
+    # Si el usuario no está activo, retornamos un error
+    if user_login.estado == 0:
+        return jsonify({'status': 'error', 'message': 'error'}), 401
 
     # En caso de que haya una sesión activa, la limpiamos
     if session:
@@ -100,8 +104,8 @@ def register():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    if session['rut_personal'] != 21674304:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     specialty = Specialty.get_specialities()
 
@@ -115,8 +119,8 @@ def register_process():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    if session['rut_personal'] != 21674304:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -140,10 +144,11 @@ def register_process():
         'usuario': data['user'],
         'iniciales_nombre': data['initials'],
         'id_especialidad': data['specialty'],
+        'id_rol': data['role'],
         'fecha_nacimiento': data['birthdate'],
         'fecha_contratacion': data['hiring-date'],
         'reporta_hh': data['report_hh'],
-        'id_estado': 1,
+        'estado': 1,
         'color': '#917CB1'
     }
 

@@ -62,7 +62,7 @@ export function Training() {
                 <section id={styles['top-section']}>
                     <section id={styles['top-section-left-container']}>
                         <div>
-                            <h1>Capacitaciones</h1>
+                            <h1 id={styles['top-section-left-container-h1']}>Capacitaciones</h1>
                             <h2 id={styles['top-section-left-container-h2']}>Gestiona y visualiza todas las capacitaciones realizadas en la empresa</h2>
                         </div>
                     </section>

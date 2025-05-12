@@ -124,6 +124,21 @@ export function Register() {
                                 <input type="checkbox" {...register('report_hh')}/>
                             </fieldset>
                         </div>
+                        <div>
+                            <fieldset className={styles['field-container']}>
+                                <label htmlFor="role" className={styles['label']}>Rol</label>
+                                <select name="role" id={styles['role']} className={styles['user-container-input']} {...register('role', {required: "Ingrese credenciales válidas"})}>
+                                    <option value="1">Gerencia</option>
+                                    <option value="2">Administradores</option>
+                                    <option value="3">Subgerencia</option>
+                                    <option value="4">Jefes de Especialidad</option>
+                                    <option value="5">Usuarios Avanzados</option>
+                                    <option value="6">Profesionales de Proyecto</option>
+                                    <option value="7">Profesionales en Entrenamiento</option>
+                                    <option value="8">Practicantes</option>
+                                </select>
+                            </fieldset>
+                        </div>
                         {errorMessage && 
                         <div className={styles['error-container']}>
                                 <span>{errorMessage}</span>

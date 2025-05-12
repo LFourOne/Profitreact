@@ -1,167 +1,507 @@
-#main{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    padding-top: 150px;
-    padding-bottom: 70px;
-    gap: 15px;
+@media (min-width: 700px) and (max-width: 1024px){
+    #main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100vw;
+        min-height: 100vh;
+        padding-top: 124px;
+        padding-bottom: 70px;
+        gap: 15px;
+    }
+    #previous-page-container{
+        display: flex;
+        justify-content: flex-start;
+        width: 720px;
+    }
+    #previous-page-btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        border: none;
+        background-color: white;
+        color: #808080;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    #form{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 700px;
+        min-height: 950px;
+        padding: 28px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+    #form-top-container-h1{
+        font-size: 26px;
+        height: 24px;
+    }
+    #form-top-container-h2{
+        font-size: 16px;
+        color: gray;
+        height: 15px;
+    }
+    #form-middle-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 15px;
+    }
+    .fieldset{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 5px;
+    }
+    .fieldset-label{
+        font-size: 16px;
+        color: black;
+    }
+    #name-input{
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #date-input{
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #format-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        gap: 10px;
+    }
+    .format-label{
+        font-size: 16px;
+        color: black;
+    }
+    #duration-container{
+        display: flex;
+        width: 100%;
+        gap: 16px;
+    }
+    .duration-input-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+    }
+    #start-duration-input{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #end-duration-input{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #instructor{
+        width: 100%;
+    }
+    #objective-input{
+        width: 100%;
+        min-height: 60px;
+        max-height: 150px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    #content-input{
+        width: 100%;
+        min-height: 100px;
+        max-height: 200px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    #form-bottom-container{
+        width: 100%;
+        margin-top: 24px;
+    }
+    #submit-btn{
+        width: 100%;
+        height: 50px;
+        background-color: rgb(115, 167, 39);
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    #submit-btn:hover{
+        background-color: rgb(101, 146, 33);
+    }
 }
-#previous-page-container{
-    display: flex;
-    justify-content: flex-start;
-    width: 720px;
+
+@media (min-width: 1025px) and (max-width: 1440px){
+    #main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100vw;
+        min-height: 100vh;
+        padding-top: 120px;
+        padding-bottom: 40px;
+        gap: 15px;
+    }
+    #previous-page-container{
+        display: flex;
+        justify-content: flex-start;
+        width: 720px;
+    }
+    #previous-page-btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        border: none;
+        background-color: white;
+        color: #808080;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    #form{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 700px;
+        min-height: 950px;
+        padding: 28px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+    #form-top-container-h1{
+        font-size: 26px;
+        height: 24px;
+    }
+    #form-top-container-h2{
+        font-size: 16px;
+        color: gray;
+        height: 15px;
+    }
+    #form-middle-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 15px;
+    }
+    .fieldset{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 5px;
+    }
+    .fieldset-label{
+        font-size: 16px;
+        color: black;
+    }
+    #name-input{
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #date-input{
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #format-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        gap: 10px;
+    }
+    .format-label{
+        font-size: 16px;
+        color: black;
+    }
+    #duration-container{
+        display: flex;
+        width: 100%;
+        gap: 16px;
+    }
+    .duration-input-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+    }
+    #start-duration-input{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #end-duration-input{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #instructor{
+        width: 100%;
+    }
+    #objective-input{
+        width: 100%;
+        min-height: 60px;
+        max-height: 150px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    #content-input{
+        width: 100%;
+        min-height: 100px;
+        max-height: 200px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    #form-bottom-container{
+        width: 100%;
+        margin-top: 24px;
+    }
+    #submit-btn{
+        width: 100%;
+        height: 50px;
+        background-color: rgb(115, 167, 39);
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    #submit-btn:hover{
+        background-color: rgb(101, 146, 33);
+    }
 }
-#previous-page-btn{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    border: none;
-    background-color: white;
-    color: #808080;
-    font-size: 16px;
-    cursor: pointer;
-}
-#form{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 700px;
-    min-height: 950px;
-    padding: 28px;
-    border: 1px solid lightgray;
-    border-radius: 10px;
-    box-sizing: border-box;
-    overflow-x: auto;
-}
-#form-top-container-h1{
-    font-size: 26px;
-    height: 24px;
-}
-#form-top-container-h2{
-    font-size: 16px;
-    color: gray;
-    height: 15px;
-}
-#form-middle-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-    gap: 15px;
-}
-.fieldset{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 100%;
-    gap: 5px;
-}
-.fieldset-label{
-    font-size: 16px;
-    color: black;
-}
-#name-input{
-    width: 100%;
-    height: 40px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-#date-input{
-    width: 100%;
-    height: 40px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-#format-container{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-    gap: 10px;
-}
-.format-label{
-    font-size: 16px;
-    color: black;
-}
-#duration-container{
-    display: flex;
-    width: 100%;
-    gap: 16px;
-}
-.duration-input-container{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    width: 100%;
-}
-#start-duration-input{
-    display: flex;
-    width: 100%;
-    height: 40px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-#end-duration-input{
-    display: flex;
-    width: 100%;
-    height: 40px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-#instructor{
-    width: 100%;
-}
-#objective-input{
-    width: 100%;
-    min-height: 60px;
-    max-height: 150px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    box-sizing: border-box;
-    resize: vertical;
-}
-#content-input{
-    width: 100%;
-    min-height: 100px;
-    max-height: 200px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    box-sizing: border-box;
-    resize: vertical;
-}
-#form-bottom-container{
-    width: 100%;
-    margin-top: 24px;
-}
-#submit-btn{
-    width: 100%;
-    height: 50px;
-    background-color: rgb(115, 167, 39);
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-#submit-btn:hover{
-    background-color: rgb(101, 146, 33);
+
+@media (min-width: 1441px){
+    #main{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        padding-top: 150px;
+        padding-bottom: 70px;
+        gap: 15px;
+    }
+    #previous-page-container{
+        display: flex;
+        justify-content: flex-start;
+        width: 720px;
+    }
+    #previous-page-btn{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        border: none;
+        background-color: white;
+        color: #808080;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    #form{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+        width: 700px;
+        min-height: 950px;
+        padding: 28px;
+        border: 1px solid lightgray;
+        border-radius: 10px;
+        box-sizing: border-box;
+        overflow-x: auto;
+    }
+    #form-top-container-h1{
+        font-size: 26px;
+        height: 24px;
+    }
+    #form-top-container-h2{
+        font-size: 16px;
+        color: gray;
+        height: 15px;
+    }
+    #form-middle-container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 15px;
+    }
+    .fieldset{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 5px;
+    }
+    .fieldset-label{
+        font-size: 16px;
+        color: black;
+    }
+    #name-input{
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #date-input{
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #format-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+        gap: 10px;
+    }
+    .format-label{
+        font-size: 16px;
+        color: black;
+    }
+    #duration-container{
+        display: flex;
+        width: 100%;
+        gap: 16px;
+    }
+    .duration-input-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 100%;
+    }
+    #start-duration-input{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #end-duration-input{
+        display: flex;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    #instructor{
+        width: 100%;
+    }
+    #objective-input{
+        width: 100%;
+        min-height: 60px;
+        max-height: 150px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    #content-input{
+        width: 100%;
+        min-height: 100px;
+        max-height: 200px;
+        padding: 10px;
+        border: 1px solid lightgray;
+        border-radius: 5px;
+        box-sizing: border-box;
+        resize: vertical;
+    }
+    #form-bottom-container{
+        width: 100%;
+        margin-top: 24px;
+    }
+    #submit-btn{
+        width: 100%;
+        height: 50px;
+        background-color: rgb(115, 167, 39);
+        border: none;
+        color: white;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    #submit-btn:hover{
+        background-color: rgb(101, 146, 33);
+    }
 }
