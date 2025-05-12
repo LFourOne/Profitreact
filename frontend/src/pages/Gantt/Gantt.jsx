@@ -175,20 +175,19 @@ export function Gantt() {
         };
 
         // Enviar la solicitud al backend
-        const response = await axios.post('http://localhost:5500/gantt/editar', formattedData, { withCredentials: true });
+        const response = await axios.patch('http://localhost:5500/gantt/editar', formattedData, { withCredentials: true });
         await fetchApi(); // Refresca los datos
         closeModal(); // Cierra la modal
         };
 
     const deleteSubmit = async (data) => {
-        const response = await axios.post('http://localhost:5500/gantt/eliminar', data, { withCredentials: true });
+        const response = await axios.delete('http://localhost:5500/gantt/eliminar', {data, withCredentials: true });
         await fetchApi();
         closeModal();
     };
 
     const customizeSubmit = async (data) => {
-
-        const response = await axios.post('http://localhost:5500/gantt/customize', data, { withCredentials: true });
+        const response = await axios.patch('http://localhost:5500/gantt/customize', data, { withCredentials: true });
         await fetchApi();
         closeModal();
     };
@@ -310,7 +309,7 @@ export function Gantt() {
                     </button>
                 </div>
                 <div className={styles['gantt-header-subcontainer']} id={styles['gantt-header-customize-container']}>
-                    {(specialty.some((specialtyItem) => specialtyItem.jefe_especialidad === sessionData.rut_personal) || sessionData.rut_personal == 21674304) && (
+                    {((specialty.some((specialtyItem) => specialtyItem.jefe_especialidad === sessionData.rut_personal) || (sessionData.id_rol == 1 || sessionData.id_rol == 2 || sessionData.id_rol == 3 || sessionData.id_rol == 4))) && (
                         <button id={styles['customize-btn']} onClick={openCustomizeModal}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={32} height={32} fill={"none"}>
                                 <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C12.8417 22 14 22.1163 14 21C14 20.391 13.6832 19.9212 13.3686 19.4544C12.9082 18.7715 12.4523 18.0953 13 17C13.6667 15.6667 14.7778 15.6667 16.4815 15.6667C17.3334 15.6667 18.3334 15.6667 19.5 15.5C21.601 15.1999 22 13.9084 22 12Z" stroke="currentColor" strokeWidth="1.5" />
@@ -719,7 +718,11 @@ export function Gantt() {
                                     <input type="hidden" {...registerAdd("project")} value={selectedProject.id_proyecto} />
                                     <div id={styles['buttons-container']}>
                                         <button onClick={closeModal} id={styles['secondary-btn']}>Cerrar</button>
-                                        <button type='submit' id={styles['primary-btn']}>Agregar</button>
+                                        {
+                                            (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5) && (
+                                                <button type='submit' id={styles['primary-btn']}>Agregar</button>
+                                            )
+                                        }
                                     </div>
                                 </div>
                             </form>
@@ -740,8 +743,9 @@ export function Gantt() {
                                     <h2>{selectedProject.id_proyecto}</h2>
                                 </div>
                                 <form onSubmit={handleSubmitDelete(deleteSubmit)} id={styles['delete-form']}>
-                                    {
+                                    {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5) ? (
                                         !isEditing && 
+                                        <>
                                             <button type='submit' id={styles['delete-btn']}>
                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ff4d4d"} fill={"none"}>
                                                     <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -750,9 +754,15 @@ export function Gantt() {
                                                     <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                                                 </svg>
                                             </button> 
+                                        <input type="hidden" {...registerDelete("date")} value={selectedDate.toLocaleDateString('es-ES')} />
+                                        <input type="hidden" {...registerDelete("project")} value={selectedProject.id_proyecto} />
+                                        </>
+                                    )
+                                    :
+                                    (
+                                        <div style={{marginRight: '40px'}}></div>
+                                    )
                                     }
-                                    <input type="hidden" {...registerDelete("date")} value={selectedDate.toLocaleDateString('es-ES')} />
-                                    <input type="hidden" {...registerDelete("project")} value={selectedProject.id_proyecto} />
                                 </form>
                             </div>
                             <form onSubmit={handleSubmitEdit(editSubmit)}>
@@ -809,9 +819,11 @@ export function Gantt() {
                                         : <button onClick={closeModal} id={styles['secondary-btn']} type='button'>Cerrar</button>
                                     }
                                     {
-                                        isEditing
-                                        ? <button type='submit' id={styles['primary-btn']}>Aplicar</button>
-                                        : <button onClick={(e) => {e.preventDefault(); switchEdit(); }} id={styles['primary-btn']} type='button'>Editar</button>
+                                        (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5)  && (
+                                            isEditing
+                                            ? <button type='submit' id={styles['primary-btn']}>Aplicar</button>
+                                            : <button onClick={(e) => {e.preventDefault(); switchEdit(); }} id={styles['primary-btn']} type='button'>Editar</button>
+                                        )
                                     }
                                 </div>
                             </form>

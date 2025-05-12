@@ -17,6 +17,8 @@ export function Meeting() {
     const [meetingData, setMeetingData] = useState([]);
     const [staff, setStaff] = useState([]);
 
+    const [loading, setLoading] = useState(true);
+
     const [isProjectDisabled, setIsProjectDisabled] = useState(false);
     const meetingType = watch("meeting_type");
 
@@ -45,9 +47,15 @@ export function Meeting() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
+            }
+            else if (error.response && error.response.status === 403) {
+                navigate('/index');
+            }
+            else {
                 console.error('Error inesperado:', error);
             }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -83,6 +91,7 @@ export function Meeting() {
 
     return(
         <>
+        {loading ? <p id={styles['loading']}>Cargando</p> : (
             <main id={styles['main']}>
                 <section id={styles['main-section']}>
                     <form onSubmit={handleSubmit(onSubmitAdd)} id={styles['form']}>
@@ -131,6 +140,7 @@ export function Meeting() {
                     </div>
                 </section>
             </main>
+        )}
         </>
     )
 

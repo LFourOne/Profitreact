@@ -282,10 +282,14 @@ export function TrainingDetails() {
                     {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3) &&
                         <div id={styles['complete-training-container']}>
                             {
-                                training[0].id_estado === 1 &&
-                                (
+                                (training[0].id_estado === 1 && training[0].ruta) ? (
                                     <button id={styles['complete-training-container-btn']} onClick={(e) => {e.preventDefault(); onSubmitComplete();}}>
                                         Completar Capacitación
+                                    </button>
+                                )
+                                : (
+                                    <button id={styles['complete-training-container-btn-disabled']} disabled>
+                                        Completar capacitación
                                     </button>
                                 )
                             }
@@ -535,7 +539,11 @@ export function TrainingDetails() {
                             }
                         </section>
                         <section id={styles['right-bottom-section']}>
-                            {!assistant.some((assistant) => assistant.rut_asistente === sessionData.rut_personal) ? (
+                            {training[0].id_estado === 2 ? (
+                                <button id={styles['right-bottom-btn-disabled']}>Capacitación Cerrada</button>
+                            )
+                            :
+                            !assistant.some((assistant) => assistant.rut_asistente === sessionData.rut_personal) ? (
                                 <button type="submit" onClick={(e) => onSubmitAttendance(e, id_capacitacion, sessionData)} id={styles['right-bottom-btn']}>Registrar asistencia</button>
                             )
                             : 

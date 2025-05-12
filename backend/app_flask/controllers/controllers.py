@@ -184,6 +184,9 @@ def meeting():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
     response_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
@@ -210,10 +213,11 @@ def insert_meeting():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
-
-    print(f"Data: {data}")
 
     today_date = datetime.now().strftime('%Y/%m/%d')
     hour_date = datetime.now().strftime('%H:%M:%S')
@@ -226,8 +230,6 @@ def insert_meeting():
     }
 
     meeting_id = Meeting.create_meeting(meeting_data)
-
-    print(f"Meeting ID: {meeting_id}")
 
     for attendant in data['name_and_last_name_form']:
 
@@ -258,6 +260,7 @@ def reports():
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
+        'id_rol': session['id_rol']
     }
 
     meetings = Meeting.select_all_meetings()
@@ -275,6 +278,9 @@ def delete_meeting():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -299,6 +305,7 @@ def minute(id_reunion):
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
+        'id_rol': session['id_rol']
     }
 
     agreements = Agreements.select_agreements({'id_reunion' : id_reunion})
@@ -342,6 +349,9 @@ def add_commitment():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
     data = request.get_json()
 
     if data['priority'] == True:
@@ -368,6 +378,9 @@ def complete_commitment():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -382,11 +395,14 @@ def complete_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/edit-commitment', methods=['POST'])
+@app.route('/reports/minute/edit-commitment', methods=['PATCH'])
 def edit_commitment():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -429,6 +445,9 @@ def delete_commitment():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -443,11 +462,11 @@ def delete_commitment():
 @app.route('/reports/minute/close-meeting', methods=['PATCH'])
 def close_meeting():
 
-    data = request.get_json()
-    print(f"Data: {data}")
-
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -470,6 +489,9 @@ def add_agreement():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
     data = request.get_json()
 
     agreement_data = {
@@ -486,6 +508,9 @@ def add_topic():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     data = request.get_json()
 

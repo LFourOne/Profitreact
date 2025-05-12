@@ -62,7 +62,11 @@ export function NavBar() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
                 </button>
                 <div className={`${styles['dropdown-content']} ${activeDropdown === 'meeting' ? styles['open'] : ''}`}>
-                    <NavLink to="/meeting" onClick={() => setActiveDropdown(null)}>Reuniones</NavLink>
+                  {
+                    (role === 1 || role === 2 || role === 3 || role === 4 || role === 5 || role === 6) && (
+                        <NavLink to="/meeting" onClick={() => setActiveDropdown(null)}>Reuniones</NavLink>
+                    )
+                  }
                     <NavLink to="/reports" onClick={() => setActiveDropdown(null)}>Reportes</NavLink>
                 </div>
             </div>

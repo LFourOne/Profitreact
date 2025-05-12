@@ -103,6 +103,7 @@ def gantt():
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
+        'id_rol' : session['id_rol'],
         'color' : session['color'],
         'company': company
     }
@@ -169,10 +170,8 @@ def planification():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -208,16 +207,14 @@ def planification():
         'planification': updated_planification
     })
 
-@app.route('/gantt/editar', methods=['POST'])
+@app.route('/gantt/editar', methods=['PATCH'])
 def edit_planification():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
 
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     # Almacenamos los datos entregados desde el front
     data = request.get_json()
@@ -267,16 +264,14 @@ def edit_planification():
         'message': 'success'
     })
 
-@app.route('/gantt/eliminar', methods=['POST'])
+@app.route('/gantt/eliminar', methods=['DELETE'])
 def delete_planification():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     # Almacenamos los datos entregados desde el front
     data = request.get_json()
@@ -309,16 +304,14 @@ def delete_planification():
         'message': 'success'
     })
 
-@app.route('/gantt/customize', methods=['POST'])
+@app.route('/gantt/customize', methods=['PATCH'])
 def customize_user():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-    
-    specialty_list = Specialty.get_specialty_bosses()
 
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     data = request.get_json()
 
@@ -419,6 +412,7 @@ def gantt_delivery():
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
+        'id_rol' : session['id_rol'],
         'company': company
     }
 
@@ -441,10 +435,8 @@ def insert_delivery():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
 
@@ -492,16 +484,14 @@ def insert_delivery():
     )
 
 
-@app.route('/gantt/delivery/editar', methods=['POST'])
+@app.route('/gantt/delivery/editar', methods=['PATCH'])
 def edit_delivery():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
 
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     # Almacenamos los datos entregados desde el front
     data = request.get_json()
@@ -606,16 +596,14 @@ def edit_delivery():
         'message': 'success'
     })
 
-@app.route('/gantt/delivery/eliminar', methods=['POST'])
+@app.route('/gantt/delivery/eliminar', methods=['DELETE'])
 def delete_delivery():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
 
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     # Almacenamos los datos entregados desde el front
     data = request.get_json()
@@ -647,16 +635,14 @@ def delete_delivery():
         'message': 'success'
     })
 
-@app.route('/gantt/delivery/completar', methods=['POST'])
+@app.route('/gantt/delivery/completar', methods=['PATCH'])
 def complete_delivery():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    specialty_list = Specialty.get_specialty_bosses()
-
-    if not (any(session['rut_personal'] == specialty['jefe_especialidad'] for specialty in specialty_list) or session['rut_personal'] == 21674304):
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     # Almacenamos los datos entregados desde el front
     data = request.get_json()
@@ -683,14 +669,14 @@ def complete_delivery():
         'message': 'success'
     })
 
-@app.route('/gantt/delivery/customize', methods=['POST'])
+@app.route('/gantt/delivery/customize', methods=['PATCH'])
 def customize_delivery():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
-    if session['rut_personal'] != 21674304:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
     

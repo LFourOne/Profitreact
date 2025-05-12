@@ -7,6 +7,7 @@ import { TrainingCard } from '../../components/TrainingCard/TrainingCard';
 export function Training() {
 
     const [loading, setLoading] = useState(true);
+    const [filter, setFilter] = useState(0);
 
     const navigate = useNavigate();
 
@@ -43,8 +44,17 @@ export function Training() {
         return formatter.format(date);
     };
 
-
+    const handleFilterChange = (filterType) => {
+        setFilter(filterType);
+    };
     
+    const filteredTraining = training.filter((training) => {
+        if (filter === 0) return true;
+        if (filter === 2) return training.estado === "Completado";
+        if (filter === 1) return training.estado === "Vigente";
+        return false;
+    });
+
     return(
         <>
         {loading ? <p>Cargando</p> : (
@@ -66,15 +76,15 @@ export function Training() {
                             )}
                         </div>
                         <div id={styles['top-section-right-container-filter-container']}>
-                            <button className={styles['top-section-right-container-filter-button']} id={styles['selected-filter']}>Todas</button>
-                            <button className={styles['top-section-right-container-filter-button']}>Completados</button>
-                            <button className={styles['top-section-right-container-filter-button']}>Vigentes</button>
+                            <button className={styles['top-section-right-container-filter-button']} id={`${filter === 0 ? styles['selected-filter'] : ''}`} onClick={() => handleFilterChange(0)}>Todas</button>
+                            <button className={styles['top-section-right-container-filter-button']} id={`${filter === 2 ? styles['selected-filter'] : ''}`} onClick={() => handleFilterChange(2)}>Completadas</button>
+                            <button className={styles['top-section-right-container-filter-button']} id={`${filter === 1 ? styles['selected-filter'] : ''}`} onClick={() => handleFilterChange(1)}>Vigentes</button>
                         </div>
                     </section>
                 </section>
                 <section id={styles['bottom-section']}>
-                        {training.length > 0 ? (
-                            training.map((training) => (
+                        {filteredTraining.length > 0 ? (
+                            filteredTraining.map((training) => (
                                 <TrainingCard
                                     key={training.id_capacitacion}
                                     title={training.nombre_capacitacion}
