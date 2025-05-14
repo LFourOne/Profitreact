@@ -162,18 +162,15 @@
   .main{
       display: flex;
       justify-content: center;
-      align-items: center;
       width: 100vw;
-      padding: 0;
-      margin: 0;
-      margin-top: 50px;
+      min-height: 100vh;
     }
     .background{
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100vw;
-      height: 100vh;
+      min-height: 100vh;
       border-right: 3px solid rgb(68, 68, 68);
       --s: 37px;
       --c: #0000, #282828 0.5deg 119.5deg, #0000 120deg;
@@ -184,6 +181,8 @@
           var(--g2) var(--s) calc(1.73 * var(--s)), var(--g3) var(--s) 0,
           var(--g3) 0 calc(1.73 * var(--s)) #1e1e1e;
       background-size: calc(2 * var(--s)) calc(3.46 * var(--s));
+      padding-top: 150px;
+      padding-bottom: 50px;
     }
     .form-section{
       display: flex;

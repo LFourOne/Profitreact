@@ -56,20 +56,7 @@ export function NavBar() {
         </div>
         <div className={styles['navbar-links']}>
             <NavLink to="/index" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Inicio</NavLink>
-            <div className={styles['dropdown']}>
-                <button onClick={() => toggleDropdown('meeting')} className={`${styles['dropdown-button']} ${['/meeting', '/reports'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
-                    Reuniones
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
-                </button>
-                <div className={`${styles['dropdown-content']} ${activeDropdown === 'meeting' ? styles['open'] : ''}`}>
-                  {
-                    (role === 1 || role === 2 || role === 3 || role === 4 || role === 5 || role === 6) && (
-                        <NavLink to="/meeting" onClick={() => setActiveDropdown(null)}>Reuniones</NavLink>
-                    )
-                  }
-                    <NavLink to="/reports" onClick={() => setActiveDropdown(null)}>Reportes</NavLink>
-                </div>
-            </div>
+            <NavLink to="/reports" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reportes</NavLink>
             <div className={styles['dropdown']}>
                 <button onClick={() => toggleDropdown('gantt')} className={`${styles['dropdown-button']} ${['/gantt', '/gantt/delivery'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
                     Gantt
@@ -87,10 +74,7 @@ export function NavBar() {
               )
             }
         </div>
-        <div className={styles['navbar-user']}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5.52 19c.64-2.2 1.84-3 3.22-3h6.52c1.38 0 2.58.8 3.22 3"/><circle cx="12" cy="10" r="3"/><circle cx="12" cy="12" r="10"/></svg>
-        </div>
+        <div className={styles['navbar-user']}></div>
     </nav>
   );
 }

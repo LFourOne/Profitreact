@@ -38,8 +38,6 @@ export function TrainingDetails() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
             }
         }
     }
@@ -74,7 +72,6 @@ export function TrainingDetails() {
             console.log(response.data.staff);
         }
         setIsEditing(true);
-        console.log("Verdadero");
     };
 
     const onSubmitEdit = async (data) => {
@@ -93,8 +90,6 @@ export function TrainingDetails() {
         catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
             }
         }
     }
@@ -121,8 +116,6 @@ export function TrainingDetails() {
 
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
             }
         }
     }
@@ -145,8 +138,6 @@ export function TrainingDetails() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
             }
         }
     }
@@ -154,7 +145,6 @@ export function TrainingDetails() {
     const backEdit = () => {
 
         setIsEditing(false);
-        console.log("Falso");
         
     };
 
@@ -179,8 +169,6 @@ export function TrainingDetails() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
             }
         }
     }
@@ -207,8 +195,6 @@ export function TrainingDetails() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
             }
         }
     }
@@ -231,18 +217,14 @@ export function TrainingDetails() {
         formData.append('file', data.file[0]);
         formData.append('id_capacitacion', id_capacitacion);
 
-        try {
-            const response = await axios.patch('http://localhost:5500/training/upload-file', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-                withCredentials: true,
-            });
+        const response = await axios.patch('http://localhost:5500/training/upload-file', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+            withCredentials: true,
+        });
 
-            await fetchApi();
-        } catch (error) {
-            console.error('Error al subir el archivo:', error);
-        }
+        await fetchApi();
     };
 
     return(
@@ -258,13 +240,20 @@ export function TrainingDetails() {
                     (   <>
                         <div>
                             <button id={styles['edit-btn']} onClick={(e) => {e.preventDefault(); backEdit();}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                                 Desactivar Edición
                             </button>
-                            <button type='submit' form='edit-form'>Confirmar Cambios</button>
+                        </div>
+                        <div>
+                            <button type='submit' form='edit-form' id={styles['confirm-btn']}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                Confirmar Cambios
+                            </button>
                         </div>
                         <div>
                             {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3) && (
                             <button id={styles['delete-btn']} onClick={(e) => {onSubmitDelete(e);}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                 Eliminar Capacitación
                             </button>
                             )}
@@ -275,25 +264,33 @@ export function TrainingDetails() {
                     (
                         (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) && (
                             <button id={styles['edit-btn']} onClick={(e) => {e.preventDefault(); switchEdit();}}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>
                                 Activar Edición
                             </button>
                         )
                     )}
                     {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3) &&
-                        <div id={styles['complete-training-container']}>
-                            {
-                                (training[0].id_estado === 1 && training[0].ruta) ? (
-                                    <button id={styles['complete-training-container-btn']} onClick={(e) => {e.preventDefault(); onSubmitComplete();}}>
-                                        Completar Capacitación
-                                    </button>
-                                )
-                                : (
-                                    <button id={styles['complete-training-container-btn-disabled']} disabled>
-                                        Completar capacitación
-                                    </button>
-                                )
-                            }
-                        </div>
+                        isEditing ? (
+                            null
+                        )
+                        :
+                        (
+                            <div id={styles['complete-training-container']}>
+                                {
+                                    (training[0].id_estado === 1 && training[0].ruta) ? (
+                                        <button id={styles['complete-training-btn']} onClick={(e) => {e.preventDefault(); onSubmitComplete();}}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                            Completar Capacitación
+                                        </button>
+                                    )
+                                    : (
+                                        <button id={styles['complete-training-btn-disabled']} disabled>
+                                            Completar capacitación
+                                        </button>
+                                    )
+                                }
+                            </div>
+                        )
                     }   
                 </section>
                 <section id={styles['training-container']}>

@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { NavBar } from './components/NavBar/NavBar';
 import { CompanySelect } from './pages/CompanySelect/CompanySelect';
 import { Index } from './pages/Index/Index';
@@ -34,6 +34,7 @@ export function App() {
           <Route path="/training" element={<Training />} />
           <Route path="/training/:id_capacitacion" element={<TrainingDetails />} />
           <Route path="/training/create" element={<CreateTraining />} />
+          <Route path='*' element={<Navigate to="/" replace />}></Route>
         </Routes>
     </>
   );

@@ -51,13 +51,14 @@
         color: white;
         border: none;
         border-radius: 8px;
-        background-color: #73a727;
+        background-color: #16a34a;
         font-size: 16px;
         gap: 10px;
         cursor: pointer;
+        transition: 0.1s ease-in-out;
     }
     #top-section-right-container-btn:hover{
-        background-color: #659221;
+        background-color: #15803d;
     }
     #top-section-right-container-filter-container{
         display: flex;
@@ -155,13 +156,13 @@
         color: white;
         border: none;
         border-radius: 8px;
-        background-color: #73a727;
+        background-color: #16a34a;
         font-size: 16px;
         gap: 10px;
         cursor: pointer;
     }
     #top-section-right-container-btn:hover{
-        background-color: #659221;
+        background-color: #15803d;
     }
     #top-section-right-container-filter-container{
         display: flex;
@@ -253,13 +254,13 @@
         color: white;
         border: none;
         border-radius: 8px;
-        background-color: #73a727;
+        background-color: #16a34a;
         font-size: 16px;
         gap: 10px;
         cursor: pointer;
     }
     #top-section-right-container-btn:hover{
-        background-color: #659221;
+        background-color: #15803d;
     }
     #top-section-right-container-filter-container{
         display: flex;

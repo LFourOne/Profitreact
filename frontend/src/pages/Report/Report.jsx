@@ -17,12 +17,11 @@ export function Report() {
 
         try {
 
-        const response = await axios.get('http://localhost:5500/reports', { withCredentials: true });
-        
-        setSessionData(response.data.session);
-        setMeetingData(response.data.meetings);
-        setProjects(response.data.projects);
-        console.log(response.data);
+            const response = await axios.get('http://localhost:5500/reports', { withCredentials: true });
+            
+            setSessionData(response.data.session);
+            setMeetingData(response.data.meetings);
+            setProjects(response.data.projects);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -73,6 +72,7 @@ export function Report() {
         <>
         {loading ? <p>Cargando...</p> : (
             <main id={styles['main']}>
+                <button onClick={() => navigate('/meeting')}>Crear Reunión</button>
                 <div id={styles['project-filter']}>
                     <label htmlFor="project-filter-select">Filtrar por proyecto:</label>
                     <select id="project-filter-select" value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>

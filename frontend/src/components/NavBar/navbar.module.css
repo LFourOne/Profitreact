@@ -1,92 +1,261 @@
-.navbar{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: fixed;
-    background-color: white;
-    border-bottom: 1px solid rgb(185, 185, 185);
-    width: 100vw;
-    height: 90px;
-    padding: 0;
-    margin: 0;
-    font-size: 16px;
-    z-index: 1000;
+@media (min-width: 700px) and (max-width: 1024px){
+    .navbar{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: fixed;
+        background-color: white;
+        border-bottom: 1px solid rgb(185, 185, 185);
+        width: 100vw;
+        height: 90px;
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        z-index: 1000;
+        gap: 20px;
+    }
+    .navbar-links{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 28px;
+    }
+    .navbar-logo{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-left: 10px;
+    }
+    #solutiva-logo{
+        width: 200px;
+        height: 50px;
+        object-fit: contain;
+    }
+    .selected-link{
+        color: #669225;
+    }
+    .navbar-user{
+        display: none;
+    }
+    .dropdown-button{
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: inherit;
+        font-family: inherit;
+    }
+    .navbar-links a:hover {
+        color: #669225;
+    }
+    .dropdown-button:hover{
+        color: #669225;
+    }
+    .dropdown{
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        padding-top: 15px;
+        width: 130px;
+        border-radius: 4px;
+    }
+    .dropdown-content a {
+        display: block;
+        padding: 5px 10px;
+        text-decoration: none;
+    }
+    .dropdown-content a:hover {
+        background-color: #d9ecbd;
+        color: black;
+    }
+    .dropdown-content.open {
+        display: block;
+    }
 }
-.navbar-links{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 70px;
+
+@media (min-width: 1025px) and (max-width: 1440px){
+    .navbar{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        position: fixed;
+        background-color: white;
+        border-bottom: 1px solid rgb(185, 185, 185);
+        width: 100vw;
+        height: 90px;
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        z-index: 1000;
+        gap: 40px;
+    }
+    .navbar-links{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 70px;
+    }
+    .navbar-logo{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-left: 25px;
+    }
+    #solutiva-logo{
+        width: 230px;
+        height: 50px;
+        object-fit: contain;
+    }
+    .selected-link{
+        color: #669225;
+    }
+    .navbar-user{
+        display: none;
+    }
+    .dropdown-button{
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: inherit;
+        font-family: inherit;
+    }
+    .navbar-links a:hover {
+        color: #669225;
+    }
+    .dropdown-button:hover{
+        color: #669225;
+    }
+    .dropdown{
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        padding-top: 15px;
+        width: 130px;
+        border-radius: 4px;
+    }
+    .dropdown-content a {
+        display: block;
+        padding: 5px 10px;
+        text-decoration: none;
+    }
+    .dropdown-content a:hover {
+        background-color: #d9ecbd;
+        color: black;
+    }
+    .dropdown-content.open {
+        display: block;
+    }
 }
-.navbar-logo{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-left: 25px;
-    flex-grow: 1;
-    flex-basis: 0;
-}
-#solutiva-logo{
-    width: 230px;
-    height: 50px;
-    flex-shrink: 0;
-}
-.selected-link{
-    color: #669225;
-}
-.navbar-user{
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    flex-grow: 1;
-    gap: 50px;
-    padding-right: 50px;
-    flex-basis: 0;
-}
-.dropdown-button{
-    background: none;
-    border: none;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
-}
-.navbar-links a:hover {
-    color: #669225;
-}
-.dropdown-button:hover{
-    color: #669225;
-}
-.dropdown{
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-.dropdown-content {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    padding-top: 15px;
-    width: 130px;
-    border-radius: 4px;
-}
-  
-.dropdown-content a {
-    display: block;
-    padding: 5px 10px;
-    text-decoration: none;
-}
-  
-.dropdown-content a:hover {
-    background-color: #d9ecbd;
-    color: black;
-}
-  
-.dropdown-content.open {
-    display: block;
+
+@media (min-width: 1441px){
+    .navbar{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        background-color: white;
+        border-bottom: 1px solid rgb(185, 185, 185);
+        width: 100vw;
+        height: 90px;
+        padding: 0;
+        margin: 0;
+        font-size: 16px;
+        z-index: 1000;
+    }
+    .navbar-links{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 70px;
+    }
+    .navbar-logo{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-left: 25px;
+        flex-grow: 1;
+        flex-basis: 0;
+    }
+    #solutiva-logo{
+        width: 230px;
+        height: 50px;
+        object-fit: contain;
+    }
+    .selected-link{
+        color: #669225;
+    }
+    .navbar-user{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        flex-grow: 1;
+        gap: 50px;
+        padding-right: 50px;
+        flex-basis: 0;
+    }
+    .dropdown-button{
+        background: none;
+        border: none;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: inherit;
+        font-family: inherit;
+    }
+    .navbar-links a:hover {
+        color: #669225;
+    }
+    .dropdown-button:hover{
+        color: #669225;
+    }
+    .dropdown{
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        padding-top: 15px;
+        width: 130px;
+        border-radius: 4px;
+    }
+    .dropdown-content a {
+        display: block;
+        padding: 5px 10px;
+        text-decoration: none;
+    }
+    .dropdown-content a:hover {
+        background-color: #d9ecbd;
+        color: black;
+    }
+    .dropdown-content.open {
+        display: block;
+    }
 }

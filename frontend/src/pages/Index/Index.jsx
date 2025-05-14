@@ -74,9 +74,6 @@ export function Index() {
                         <div className={styles['commitments-container']}>
 
                         </div>
-                        <div className={styles['commitments-container']}>
-
-                        </div>
                     </div>
                 </section>
                 <section className={styles['side-section']}>
