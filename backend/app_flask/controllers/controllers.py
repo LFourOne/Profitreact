@@ -41,6 +41,35 @@ def meeting():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    response_data = {
+        'rut_personal': session['rut_personal'],
+        'nombres': session['nombres'],
+        'apellido_p': session['apellido_p'],
+        'apellido_m': session['apellido_m'],
+        'email': session['email'],
+        'id_especialidad': session['id_especialidad'],
+        'id_rol': session['id_rol']
+    }
+
+    meetings = Meeting.select_all_meetings()
+
+    meeting_type = Meeting.select_meeting_type()
+
+    project_list = Project.get_projects()
+
+    return jsonify({
+        'session' : response_data,
+        'meetings' : meetings,
+        'projects' : project_list,
+        'meeting_type' : meeting_type
+        }), 200
+
+@app.route('/meeting/create-meeting')
+def create_meeting():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
     if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
@@ -65,8 +94,8 @@ def meeting():
         'staff' : staff
         }), 200
 
-@app.route('/meetings/insert', methods=['POST'])
-def insert_meeting():
+@app.route('/meeting/create-meeting/process', methods=['POST'])
+def create_meeting_process():
     
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
@@ -104,33 +133,7 @@ def insert_meeting():
         'meeting': meeting_id
         }), 200
 
-@app.route('/reports')
-def reports():
-
-    if 'rut_personal' not in session:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-    
-    response_data = {
-        'rut_personal': session['rut_personal'],
-        'nombres': session['nombres'],
-        'apellido_p': session['apellido_p'],
-        'apellido_m': session['apellido_m'],
-        'email': session['email'],
-        'id_especialidad': session['id_especialidad'],
-        'id_rol': session['id_rol']
-    }
-
-    meetings = Meeting.select_all_meetings()
-
-    project_list = Project.get_projects()
-
-    return jsonify({
-        'session' : response_data,
-        'meetings' : meetings,
-        'projects' : project_list
-        }), 200
-
-@app.route('/reports/delete-meeting', methods=['DELETE'])
+@app.route('/meeting/delete-meeting', methods=['DELETE'])
 def delete_meeting():
     
     if 'rut_personal' not in session:
@@ -155,6 +158,28 @@ def minute(id_reunion):
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6, 7]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
+    role_permissions = {
+        1: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        2: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        3: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        4: [3, 4, 5, 6, 7, 8, 9, 10],
+        5: [3, 4, 5, 6, 7, 8, 9, 10],
+        6: [4, 5, 6, 7, 8, 9, 10],
+        7: [4, 5, 6, 7, 8, 9, 10],
+        8: [],
+    }
+
+    meeting_data = Meeting.select_all({'id_reunion' : id_reunion})
+    
+    meeting_type = meeting_data[0]['id_tipo_reunion']
+    
+    allowed_types = role_permissions[session['id_rol']]
+    if meeting_type not in allowed_types:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
     response_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
@@ -168,8 +193,6 @@ def minute(id_reunion):
     agreements = Agreements.select_agreements({'id_reunion' : id_reunion})
 
     topics = Topics.select_topics({'id_reunion' : id_reunion})
-
-    meeting_data = Meeting.select_all({'id_reunion' : id_reunion})
 
     name_and_last_name = Staff.obtain_name_and_last_name()
     rut_jefe_proyecto = Project.select_rut_jefe_proyecto({'id_proyecto' : meeting_data[0]['id_proyecto']})
@@ -200,7 +223,7 @@ def minute(id_reunion):
         'topics' : topics
         }), 200
 
-@app.route('/reports/minute/add-commitment', methods=['POST'])
+@app.route('/meetings/minute/add-commitment', methods=['POST'])
 def add_commitment():
     
     if 'rut_personal' not in session:
@@ -210,6 +233,8 @@ def add_commitment():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     data = request.get_json()
+
+    print(f"Data: {data}")
 
     if data['priority'] == True:
         data['priority'] = 1
@@ -221,7 +246,7 @@ def add_commitment():
         'id_proyecto': data['project_id'],
         'texto_compromiso' : data['commitment-text'],
         'fecha_comprometida' : data['commitment-date'],
-        'responsable' : data['name_and_last_name_form'],
+        'responsable' : data['name_and_last_name_form']['value'],
         'prioridad': data['priority'],
         'id_estado' : 1
     }
@@ -230,7 +255,7 @@ def add_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/complete-commitment', methods=['POST'])
+@app.route('/meetings/minute/complete-commitment', methods=['POST'])
 def complete_commitment():
     
     if 'rut_personal' not in session:
@@ -252,7 +277,7 @@ def complete_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/edit-commitment', methods=['PATCH'])
+@app.route('/meetings/minute/edit-commitment', methods=['PATCH'])
 def edit_commitment():
     
     if 'rut_personal' not in session:
@@ -297,7 +322,7 @@ def edit_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/delete-commitment', methods=['DELETE'])
+@app.route('/meetings/minute/delete-commitment', methods=['DELETE'])
 def delete_commitment():
     
     if 'rut_personal' not in session:
@@ -316,7 +341,7 @@ def delete_commitment():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/close-meeting', methods=['PATCH'])
+@app.route('/meetings/minute/close-meeting', methods=['PATCH'])
 def close_meeting():
 
     if 'rut_personal' not in session:
@@ -340,7 +365,7 @@ def close_meeting():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/add-agreement', methods=['POST'])
+@app.route('/meetings/minute/add-agreement', methods=['POST'])
 def add_agreement():
     
     if 'rut_personal' not in session:
@@ -360,7 +385,7 @@ def add_agreement():
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/reports/minute/add-topic', methods=['POST'])
+@app.route('/meetings/minute/add-topic', methods=['POST'])
 def add_topic():
     
     if 'rut_personal' not in session:

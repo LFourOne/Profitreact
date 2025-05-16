@@ -1,237 +1,456 @@
 @media (min-width: 700px) and (max-width: 1024px){
     #main{
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
+        padding-top: 120px;
+        box-sizing: border-box;
+        gap: 20px;
     }
-    #main-section{
+    #top-section{
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
         align-items: center;
-        width: 700px;
-        max-height: 560px;
-        border-radius: 12px;
-        border: 1px solid lightgray;
-        gap: 10px;
-        background-color: white;
-        overflow-y: auto;
-        overflow-x: hidden;
-        margin-top: 80px;
-    }
-    #form{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding-top: 20px;
-        gap: 15px;
         width: 100%;
+        height: 120px;
     }
-    label{
-        font-size: 18px;
-    }
-    #btn-container{
+    #top-section-left-container{
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
+        width: 50%;
+        height: 100%;
+        padding-left: 20px;
     }
-    #btn{
+    #top-section-left-container-h2{
+        font-size: 20px;
+        font-weight: 500;
+        color: gray;
+        margin: 0;
+    }
+    #top-section-right-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding-top: 10px;
+        padding-right: 20px;
+        width: 50%;
+        height: 100%;
+    }
+    #top-section-right-container-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 40px;
-        width: 150px;
-        background-color: rgb(115, 167, 39);
-        border-radius: 5px;
-        border: none;
+        width: 220px;
         color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #16a34a;
         font-size: 16px;
+        gap: 10px;
         cursor: pointer;
     }
-    #btn:hover{
-        background-color: rgb(101, 146, 33);
+    #top-section-right-container-btn:hover{
+        background-color: #15803d;
     }
-    #reunion-imagen{
-        width: 400px;
-        height: 230px;
-    }
-    .input-container{
+    #middle-section{
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 16px;
+        margin-top: 12px;
     }
-    .select-input{
-        width: 350px;
-        height: 35px;
-        border-radius: 5px;
-        border: 1px solid black;
+    .filter-container{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
     }
-    #demo-multiple-checkbox-label{
-        font-size: 11px;
+    .filter-select-label{
+        font-size: 16px;
+        font-weight: 500;
+        color: black;
     }
-    #name_and_last_name_form_toki{
-        width: 350px;
-        max-width: 350px;
-        max-height: none;
+    .filter-select{
+        width: 140px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid lightgray;
+        background-color: white;
+        color: black;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+    .table-container{
+        max-height: 550px;
+        overflow-y: auto;
+    }
+    #table{
+        width: 750px;
+        max-height: 700px;
+        border-collapse: collapse;
+        border: 1px solid lightgray;
+        text-align: left;
+        overflow-y: scroll;
+    }
+    #thead{
+        height: 50px;
+        border: 1px solid lightgray;
+    }
+    .th{
+        width: 164px;
+        box-sizing: border-box;
+        padding: 0 0 0 20px;
+        color: gray;
+        font-size: 17px;
+        font-weight: 500;
+        text-align: left;
+    }
+    #th-meeting{
+        width: 259px;
+    }
+    .td{
+        height: 64px;
+        padding: 0 0 0 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: left;
+    }
+    #td-project{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        width: 90px;
+        height: 32px;
+    }
+    #td-date{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    #tipo_reunion_td{
+        text-align: left;
+    }
+    #meeting-tr{
+        cursor: pointer;
+    }
+    #meeting-tr:hover{
+        background-color: #f9fafb;
+    }
+    #delete-button{
+        cursor: pointer;
+        background-color: inherit;
+        border: 0;
+    }
+    #delete-button:hover svg{
+        stroke:#b91c1c;
+        transition: transform 0.1s ease-in-out;
     }
 }
 
 @media (min-width: 1025px) and (max-width: 1440px){
     #main{
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
         width: 100vw;
         height: 100vh;
+        padding-top: 140px;
+        box-sizing: border-box;
     }
-    #main-section{
+    #top-section{
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
         align-items: center;
-        width: 700px;
-        max-height: 650px;
-        border-radius: 12px;
-        border: 1px solid lightgray;
-        gap: 10px;
-        background-color: white;
-        overflow-y: auto;
-        overflow-x: hidden;
-        margin-top: 80px;
-    }
-    #form{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding-top: 20px;
-        gap: 15px;
         width: 100%;
+        height: 120px;
     }
-    label{
-        font-size: 18px;
-    }
-    #btn-container{
+    #top-section-left-container{
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
+        width: 50%;
+        height: 100%;
+        padding-left: 30px;
     }
-    #btn{
+    #top-section-left-container-h2{
+        font-size: 20px;
+        font-weight: 500;
+        color: gray;
+        margin: 0;
+    }
+    #top-section-right-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding-top: 10px;
+        padding-right: 30px;
+        width: 50%;
+        height: 100%;
+    }
+    #top-section-right-container-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 40px;
-        width: 150px;
-        background-color: rgb(115, 167, 39);
-        border-radius: 5px;
-        border: none;
+        width: 220px;
         color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #16a34a;
         font-size: 16px;
+        gap: 10px;
         cursor: pointer;
     }
-    #btn:hover{
-        background-color: rgb(101, 146, 33);
+    #top-section-right-container-btn:hover{
+        background-color: #15803d;
     }
-    #reunion-imagen{
-        width: 400px;
-        height: 280px;
-    }
-    .input-container{
+    #middle-section{
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 16px;
+        margin-top: 12px;
     }
-    .select-input{
-        width: 350px;
-        height: 35px;
-        border-radius: 5px;
-        border: 1px solid black;
+    .filter-container{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
     }
-    #demo-multiple-checkbox-label{
-        font-size: 11px;
+    .filter-select-label{
+        font-size: 16px;
+        font-weight: 500;
+        color: black;
     }
-    #name_and_last_name_form_toki{
-        width: 350px;
-        max-width: 350px;
-        max-height: none;
+    .filter-select{
+        width: 140px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid lightgray;
+        background-color: white;
+        color: black;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+    .table-container{
+        max-height: 380px;
+        overflow-y: auto;
+    }
+    #table{
+        width: 1150px;
+        max-height: 700px;
+        border-collapse: collapse;
+        border: 1px solid lightgray;
+        text-align: left;
+        overflow-y: scroll;
+    }
+    #thead{
+        height: 50px;
+        border: 1px solid lightgray;
+    }
+    .th{
+        width: 164px;
+        box-sizing: border-box;
+        padding: 0 0 0 20px;
+        color: gray;
+        font-size: 17px;
+        font-weight: 500;
+        text-align: left;
+    }
+    #th-meeting{
+        width: 259px;
+    }
+    .td{
+        height: 64px;
+        padding: 0 0 0 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: left;
+    }
+    #td-project{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        width: 90px;
+        height: 32px;
+    }
+    #td-date{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    #tipo_reunion_td{
+        text-align: left;
+    }
+    #meeting-tr{
+        cursor: pointer;
+    }
+    #meeting-tr:hover{
+        background-color: #f9fafb;
+    }
+    #delete-button{
+        cursor: pointer;
+        background-color: inherit;
+        border: 0;
+    }
+    #delete-button:hover svg{
+        stroke:#b91c1c;
+        transition: transform 0.1s ease-in-out;
     }
 }
 
 @media (min-width: 1441px){
     #main{
         display: flex;
-        justify-content: center;
+        flex-direction: column;
         align-items: center;
         width: 100vw;
-        height: 100vh;
+        min-height: 100vh;
+        padding-top: 140px;
+        box-sizing: border-box;
     }
-    #main-section{
+    #top-section{
         display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
         align-items: center;
-        width: 1100px;
-        max-height: 780px;
-        border-radius: 12px;
-        border: 1px solid lightgray;
-        gap: 10px;
-        background-color: white;
-        overflow-y: auto;
-        overflow-x: hidden;
-        margin-top: 80px;
-    }
-    #form{
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding-top: 20px;
-        gap: 15px;
         width: 100%;
+        height: 120px;
     }
-    label{
-        font-size: 18px;
-    }
-    #btn-container{
+    #top-section-left-container{
         display: flex;
+        flex-direction: column;
+        align-items: center;
         justify-content: center;
+        width: 50%;
+        height: 100%;
     }
-    #btn{
+    #top-section-left-container-h2{
+        font-size: 20px;
+        font-weight: 500;
+        color: gray;
+        margin: 0;
+    }
+    #top-section-right-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        padding-top: 10px;
+        padding-right: 130px;
+        width: 50%;
+        height: 100%;
+    }
+    #top-section-right-container-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 40px;
-        width: 150px;
-        background-color: rgb(115, 167, 39);
-        border-radius: 5px;
-        border: none;
+        width: 220px;
         color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #16a34a;
         font-size: 16px;
+        gap: 10px;
         cursor: pointer;
     }
-    #btn:hover{
-        background-color: rgb(101, 146, 33);
+    #top-section-right-container-btn:hover{
+        background-color: #15803d;
     }
-    #reunion-imagen{
-        width: 700px;
-        height: 450px;
-    }
-    .input-container{
+    #middle-section{
         display: flex;
         flex-direction: column;
-        gap: 5px;
+        gap: 16px;
+        margin-top: 12px;
     }
-    .select-input{
-        width: 350px;
-        height: 35px;
-        border-radius: 5px;
-        border: 1px solid black;
+    .filter-container{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 50px;
     }
-    #demo-multiple-checkbox-label{
-        font-size: 11px;
+    .filter-select-label{
+        font-size: 16px;
+        font-weight: 500;
+        color: black;
     }
-    #name_and_last_name_form_toki{
-        width: 350px;
-        max-width: 350px;
-        max-height: none;
-    }
-    #loading{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        z-index: 1000;
+    .filter-select{
+        width: 140px;
+        height: 36px;
+        border-radius: 8px;
+        border: 1px solid lightgray;
         background-color: white;
+        color: black;
+        font-size: 16px;
+        padding-left: 10px;
+    }
+    .table-container{
+        max-height: 550px;
+        overflow-y: auto;
+    }
+    #table{
+        width: 1650px;
+        border-collapse: collapse;
+        border: 1px solid lightgray;
+        text-align: left;
+    }
+    #thead{
+        height: 50px;
+        border: 1px solid lightgray;
+    }
+    .th{
+        width: 164px;
+        box-sizing: border-box;
+        padding: 0 0 0 20px;
+        color: gray;
+        font-size: 17px;
+        font-weight: 500;
+        text-align: left;
+    }
+    #th-meeting{
+        width: 259px;
+    }
+    .td{
+        height: 64px;
+        padding: 0 0 0 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: left;
+    }
+    #td-project{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        width: 90px;
+        height: 32px;
+    }
+    #td-date{
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+    #tipo_reunion_td{
+        text-align: left;
+    }
+    #meeting-tr{
+        cursor: pointer;
+    }
+    #meeting-tr:hover{
+        background-color: #f9fafb;
+    }
+    #delete-button{
+        cursor: pointer;
+        background-color: inherit;
+        border: 0;
+    }
+    #delete-button:hover svg{
+        stroke:#b91c1c;
+        transition: transform 0.1s ease-in-out;
     }
 }

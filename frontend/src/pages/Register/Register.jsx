@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import logo from '../../assets/grupo-solutiva-logo.png'
 import styles from './Register.module.css';
 import axios from 'axios';
 
 export function Register() {
 
+    const navigate = useNavigate();
+
     const {register, handleSubmit, reset} = useForm();
+
+    const [loading, setLoading] = useState(true);
     
     const [specialty, setSpecialty] = useState([]);
 
@@ -24,9 +29,15 @@ export function Register() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/index');
-            } else {
+            }
+            if (error.response && error.response.status === 403) {
+                navigate('/index');
+            } 
+            else {
                 console.error('Error inesperado:', error);
             }
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -50,6 +61,7 @@ export function Register() {
 
     return(
         <>
+        {loading ? <p id={styles['loading-page']}>Cargando...</p> : (
         <main className={styles['main']}>
             <section className={styles['background']}>
                 <section className={styles['form-section']}>
@@ -151,6 +163,7 @@ export function Register() {
                 </section>
             </section>
         </main>
+        )}
         </>
     )
 }

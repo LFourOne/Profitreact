@@ -56,7 +56,7 @@ export function NavBar() {
         </div>
         <div className={styles['navbar-links']}>
             <NavLink to="/index" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Inicio</NavLink>
-            <NavLink to="/reports" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reportes</NavLink>
+            <NavLink to="/meeting" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reuniones</NavLink>
             <div className={styles['dropdown']}>
                 <button onClick={() => toggleDropdown('gantt')} className={`${styles['dropdown-button']} ${['/gantt', '/gantt/delivery'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
                     Gantt

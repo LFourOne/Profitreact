@@ -42,7 +42,8 @@ class Meeting:
     def select_all(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT id_proyecto, id_tipo_reunion, id_estado FROM reuniones
+                SELECT reuniones.id_proyecto, reuniones.id_tipo_reunion, reuniones.id_estado, tipo_reunion.descripcion_tipo_reunion FROM reuniones
+                JOIN tipo_reunion ON reuniones.id_tipo_reunion = tipo_reunion.id_tipo_reunion
                 WHERE id_reunion = %(id_reunion)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)

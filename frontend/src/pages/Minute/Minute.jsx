@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { data, useNavigate, useParams } from 'react-router';
+import Select from 'react-select'
 import axios from 'axios';
 import Modal from 'react-modal';
 import styles from './Minute.module.css';
@@ -9,7 +10,7 @@ export function Minute() {
 
     Modal.setAppElement('#root');
 
-    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, control: controlAdd, formState: { errors : errorsAdd } } = useForm();
+    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, control: controlAdd, formState: { errors : errorsAdd }, control } = useForm();
     const { register: registerComplete, handleSubmit: handleSubmitComplete, reset: resetComplete, control: controlComplete, formState: { errors : errorsComplete } } = useForm();
     const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, control: controlEdit, formState: { errors : errorsEdit } } = useForm();
     const { register: registerDelete, handleSubmit: handleSubmitDelete, reset: resetDelete, control: controlDelete, formState: { errors : errorsDelete } } = useForm();
@@ -19,7 +20,7 @@ export function Minute() {
     const navigate = useNavigate();
     
     const [sessionData, setSessionData] = useState({});
-    const [staffInfo, setStaffInfo] = useState([]);
+    const [staff, setStaff] = useState([]);
     const [projects, setProjects] = useState([]);
     const [meetingData, setMeetingData] = useState([]);
     const [projectChiefName, setProjectChiefName] = useState([]);
@@ -31,6 +32,8 @@ export function Minute() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const { id_reunion } = useParams();
+
+    const [changeTopicAgreementView, setChangeTopicAgreementView] = useState(false);
     
     const [stateFilter, setStateFilter] = useState(1);
     const [projectFilter, setProjectFilter] = useState("");
@@ -44,7 +47,7 @@ export function Minute() {
             const response = await axios.get(`http://localhost:5500/reports/minute/${id_reunion}`, { withCredentials: true });
             
             setSessionData(response.data.session);
-            setStaffInfo(response.data.name_and_last_name);
+            setStaff(response.data.name_and_last_name);
             setProjects(response.data.projects);
             setMeetingData(response.data.meeting_data);
             setProjectChiefName(response.data.project_chief_name);
@@ -56,7 +59,11 @@ export function Minute() {
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
-            } else {
+            } 
+            if (error.response && error.response.status === 403) {
+                navigate('/meeting');
+            }
+            else {
                 console.error('Error inesperado:', error); // Maneja otros errores
             }
         } finally {
@@ -75,7 +82,9 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.post('http://localhost:5500/reports/minute/add-commitment', data, {
+        data.id_reunion = id_reunion;
+
+        const response = await axios.post('http://localhost:5500/meetings/minute/add-commitment', data, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -95,7 +104,7 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.post('http://localhost:5500/reports/minute/complete-commitment', {id_compromiso}, {
+        const response = await axios.post('http://localhost:5500/meetings/minute/complete-commitment', {id_compromiso}, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -113,7 +122,7 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.patch('http://localhost:5500/reports/minute/edit-commitment', data, {
+        const response = await axios.patch('http://localhost:5500/meetings/minute/edit-commitment', data, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -132,7 +141,7 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.delete('http://localhost:5500/reports/minute/delete-commitment', {
+        const response = await axios.delete('http://localhost:5500/meetings/minute/delete-commitment', {
             data: {id_compromiso},
             headers: {
                 'Content-Type': 'application/json'
@@ -153,7 +162,7 @@ export function Minute() {
 
         data.id_reunion = id_reunion;
 
-        const response = await axios.post('http://localhost:5500/reports/minute/add-agreement', data, {
+        const response = await axios.post('http://localhost:5500/meetings/minute/add-agreement', data, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -173,7 +182,7 @@ export function Minute() {
 
         data.id_reunion = id_reunion;
 
-        const response = await axios.post('http://localhost:5500/reports/minute/add-topic', data, {
+        const response = await axios.post('http://localhost:5500/meetings/minute/add-topic', data, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -193,7 +202,7 @@ export function Minute() {
         
         event.preventDefault();
 
-        const response = await axios.patch('http://localhost:5500/reports/minute/close-meeting', {id_reunion}, {
+        const response = await axios.patch('http://localhost:5500/meetings/minute/close-meeting', {id_reunion}, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -236,28 +245,190 @@ export function Minute() {
         setModalIsOpen(false);
     }
 
+    const changeTopicAgreementViewHandler = () => {
+        setChangeTopicAgreementView(!changeTopicAgreementView);
+    }
+
+    const staffList = staff.map((staff) => ({
+        value: staff.rut_personal,
+        label: `${staff.nombres} ${staff.apellido_p} ${staff.apellido_m}`
+    }));
+
     return(
         <>
         {loading ? <p>Cargando...</p> : (
             <>
             <section id={styles['main-section']}>
-                <button id={styles['previous-page-btn']} onClick={() => navigate(-1)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#808080" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H6M12 5l-7 7 7 7"/></svg>
-                    Volver a capacitaciones
-                </button>
-                <section id={styles['filters-section']}>
-                    <div id={styles['state-filter']}>
-                        <label htmlFor="state-filter-select">Filtrar por estado:</label>
-                        <select id="state-filter-select" value={stateFilter} onChange={(e) => setStateFilter(Number(e.target.value))}>
+                <section className={styles['commitment-header-section']}>
+                    <div className={styles['commitment-title-container']}>
+                        {
+                            meetingData[0].id_tipo_reunion === 1 ? (
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/></svg>
+                                    <h1>{meetingData[0].descripcion_tipo_reunion}</h1>
+                                    {
+                                        meetingData[0].id_estado === 1 ? (
+                                            <p className={styles['state-active']}>En curso</p>
+                                        )
+                                        :
+                                        (
+                                            <p className={styles['state-closed']}>Finalizada</p>
+                                        )
+                                    }
+                                </div>
+                            )
+                            :
+                            meetingData[0].id_tipo_reunion === 3 ? (
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/></svg>
+                                    <h1>{meetingData[0].descripcion_tipo_reunion}</h1>
+                                    {
+                                        meetingData[0].id_estado === 1 ? (
+                                            <p className={styles['state-active']}>En curso</p>
+                                        )
+                                        :
+                                        (
+                                            <p className={styles['state-closed']}>Finalizada</p>
+                                        )
+                                    }
+                                </div>
+                            )
+                            :
+                            (
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/></svg>
+                                    <h1>{meetingData[0].descripcion_tipo_reunion} - {meetingData[0].id_proyecto}</h1>
+                                    {
+                                        meetingData[0].id_estado === 1 ? (
+                                            <p className={styles['state-active']}>En curso</p>
+                                        )
+                                        :
+                                        (
+                                            <p className={styles['state-closed']}>Finalizada</p>
+                                        )
+                                    }
+                                </div>
+                            )
+                        }
+                        <span>Administra los compromisos de esta reunión</span>
+                    </div>
+                    <div className={styles['close-meeting-section']}>
+                        {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
+                            <button type='submit' className={styles['close-meeting-btn']} onClick={(e) => closeMeeting(e)}>Cerrar Reunión</button>
+                        )
+                        :
+                        ( meetingData[0].id_estado === 2 ? (
+                            <span className={styles['close-meeting-btn-disabled']}>Reunión cerrada</span>
+                        )
+                        :
+                        (
+                            <span className={styles['close-meeting-btn-disabled']}>Cerrar Reunión</span>
+                        ))}
+                    </div>
+                </section>
+                {((sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) && (meetingData[0].id_estado === 1)) && (
+                    <section className={styles['add-commitment-section']}>
+                        <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
+                            <section>
+                                {meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3 ? (
+                                    <fieldset>
+                                        <label>Proyecto</label>
+                                        <select name="project-select" className={styles['add-commitment-select']} {...registerAdd('project_id', {required: true})}>
+                                            {projects.map((project) => (
+                                                <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                                            ))}
+                                        </select>
+                                    </fieldset>
+                                    )
+                                    :
+                                    (
+                                    <fieldset>
+                                        <label>Proyecto</label>
+                                        <span className={styles['add-commitment-select']}>{meetingData[0].id_proyecto}</span>
+                                        <input type="hidden" value={meetingData[0].id_proyecto} {...registerAdd('project_id')} />
+                                    </fieldset>
+                                    )
+                                }
+                                <fieldset>
+                                    <label>Responsable</label>
+                                    <Controller
+                                        name="name_and_last_name_form"
+                                        control={control}
+                                        rules={{ required: true }}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                placeholder="Seleccione el responsable"
+                                                options={staffList}
+                                                className={styles['name_and_last_name_form']}
+                                                styles={{
+                                                    control: (base) => ({
+                                                        ...base,
+                                                        minWidth: 300,
+                                                        height: 48,
+                                                        borderRadius: 4,
+                                                        border: '1px solid #d1d5db',
+                                                        backgroundColor: 'white',
+                                                        color: 'black',
+                                                        fontSize: 16,
+                                                        boxSizing: 'border-box',
+                                                        paddingLeft: 8,
+                                                    }),
+                                                    menu: (base) => ({
+                                                        ...base,
+                                                        zIndex: 9999,
+                                                    }),
+                                                    option: (base, state) => ({
+                                                        ...base,
+                                                        backgroundColor: state.isSelected ? '#15803d' : 'white',
+                                                        color: state.isSelected ? 'white' : 'black',
+                                                        '&:hover': {
+                                                            backgroundColor: '#f3f4f6',
+                                                            color: 'black',
+                                                        },
+                                                    }),
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                </fieldset>
+                                <fieldset>
+                                    <label>Fecha</label>
+                                    <input type="date" id={styles['commitment-date']} className={styles['add-commitment-select']} {...registerAdd('commitment-date', {required: true})} />
+                                </fieldset>
+                                <fieldset>
+                                    <label>Prioridad</label>
+                                    <input type="checkbox" id={styles['priority']} {...registerAdd('priority')} />
+                                </fieldset>
+                            </section>
+                            <section>
+                                <fieldset>
+                                    <label>Compromiso</label>
+                                    <textarea type="text" id={styles['commitment-text']} {...registerAdd('commitment-text', {required: true})} placeholder='Escribe el contenido del compromiso aquí'></textarea>
+                                </fieldset>
+                            </section>
+                            <section className={styles['add-commitment-btn-container']}>
+                                <button type="submit" className={styles['add-commitment-btn']} onClick={handleSubmitAdd(onSubmitAdd)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Agregar Compromiso
+                                </button>
+                            </section>
+                        </form>
+                    </section>
+                )}
+                <section className={styles['filters-section']}>
+                    <div className={styles['filter-container']}>
+                        <label>Filtrar por estado:</label>
+                        <select className={styles['filter-select']} value={stateFilter} onChange={(e) => setStateFilter(Number(e.target.value))}>
                             <option value={1}>Vigente</option>
                             <option value={2}>Completado</option>
                             <option value={3}>Eliminado</option>
                             <option value={0}>Todos</option>
                         </select>
                     </div>
-                    <div id={styles['project-filter']}>
-                        <label htmlFor="project-filter-select">Filtrar por proyecto:</label>
-                        <select id="project-filter-select" value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
+                    <div className={styles['filter-container']}>
+                        <label>Filtrar por proyecto:</label>
+                        <select className={styles['filter-select']} value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
                             <option value="">Todos</option>
                             {projects.map((project) => (
                                 <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
@@ -265,127 +436,76 @@ export function Minute() {
                         </select>
                     </div>
                 </section>
-                {
-                    ((sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) && (meetingData[0].id_estado === 1)) && (
-                        <section className={styles['commitment-section']}>
-                            <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
-                                <table className={styles['top-table']}>
-                                    <thead id={styles['thead-commitment']}>
-                                        <tr id={styles['tr-table-head']}>                                
-                                            <th className={styles['th-head']}>Proyecto</th>
-                                            {(meetingData.length > 0 && (meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3)) && (
-                                                <th className={styles['th-head']}>Jefe de Proyecto</th>
-                                            )}
-                                            <th className={styles['th-large-head']}>Responsable</th>
-                                            <th id={styles['th-commitment-data']}><label htmlFor="commitment-date">Fecha de Compromiso</label></th>
-                                            <th className={styles['th-head']}><label htmlFor="commitment-text">Compromiso</label></th>
-                                            <th className={styles['th-head']}>Prioridad</th>
-                                            <th className={styles['th-head']}>Agregar</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr className={styles['body-tr']}>
-                                            <td className={styles['td']}>
-                                                {(meetingData.length > 0 && (meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3)) ? 
-                                                (
-                                                    <select name="project-select" id={styles['project-select']} defaultValue="" {...registerAdd("project_id", {required: true})}>
-                                                        <option value="" disabled>PXXX-EJE</option>
-                                                        {projects.map((project) => (
-                                                            <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
-                                                        ))}
-                                                    </select>
-                                                )
-                                                :
-                                                (
-                                                <>
-                                                    {meetingData.length > 0 && (
-                                                        <>
-                                                        <span>{meetingData[0].id_proyecto}</span>
-                                                        <input type="hidden" value={meetingData[0].id_proyecto} {...registerAdd("project_id", {required: true})} />
-                                                        </>
-                                                    )
-                                                    }
-                                                </>
-                                                )
-                                                }
-                                            </td>
-                                            {(meetingData.length > 0 && (meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3)) && (
-                                                <td className={styles['td']}>{projectChiefName.length > 0 && `${projectChiefName[0].nombres} ${projectChiefName[0].apellido_p} ${projectChiefName[0].apellido_m}`}</td>
-                                            )}
-                                            <td className={styles['td']}>
-                                                <select name="name_and_last_name_form" id={styles['name_and_last_name_form']} defaultValue="" {...registerAdd("name_and_last_name_form", {required: true})}>
-                                                    <option value="" disabled>Selecciona personal</option>
-                                                    {staffInfo.map((staff) => (
-                                                        <option value={staff.rut_personal} key={staff.rut_personal}>{staff.nombres} {staff.apellido_p} {staff.apellido_m}</option>
-                                                    ))}
-                                                </select>
-                                            </td>
-                                            <td className={styles['td']}>
-                                                <input type="date" name="commitment-date" id={styles['commitment-date']} {...registerAdd("commitment-date", {required: true})} />
-                                            </td>
-                                            <td className={styles['td']} id={styles['td-commitment-text']}>
-                                                <input type="text" name="commitment-text" id={styles['commitment-text']} placeholder="Escribe el contenido del compromiso aquí" {...registerAdd("commitment-text", {required: true})} />
-                                            </td>
-                                            <td className={styles['td']} id={styles['td-priority']}>
-                                                <input type="checkbox" name="priority" id={styles['priority']} {...registerAdd("priority")} />
-                                            </td>
-                                            <td className={styles['td']}>
-                                                {meetingData[0].id_estado === 2 ? (
-                                                    <span>Reunión Cerrada</span>
-                                                )
-                                                :
-                                                (
-                                                <>
-                                                    <button type="submit" className={styles['pointer']}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                                    </button>
-                                                    <input type="hidden" value={id_reunion} {...registerAdd("id_reunion")} />
-                                                </>
-                                                )
-                                                }
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </form>
-                        </section>
-                    )
-                }
-                <section id={styles['commitment-list-section']}>
-                    <div id={styles['commitment-list-wrapper']}>
-                        <table id={styles['commitment-list-table']}>
-                            <thead id={styles['thead-commitment-list']}>
-                                <tr id="tr-commitment-list">
-                                    <th className={styles['th-short-space-list']}>Proyecto</th>
-                                    <th id={styles['th-speciality-list']}>Responsable</th>
-                                    <th className={styles['th-short-space-list']}>Fecha</th>
-                                    <th id={styles['th-commitment-text-list']}>Compromiso</th>
-                                    <th className={styles['th-short-space-list']}>Completar</th>
-                                    <th className={styles['th-short-space-list']}>Estado</th>
-                                    <td className={styles['th-short-space-list']}>Editar</td>
-                                    <td className={styles['th-short-space-list']}>Eliminar</td>
-                                </tr>
-                            </thead>
-                            <tbody className={styles['tbody-list']}>
-                                {commitments
-                                .filter(commitment => (stateFilter === 0 || commitment.id_estado === stateFilter) && (projectFilter === "" || commitment.id_proyecto === projectFilter))
-                                .map((commitment) => (
-                                    <tr className={styles['tr-list']} key={commitment.id_compromiso}>
-                                        <td className={styles['td']}>{commitment.id_proyecto}</td>
-                                        <td className={styles['td']}>{commitment.responsable_nombre}</td>
-                                        <td className={styles['td']}>{formatDate(commitment.fecha_comprometida)}</td>
-                                            {commitment.prioridad === 1 ? (
-                                                <td style={{ fontWeight: 'bold' }} id={styles['td-texto-compromiso']} className={styles['td']}>{commitment.texto_compromiso}</td>
-                                            ) 
-                                            : 
-                                            (
-                                                <td id={styles['td-texto-compromiso']} className={styles['td']}>{commitment.texto_compromiso}</td>
-                                            )}
-                                        <td className={styles['td']}>
+                <section className={styles['commitment-section']}>
+                    <table>
+                        <thead>
+                            <tr>
+                                {
+                                    (meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3) ? (
+                                        <th>Proyecto</th>
+                                    )
+                                    :
+                                    (
+                                        null
+                                    )
+                                }
+                                <th>Responsable</th>
+                                <th>Fecha</th>
+                                <th>Compromiso</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {commitments
+                            .filter(commitment => (stateFilter === 0 || commitment.id_estado === stateFilter) && (projectFilter === "" || commitment.id_proyecto === projectFilter))
+                            .map((commitment) => (
+                                <tr key={commitment.id_compromiso}>
+                                    {
+                                        (meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3) ? (
+                                            <td>{commitment.id_proyecto}</td>
+                                        )
+                                        :
+                                        (
+                                            null
+                                        )
+                                    }
+                                    <td>{commitment.responsable_nombre}</td>
+                                    <td>
+                                        <div className={styles['td-svg']}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                            {formatDate(commitment.fecha_comprometida)}
+                                        </div>
+                                    </td>
+                                        {commitment.prioridad === 1 ? (
+                                            <td style={{ fontWeight: 'bold' }} className={styles['commitment-text']}>{commitment.texto_compromiso}</td>
+                                        ) 
+                                        : 
+                                        (
+                                            <td className={styles['commitment-text']}>{commitment.texto_compromiso}</td>
+                                        )}
+                                    <td>
+                                        {commitment.id_estado === 1 ? (
+                                            <span className={styles['state-current']}>Vigente</span>
+                                        )
+                                        :
+                                        (
+                                        commitment.id_estado === 2 ? (
+                                            <span className={styles['state-completed']}>Completado</span>
+                                        )
+                                        :
+                                        (
+                                        commitment.id_estado === 3 && (
+                                            <span className={styles['state-deleted']}>Eliminado</span>
+                                        )))}
+                                    </td>
+                                    <td>
+                                        <div className={styles['action-btns-container']}>
+                                            {/* Completar compromiso */}
                                             {commitment.id_estado === 1 ? (
                                                 (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) ? (
-                                                    <button type='submit' className={styles['pointer']} onClick={(e) => onSubmitComplete(e, commitment.id_compromiso)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                                                    <button type='submit' className={styles['action-btn-complete']} onClick={(e) => onSubmitComplete(e, commitment.id_compromiso)}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                                                     </button>
                                                 )
                                                 :
@@ -395,36 +515,14 @@ export function Minute() {
                                             )
                                             : 
                                             (
-                                            commitment.id_estado === 2 ? (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#669225" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                                            )
-                                            :
-                                            (
-                                            commitment.id_estado === 3 && (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#930000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                                            )))
-                                            }
-                                        </td>
-                                        <td className={styles['td']}>
-                                            {commitment.id_estado === 1 ? (
-                                                <span id={styles['current']}>Vigente</span>
-                                            )
-                                            :
-                                            (
-                                            commitment.id_estado === 2 ? (
-                                                <span id={styles['completed']}>Completado</span>
-                                            )
-                                            :
-                                            (
-                                            commitment.id_estado === 3 && (
-                                                <span id={styles['deleted']}>Eliminado</span>
-                                            )))}
-                                        </td>
-                                        <td className={styles['td']}>
+                                            commitment.id_estado === 2 && (
+                                                null
+                                            ))}
+                                            {/* Editar compromiso */}
                                             {commitment.id_estado === 1 ? (
                                                 (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) ? (
-                                                <button onClick={() => openModal(commitment.id_compromiso)} className={styles['pointer']}>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
+                                                <button onClick={() => openModal(commitment.id_compromiso)} className={styles['action-btn-edit']}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
                                                 </button>
                                                 )
                                                 :
@@ -434,20 +532,14 @@ export function Minute() {
                                             )
                                             :
                                             (
-                                            commitment.id_estado === 2 ? (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#669225" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                                            )
-                                            :
-                                            (
-                                            commitment.id_estado === 3 && (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#930000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                                            )))}
-                                        </td>
-                                        <td className={styles['td']}>
+                                            commitment.id_estado !== 1 && (
+                                                null
+                                            ))}
+                                            {/* Eliminar compromiso */}
                                             {commitment.id_estado === 1 ? (
                                                 (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 ) ? (
-                                                    <button type='submit' className={styles['pointer']} onClick={(e) => onSubmitDelete(e, commitment.id_compromiso)}>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className={styles['pointer']} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                                                    <button type='submit' className={styles['action-btn-delete']} onClick={(e) => onSubmitDelete(e, commitment.id_compromiso)}>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
                                                     </button>
                                                 )
                                                 :
@@ -457,110 +549,106 @@ export function Minute() {
                                             )
                                             :
                                             (
-                                            commitment.id_estado === 2 ? (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#669225" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                                            )
-                                            :
-                                            (
-                                            commitment.id_estado === 3 && (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#930000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
-                                            )))}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
+                                            commitment.id_estado !== 1 && (
+                                                null
+                                            ))}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </section>
-                <section id={styles['close-meeting-section']}>
-                    {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
-                        <button type='submit' className={styles['primary-btn']} onClick={(e) => closeMeeting(e)}>Cerrar Reunión</button>
-                    )
-                    :
-                    ( meetingData[0].id_estado === 2 ? (
-                        <span>Reunión cerrada</span>
+                <section className={styles['topic-agreement-section']}>
+                    <div className={styles['topic-agreement-title']}>
+                        {changeTopicAgreementView === false ? (
+                            <>
+                                <h1>Acuerdos</h1>
+                                <p>Registra los acuerdos de la reunión</p>
+                            </>
+                        )
+                        :
+                        (
+                            <>
+                                <h1>Temas Tratados</h1>
+                                <p>Registra los temas tratados de la reunión</p>
+                            </>
+                        )}
+                    </div>
+                    <section className={styles['change-view-section']}>
+                        <button className={`${changeTopicAgreementView === false ? styles['change-view-btn-selected'] : styles['change-view-btn'] }`} onClick={changeTopicAgreementViewHandler}>
+                            Acuerdos
+                        </button>
+                        <button className={`${changeTopicAgreementView === true ? styles['change-view-btn-selected'] : styles['change-view-btn'] }`} onClick={changeTopicAgreementViewHandler}>
+                            Temas Tratados
+                        </button>
+                    </section>
+                    {changeTopicAgreementView === false ? (
+                        <section className={styles['agreement-section']}>
+                            <form className={styles['agreement-form']} onSubmit={handleSubmitAgreement(onSubmitAddAgreement)}>
+                                <input type="text" placeholder='Ingresa un nuevo acuerdo' {...registerAgreement('agreement', {required: true})} />                                        
+                                    {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
+                                        <button type="submit" className={styles['add-agreement-topic-btn']}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                            Añadir Acuerdo
+                                        </button>
+                                    )
+                                    :
+                                    (
+                                        null
+                                    )}
+                            </form>
+                            <div className={styles['agreement-table-container']}>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Texto del Acuerdo</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {agreements.map((agreement) => (
+                                            <tr key={agreement.id_acuerdo}>
+                                                <td>{agreement.texto_acuerdo}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
                     )
                     :
                     (
-                        <span>Cerrar Reunión D</span>
-                    ))}
-                </section>
-                <section id={styles['topics-agreements-container']}>
-                    <section id={styles['agreements-container']}>
-                        <div className={styles['add-agreement-container']}>
-                            <form onSubmit={handleSubmitAgreement(onSubmitAddAgreement)} className={styles['topic-agreement-form']}>
-                                {meetingData[0].id_estado === 1 && (
-                                    <div className={styles['topic-agreement-input']}>
-                                        <label htmlFor="agreements">Acuerdos</label>
-                                        <input type="text" name='agreements' id={styles['agreements']} {...registerAgreement("agreement", {required: true})} />
-                                    </div>
-                                )}
-                                
-                                <div>
+                        <section className={styles['topic-section']}>
+                            <form className={styles['topic-form']} onSubmit={handleSubmitTopic(onSubmitAddTopic)}>
+                                <input type="text" placeholder='Ingresa un nuevo tema tratado' {...registerTopic('topic', {required: true})} />
                                 {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
-                                    <button type='submit' className={styles['primary-btn']}>Añadir Acuerdo</button>
-                                ) 
-                                : 
+                                    <button type="submit" className={styles['add-agreement-topic-btn']}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                        Añadir Tema Tratado
+                                    </button>
+                                )
+                                :
                                 (
                                     null
                                 )}
-                                </div>
                             </form>
-                        </div>
-                        <div className={styles['topic-agreement-table-section']}>
-                            <table className={styles['topic-agreement-table']}>
+                            <table className={styles['topic-table']}>
                                 <thead>
                                     <tr>
-                                        <th className={styles['head-th-agreement-topic-text']}>Texto del Acuerdo</th>
+                                        <th>Texto del Tema Tratado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {agreements.length > 0 && agreements.map((agreement) => (
-                                        <tr key={agreement.id_acuerdo}>
-                                            <td className={styles['agreement-topic-text']}>{agreement.texto_acuerdo}</td>
+                                    {topics.map((topic) => (
+                                        <tr key={topic.id_tema_tratado}>
+                                            <td>{topic.texto_tema_tratado}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
-                        </div>
-                    </section>
-                    <section id={styles['topics-container']}>
-                        <div className={styles['add-agreement-container']}>
-                            <form onSubmit={handleSubmitTopic(onSubmitAddTopic)} className={styles['topic-agreement-form']}>
-                                {meetingData[0].id_estado === 1 && (
-                                    <div className={styles['topic-agreement-input']}>
-                                        <label htmlFor="topics_covered">Temas Tratados</label>
-                                        <input type="text" name='topics_covered' id={styles['topics-covered']} {...registerTopic("topic", {required: true})} />
-                                    </div>
-                                )}
-                                <div>
-                                {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
-                                    <button type='submit' className={styles['primary-btn']}>Añadir Tema Tratado</button>
-                                ) 
-                                : 
-                                (
-                                    null
-                                )}
-                                </div>
-                            </form>
-                        </div>
-                        <div className={styles['topic-agreement-table-section']}>
-                            <table className={styles['topic-agreement-table']}>
-                                <thead>
-                                    <tr>
-                                        <th className={styles['head-th-agreement-topic-text']}>Texto del Tema Tratado</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {topics.length > 0 && topics.map((topic) => (
-                                        <tr key={topic.id_tema}>
-                                            <td className={styles['agreement-topic-text']}>{topic.texto_tema_tratado}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </section>
+                        </section>
+                    )
+                    }
                 </section>
                 <section id={styles['modal-section']}>
                 <Modal
@@ -571,56 +659,7 @@ export function Minute() {
                 >
                     {editingCommitment && (
                         <form onSubmit={handleSubmitEdit(onSubmitEdit)}>
-                            <table id={styles['modal-table']}>
-                                <thead id={styles['modal-thead']}>
-                                    <tr>
-                                        <th className={styles['modal-thead-th']}>Proyecto</th>
-                                        <th className={styles['modal-thead-th-large']}>Responsable</th>
-                                        <th className={styles['modal-thead-th']}>Fecha</th>
-                                        <th id={styles['modal-thead-th-commitment-text']}>Compromiso</th>
-                                        <th className={styles['modal-thead-th']}>Prioridad</th>
-                                    </tr>
-                                </thead>
-                                <tbody id={styles['modal-tbody']}>
-                                    <tr>
-                                        <td className={styles['modal-td']}>
-                                            {meetingData.length > 0 && meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3 ? (
-                                                <select name="project-select" id={styles['project-select']} defaultValue={editingCommitment.id_proyecto} {...registerEdit("project_id", {required: true})}>
-                                                    {projects.map((project) => (
-                                                        <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
-                                                    ))}
-                                                </select>
-                                            )
-                                            :
-                                            (
-                                                <span>{editingCommitment.id_proyecto}</span>
-                                            )}
-                                        </td>
-                                        <td className={styles['modal-td']}>
-                                            <select name="name_and_last_name_form" id={styles['name_and_last_name_form']} defaultValue={editingCommitment.responsable} {...registerEdit("name_and_last_name_form", {required: true})}>
-                                                {staffInfo.map((staff) => (
-                                                    <option value={staff.rut_personal} key={staff.rut_personal}>{staff.nombres} {staff.apellido_p} {staff.apellido_m}</option>
-                                                ))}
-                                            </select>
-                                        </td>
-                                        <td className={styles['modal-td']}>
-                                            <input type="date" name="commitment-date" id={styles['commitment-date']} defaultValue={formatDateForInput(editingCommitment.fecha_comprometida)} {...registerEdit("commitment-date", {required: true})} />
-                                        </td>
-                                        <td className={styles['modal-td']}>
-                                            <input type="text" name="commitment-text" id={styles['commitment-text']} defaultValue={editingCommitment.texto_compromiso} {...registerEdit("commitment-text", {required: true})} />
-                                        </td>
-                                        <td className={styles['modal-td']}>
-                                            <input type="checkbox" name="priority" id={styles['priority']} defaultChecked={editingCommitment.prioridad} {...registerEdit("priority")} />
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <input type="hidden" value={editingCommitment.id_compromiso} {...registerEdit("id_commitment")} />
-                            <input type="hidden" value={meetingData[0].id_tipo_reunion} {...registerEdit("id_meeting_type")} />
-                            <div id={styles['modal-buttons']}>
-                                <button id={styles['secondary-btn']} onClick={closeModal}>Cancelar</button>
-                                <button type='submit' className={styles['primary-btn']}>Guardar Cambios</button>
-                            </div>
+                            
                         </form>
                     )}
                 </Modal>
