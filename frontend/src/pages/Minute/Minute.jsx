@@ -64,7 +64,7 @@ export function Minute() {
                 navigate('/meeting');
             }
             else {
-                console.error('Error inesperado:', error); // Maneja otros errores
+                console.error('Error inesperado:', error);
             }
         } finally {
             setLoading(false);
@@ -310,7 +310,6 @@ export function Minute() {
                                 </div>
                             )
                         }
-                        <span>Administra los compromisos de esta reunión</span>
                     </div>
                     <div className={styles['close-meeting-section']}>
                         {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
@@ -416,6 +415,12 @@ export function Minute() {
                         </form>
                     </section>
                 )}
+                <section className={styles['commitment-title-section']}>
+                    <div>
+                        <h1>Compromisos</h1>
+                        <p>Administra los compromisos de la reunión</p>
+                    </div>
+                </section>
                 <section className={styles['filters-section']}>
                     <div className={styles['filter-container']}>
                         <label>Filtrar por estado:</label>
@@ -650,7 +655,6 @@ export function Minute() {
                     )
                     }
                 </section>
-                <section id={styles['modal-section']}>
                 <Modal
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
@@ -658,12 +662,98 @@ export function Minute() {
                     className={styles['modal']}
                 >
                     {editingCommitment && (
-                        <form onSubmit={handleSubmitEdit(onSubmitEdit)}>
-                            
+                        <>
+                        <section className={styles['modal-header']}>
+                            <div>
+                                <h1>Editar compromiso</h1>
+                                <p>Modifica los detalles del compromiso</p>
+                            </div>
+                            <button onClick={closeModal}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                            </button>
+                        </section>
+                        <form onSubmit={handleSubmitEdit(onSubmitEdit)} className={styles['modal-form']} id='modal-form'>
+                            <fieldset>
+                                <label>Proyecto</label>
+                                {
+                                    (meetingData[0].id_tipo_reunion === 1 || meetingData[0].id_tipo_reunion === 3) ? (
+                                        <select name="project-select" className={styles['add-commitment-select']} defaultValue={editingCommitment.id_proyecto} {...registerEdit('project_id', {required: true})}>
+                                            {projects.map((project) => (
+                                                <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                                            ))}
+                                        </select>
+                                    )
+                                    :
+                                    (
+                                        <span className={styles['add-commitment-select']}>{meetingData[0].id_proyecto}</span>
+                                    )
+                                }
+                            </fieldset>
+                            <fieldset>
+                                <label>Responsable</label>
+                                <Controller
+                                    name="name_and_last_name_form"
+                                    control={controlEdit}
+                                    rules={{ required: true }}
+                                    render={({ field }) => (
+                                        <Select
+                                            {...field}
+                                            placeholder="Seleccione el responsable"
+                                            options={staffList}
+                                            className={styles['name_and_last_name_form']}
+                                            styles={{
+                                                control: (base) => ({
+                                                    ...base,
+                                                    width: 472,
+                                                    height: 48,
+                                                    borderRadius: 4,
+                                                    border: '1px solid #d1d5db',
+                                                    backgroundColor: 'white',
+                                                    color: 'black',
+                                                    fontSize: 16,
+                                                    boxSizing: 'border-box',
+                                                    paddingLeft: 4,
+                                                }),
+                                                menu: (base) => ({
+                                                    ...base,
+                                                    zIndex: 9999,
+                                                }),
+                                                option: (base, state) => ({
+                                                    ...base,
+                                                    backgroundColor: state.isSelected ? '#15803d' : 'white',
+                                                    color: state.isSelected ? 'white' : 'black',
+                                                    '&:hover': {
+                                                        backgroundColor: '#f3f4f6',
+                                                        color: 'black',
+                                                    },
+                                                }),
+                                            }}
+                                        />
+                                    )}
+                                />
+                            </fieldset>
+                            <fieldset>
+                                <label>Fecha</label>
+                                <input type="date" id={styles['commitment-date']} className={styles['add-commitment-select']} defaultValue={formatDateForInput(editingCommitment.fecha_comprometida)} {...registerEdit('commitment-date', {required: true})} />
+                            </fieldset>
+                            <fieldset>
+                                <label>Prioridad</label>
+                                <input type="checkbox" id={styles['priority']} defaultChecked={editingCommitment.prioridad === 1} {...registerEdit('priority')} />
+                            </fieldset>
+                            <fieldset>
+                                <label>Compromiso</label>
+                                <textarea type="text" id={styles['commitment-text']} defaultValue={editingCommitment.texto_compromiso} {...registerEdit('commitment-text', {required: true})} placeholder='Escribe el contenido del compromiso aquí'></textarea>
+                            </fieldset>
+                            <input type="hidden" value={editingCommitment.id_tipo_reunion} {...registerEdit('id_meeting_type')} />
+                            <input type="hidden" value={editingCommitment.id_compromiso} {...registerEdit('id_commitment')} />
                         </form>
+                        <section className={styles['modal-footer']}>
+                            <button className={styles['modal-btn-cancel']} onClick={closeModal}>Cancelar</button>
+                            <button className={styles['modal-btn-save']} onClick={handleSubmitEdit(onSubmitEdit)} form='modal-form'>Guardar Cambios</button>
+                        </section>
+                        </>
                     )}
                 </Modal>
-                </section>
             </section>
             </>
         )}

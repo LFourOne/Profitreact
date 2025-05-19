@@ -234,8 +234,6 @@ def add_commitment():
     
     data = request.get_json()
 
-    print(f"Data: {data}")
-
     if data['priority'] == True:
         data['priority'] = 1
     else:
@@ -288,6 +286,8 @@ def edit_commitment():
 
     data = request.get_json()
 
+    print(f"Dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: {data}")
+
     if data['priority'] == True:
         data['priority'] = 1
     else:
@@ -302,7 +302,7 @@ def edit_commitment():
             'id_proyecto' : data['project_id'],
             'texto_compromiso' : data['commitment-text'],
             'fecha_comprometida' : data['commitment-date'],
-            'responsable' : data['name_and_last_name_form'],
+            'responsable' : data['name_and_last_name_form']['value'],
             'prioridad': data['priority']
         }
 
