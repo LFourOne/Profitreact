@@ -99,8 +99,6 @@ def register_attendance():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
     data = request.get_json()
-
-    print(f"ESTA ES LA DATA: {data}")
     
     verificator = TrainingAssistant.select_attendant_by_rut({'id_capacitacion': data['id_capacitacion'], 'rut_asistente': data['session']['rut_personal']})
 
@@ -221,7 +219,6 @@ def upload_file():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     if 'file' not in request.files:
-        print('No se envió ningún archivo')
         return jsonify({'error': 'No se envió ningún archivo'}), 400
     
     file = request.files['file']

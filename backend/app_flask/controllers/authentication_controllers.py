@@ -27,8 +27,6 @@ def company_process():
     else:
         return jsonify({'status': 'error', 'message': 'error'}), 400
     
-    print(f"Data Base: {session['data_base']}")
-    
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
 
@@ -116,8 +114,6 @@ def register_process():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
-
-    print(f"Data: {data}")
 
     encrypted_password = bcrypt.generate_password_hash(data['password'])
 

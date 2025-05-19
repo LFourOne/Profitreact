@@ -286,8 +286,6 @@ def edit_commitment():
 
     data = request.get_json()
 
-    print(f"Dataaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa: {data}")
-
     if data['priority'] == True:
         data['priority'] = 1
     else:
@@ -351,8 +349,6 @@ def close_meeting():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
     data = request.get_json()
-
-    print(f"Data: {data}")
 
     hour_date = datetime.now().strftime('%H:%M:%S')
 

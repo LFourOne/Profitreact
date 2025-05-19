@@ -348,22 +348,25 @@ export function Minute() {
                                     </fieldset>
                                     )
                                 }
-                                <fieldset>
+                                <fieldset className={styles['add-commitment-fieldset-responsible']}>
                                     <label>Responsable</label>
                                     <Controller
                                         name="name_and_last_name_form"
                                         control={control}
                                         rules={{ required: true }}
+                                        className={styles['name_and_last_name_form']}
+                                        classNamePrefix="react-select"
                                         render={({ field }) => (
                                             <Select
                                                 {...field}
-                                                placeholder="Seleccione el responsable"
+                                                placeholder="Seleccione el responsable..."
                                                 options={staffList}
                                                 className={styles['name_and_last_name_form']}
                                                 styles={{
                                                     control: (base) => ({
                                                         ...base,
-                                                        minWidth: 300,
+                                                        minWidth: '100%',
+                                                        minWidth: 0,
                                                         height: 48,
                                                         borderRadius: 4,
                                                         border: '1px solid #d1d5db',
@@ -397,7 +400,7 @@ export function Minute() {
                                 </fieldset>
                                 <fieldset>
                                     <label>Prioridad</label>
-                                    <input type="checkbox" id={styles['priority']} {...registerAdd('priority')} />
+                                    <input type="checkbox" className={styles['priority']} {...registerAdd('priority')} />
                                 </fieldset>
                             </section>
                             <section>
