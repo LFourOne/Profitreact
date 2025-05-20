@@ -41,6 +41,9 @@ def meeting():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6, 7]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
     response_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
