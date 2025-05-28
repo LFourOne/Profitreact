@@ -144,3 +144,13 @@ def register_process():
     User.create_one(user_data)
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    session.clear()
+    
+    return jsonify({'status': 'success', 'message': 'success'}), 200

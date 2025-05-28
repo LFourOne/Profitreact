@@ -49,7 +49,15 @@
         padding: 20px 0 0 50px;
         box-sizing: border-box;
     }
+    .top-section h1{
+        height: 16px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
+    }
     .top-section p{
+        font-size: 16px;
+        font-weight: 500;
         color: #4b5563;
     }
     .form{
@@ -154,7 +162,15 @@
         padding: 20px 0 0 50px;
         box-sizing: border-box;
     }
+    .top-section h1{
+        height: 16px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
+    }
     .top-section p{
+        font-size: 16px;
+        font-weight: 500;
         color: #4b5563;
     }
     .form{
@@ -258,7 +274,15 @@
         padding: 20px 0 0 50px;
         box-sizing: border-box;
     }
+    .top-section h1{
+        height: 16px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
+    }
     .top-section p{
+        font-size: 16px;
+        font-weight: 500;
         color: #4b5563;
     }
     .form{

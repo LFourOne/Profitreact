@@ -91,3 +91,16 @@ class Commitment:
                 ORDER BY compromiso.id_proyecto DESC, compromiso.prioridad DESC, compromiso.fecha_comprometida DESC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def get_all_personal_commitments(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT compromiso.id_compromiso, compromiso.id_reunion, compromiso.id_proyecto, compromiso.texto_compromiso, compromiso.fecha_comprometida, compromiso.prioridad, 
+                reuniones.id_tipo_reunion, reuniones.fecha, tipo_reunion.descripcion_tipo_reunion FROM compromiso
+                JOIN reuniones ON compromiso.id_reunion = reuniones.id_reunion
+                JOIN tipo_reunion ON reuniones.id_tipo_reunion = tipo_reunion.id_tipo_reunion
+                WHERE compromiso.responsable = %(responsable)s AND compromiso.id_estado = 1
+                ORDER BY compromiso.prioridad DESC, compromiso.fecha_comprometida ASC;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)

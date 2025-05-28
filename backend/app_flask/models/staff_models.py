@@ -56,6 +56,17 @@ class Staff:
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
+    @classmethod
+    def obtain_team(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT maestro_personal.rut_personal, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, maestro_personal.iniciales_nombre, maestro_personal.id_especialidad, especialidades.especialidad FROM maestro_personal
+                JOIN especialidades ON maestro_personal.id_especialidad = especialidades.id_especialidad
+                WHERE maestro_personal.id_especialidad = %(id_especialidad)s AND maestro_personal.estado = 1
+                ORDER BY maestro_personal.apellido_p DESC;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+
     # Los siguientes classmethod se usan para la Gantt
 
     @classmethod

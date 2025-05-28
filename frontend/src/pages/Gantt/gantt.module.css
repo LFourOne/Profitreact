@@ -1164,9 +1164,9 @@
         padding: 7px;
     }
     .staff-top-container{
-    display: flex;
-    align-items: center;
-    gap: 190px;
+        display: flex;
+        align-items: center;
+        gap: 190px;
     }
     #buttons-container{
         display: flex;

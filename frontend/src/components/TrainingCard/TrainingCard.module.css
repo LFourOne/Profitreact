@@ -14,20 +14,20 @@
     .card-top-subcontainer{
         display: flex;
         flex-direction: column;
+        height: 70px;
         overflow-x: auto;
         overflow-y: hidden;
     }
     .card-top-subcontainer-h1{
-        white-space: nowrap;
+        height: 28px;
+        margin: 0;
         font-size: 26px;
         font-weight: bold;
         color: black;
-        height: 25px;
-        padding: 10px 0 0 0;
-        margin: 0;
+        white-space: nowrap;
     }
     .card-top-subcontainer-h2{
-        padding: 8px 0 0 0;
+        height: 0px;
         font-size: 16px;
         font-weight: normal;
         color: gray;
@@ -116,20 +116,20 @@
     .card-top-subcontainer{
         display: flex;
         flex-direction: column;
+        height: 70px;
         overflow-x: auto;
         overflow-y: hidden;
     }
     .card-top-subcontainer-h1{
-        white-space: nowrap;
+        height: 28px;
+        margin: 0;
         font-size: 26px;
         font-weight: bold;
         color: black;
-        height: 25px;
-        padding: 10px 0 0 0;
-        margin: 0;
+        white-space: nowrap;
     }
     .card-top-subcontainer-h2{
-        padding: 8px 0 0 0;
+        height: 0px;
         font-size: 16px;
         font-weight: normal;
         color: gray;
@@ -218,17 +218,20 @@
     .card-top-subcontainer{
         display: flex;
         flex-direction: column;
+        height: 70px;
         overflow-x: auto;
         overflow-y: hidden;
     }
     .card-top-subcontainer-h1{
-        white-space: nowrap;
+        height: 28px;
+        margin: 0;
         font-size: 26px;
         font-weight: bold;
         color: black;
-        height: 25px;
+        white-space: nowrap;
     }
     .card-top-subcontainer-h2{
+        height: 0px;
         font-size: 16px;
         font-weight: normal;
         color: gray;

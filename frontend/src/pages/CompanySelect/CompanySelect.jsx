@@ -27,22 +27,22 @@ export function CompanySelect(){
 
     return(
         <>
-        <main id={styles['main']}>
-            <section id={styles['main-section']}>
-                <section id={styles['top-section']}>
-                    <div id={styles['top-section-logo']}>
-                        <img src={groupLogo} alt="SOLUTIVA Logo" id={styles['logo']} draggable='false' />
+        <main className={styles['main']}>
+            <section className={styles['main-section']}>
+                <section className={styles['top-section']}>
+                    <div className={styles['top-section-logo']}>
+                        <img src={groupLogo} alt="SOLUTIVA Logo" className={styles['logo']} draggable='false' />
                     </div>
-                    <div id={styles['top-section-title']}>
-                        <h1 id={styles['top-section-title-h1']}>¡Bienvenid@ a Profit!</h1>
-                        <h2 id={styles['top-section-title-h2']}>Selecciona la empresa a la que perteneces</h2>
+                    <div className={styles['top-section-title']}>
+                        <h1 className={styles['top-section-title-h1']}>¡Bienvenid@ a Profit!</h1>
+                        <h2 className={styles['top-section-title-h2']}>Selecciona la empresa a la que perteneces</h2>
                     </div>
                 </section>
-                <section id={styles['middle-section']}>
+                <section className={styles['middle-section']}>
                     <div className={styles['middle-section-company-card']}>
                         <div className={styles['middle-section-company-card-title-container']}>
                             <div className={styles['middle-section-company-card-title-svg-container']}>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={32} height={32} color={"#ffffff"} fill={"none"}><path d="M3.25195 3V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M16.252 3V10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.75195 3V7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.75195 10V14" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.75195 17V21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M19.6134 13.4393L20.3077 14.1317C20.8951 14.7175 20.8951 15.6672 20.3077 16.253L16.6702 19.9487C16.3841 20.234 16.0181 20.4264 15.6203 20.5005L13.3659 20.9885C13.01 21.0656 12.693 20.7504 12.7692 20.3952L13.2491 18.1599C13.3234 17.7632 13.5163 17.3982 13.8024 17.1129L17.4862 13.4393C18.0736 12.8536 19.026 12.8536 19.6134 13.4393Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={32} height={32} color={"#ffffff"} fill={"none"}><path d="M3.25195 3V21" stroke="currentColor" strokeWclassNameth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M16.252 3V10.5" stroke="currentColor" strokeWclassNameth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.75195 3V7" stroke="currentColor" strokeWclassNameth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.75195 10V14" stroke="currentColor" strokeWclassNameth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M9.75195 17V21" stroke="currentColor" strokeWclassNameth="1.5" strokeLinecap="round" strokeLinejoin="round" /><path d="M19.6134 13.4393L20.3077 14.1317C20.8951 14.7175 20.8951 15.6672 20.3077 16.253L16.6702 19.9487C16.3841 20.234 16.0181 20.4264 15.6203 20.5005L13.3659 20.9885C13.01 21.0656 12.693 20.7504 12.7692 20.3952L13.2491 18.1599C13.3234 17.7632 13.5163 17.3982 13.8024 17.1129L17.4862 13.4393C18.0736 12.8536 19.026 12.8536 19.6134 13.4393Z" stroke="currentColor" strokeWclassNameth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                             </div>
                             <h1>Solutiva Consultores</h1>
                         </div>
@@ -62,8 +62,8 @@ export function CompanySelect(){
                         </div>
                     </div>
                 </section>
-                <section id={styles['bottom-section']}>
-                    <div id={styles['bottom-section-copyright-container']}>
+                <section className={styles['bottom-section']}>
+                    <div className={styles['bottom-section-copyright-container']}>
                         <span>© 2025 Grupo SOLUTIVA. Todos los derechos reservados.</span>
                     </div>
                 </section>

@@ -24,6 +24,10 @@ def index():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
+    commitments = Commitment.get_all_personal_commitments({'responsable': session['rut_personal']})
+
+    team = Staff.obtain_team({'id_especialidad': session['id_especialidad']})
+
     response_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
@@ -33,7 +37,11 @@ def index():
         'id_especialidad': session['id_especialidad'],
     }
 
-    return jsonify({'session' : response_data}), 200
+    return jsonify({
+        'commitments' : commitments,
+        'team' : team,
+        'session' : response_data,
+        }), 200
 
 @app.route('/meeting')
 def meeting():

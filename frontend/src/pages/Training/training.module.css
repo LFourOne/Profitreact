@@ -228,6 +228,9 @@
         width: 50%;
         height: 100%;
     }
+    #top-section-left-container-h1{
+        font-size: 24px;
+    }
     #top-section-left-container-h2{
         font-size: 20px;
         font-weight: 500;

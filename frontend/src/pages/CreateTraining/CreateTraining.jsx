@@ -75,8 +75,8 @@ export function CreateTraining() {
                     </section>
                     <form onSubmit={handleSubmit(onSubmit)} id={styles['form']}>
                         <section id={styles['form-top-container']}>
-                            <h1 id={styles['form-top-container-h1']}>Registro de Capacitación</h1>
-                            <h2 id={styles['form-top-container-h2']}>Completa el formulario para registrar una nueva capacitación.</h2>
+                            <h1>Registro de Capacitación</h1>
+                            <p>Completa el formulario para registrar una nueva capacitación.</p>
                         </section>
                         <section id={styles['form-middle-container']}>
                             <fieldset className={styles['fieldset']}>

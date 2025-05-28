@@ -38,14 +38,16 @@
         box-sizing: border-box;
         overflow-x: auto;
     }
-    #form-top-container-h1{
-        font-size: 26px;
-        height: 24px;
+    #form-top-container h1{
+        height: 34px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
     }
-    #form-top-container-h2{
+    #form-top-container p{
         font-size: 16px;
-        color: gray;
-        height: 15px;
+        font-weight: 500;
+        color: #4b5563;
     }
     #form-middle-container{
         display: flex;
@@ -207,14 +209,16 @@
         box-sizing: border-box;
         overflow-x: auto;
     }
-    #form-top-container-h1{
-        font-size: 26px;
-        height: 24px;
+    #form-top-container h1{
+        height: 34px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
     }
-    #form-top-container-h2{
+    #form-top-container p{
         font-size: 16px;
-        color: gray;
-        height: 15px;
+        font-weight: 500;
+        color: #4b5563;
     }
     #form-middle-container{
         display: flex;
@@ -377,14 +381,16 @@
         box-sizing: border-box;
         overflow-x: auto;
     }
-    #form-top-container-h1{
-        font-size: 26px;
-        height: 24px;
+    #form-top-container h1{
+        height: 34px;
+        font-size: 28px;
+        font-weight: bold;
+        color: #1f2937;
     }
-    #form-top-container-h2{
+    #form-top-container p{
         font-size: 16px;
-        color: gray;
-        height: 15px;
+        font-weight: 500;
+        color: #4b5563;
     }
     #form-middle-container{
         display: flex;
