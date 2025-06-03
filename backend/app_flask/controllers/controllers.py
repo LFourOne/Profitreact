@@ -6,7 +6,8 @@ from app_flask.models.staff_models import Staff
 from app_flask.models.attendant_models import Attendant
 from app_flask.models.commitment_models import Commitment
 from app_flask.models.topic_agreement_models import Agreements, Topics 
-from datetime import datetime
+from app_flask.models.planning_models import Planning
+from datetime import datetime, timedelta
 
 @app.route('/navbar')
 def navbar():
@@ -25,8 +26,50 @@ def index():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
     
     commitments = Commitment.get_all_personal_commitments({'responsable': session['rut_personal']})
-
+    
     team = Staff.obtain_team({'id_especialidad': session['id_especialidad']})
+
+    today = datetime.now()
+    bussiness_days = {}
+
+    idx = 0
+    i = 0
+
+    while idx < 5:
+        day = today + timedelta(days=i)
+        if day.weekday() < 5:
+            date = day.strftime('%Y-%m-%d')
+            bussiness_days[idx] = {'date': date}
+            idx += 1
+        i += 1
+
+    planification = Planning.select_weekly_planning({'fecha_inicio': bussiness_days[0]['date'], 'fecha_fin': bussiness_days[4]['date'], 'rut_personal': session['rut_personal']})
+
+    for p in planification:
+        if isinstance(p['fecha'], (datetime, )):
+            p['fecha'] = p['fecha'].strftime('%Y-%m-%d')
+        elif isinstance(p['fecha'], (type(datetime.now().date()), )):
+            p['fecha'] = p['fecha'].isoformat()
+
+    # Agrupa planificaciones por fecha
+    planification_by_date = {}
+    for p in planification:
+        fecha = p['fecha']
+        if fecha not in planification_by_date:
+            planification_by_date[fecha] = []
+        planification_by_date[fecha].append(p)
+
+    # Junta días hábiles con sus planificaciones (aunque estén vacías)
+    planification_grouped = []
+    for idx, day in bussiness_days.items():
+        planifications = planification_by_date.get(day['date'], [])
+        planification_grouped.append({
+            'date': day['date'],
+            'planification': planifications
+        })
+
+    projects = Project.get_projects_for_commitments()
+    meeting_type = Meeting.select_meeting_type()
 
     response_data = {
         'rut_personal': session['rut_personal'],
@@ -40,6 +83,9 @@ def index():
     return jsonify({
         'commitments' : commitments,
         'team' : team,
+        'planification' : planification_grouped,
+        'projects' : projects,
+        'meeting_type' : meeting_type,
         'session' : response_data,
         }), 200
 

@@ -45,12 +45,23 @@ class Planning:
                 WHERE id_planificacion = %(id_planificacion)s;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def select_weekly_planning(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT gantt_planificacion.id_planificacion, gantt_planificacion.id_proyecto, gantt_planificacion.fecha, gantt_asignados.rut_personal, gantt_asignados.id_asignado FROM gantt_planificacion
+                JOIN gantt_asignados ON gantt_planificacion.id_planificacion = gantt_asignados.id_planificacion
+                WHERE gantt_planificacion.fecha BETWEEN %(fecha_inicio)s AND %(fecha_fin)s AND gantt_asignados.rut_personal = %(rut_personal)s
+                ORDER BY gantt_planificacion.fecha;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
 
 
 class Assigned:
     def __init__(self, data):
         self.id_asignado = data.get('id_asignado')
-        self.id_planificacion   = data.get('id_planificacion')
+        self.id_planificacion = data.get('id_planificacion')
         self.rut_personal = data.get('rut_personal')
         self.id_especialidad = data.get('id_especialidad')
     

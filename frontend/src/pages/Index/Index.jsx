@@ -11,6 +11,13 @@ export function Index() {
     const [session, setSession] = useState([]);
     const [commitments, setCommitments] = useState([]);
     const [team, setTeam] = useState([]);
+    const [planification, setPlanification] = useState([]);
+    const [projects, setProjects] = useState([]);
+    const [meetingType, setMeetingType] = useState([]);
+
+    const [projectFilter, setProjectFilter] = useState("");
+    const [meetingTypeFilter, setMeetingTypeFilter] = useState("");
+    
     const [loading, setLoading] = useState(true);
     
     const fetchApi = async () => {
@@ -21,6 +28,9 @@ export function Index() {
         
         setCommitments(response.data.commitments);
         setTeam(response.data.team);
+        setPlanification(response.data.planification);
+        setProjects(response.data.projects);
+        setMeetingType(response.data.meeting_type);
         setSession(response.data.session);
         console.log(response.data)
 
@@ -91,6 +101,25 @@ export function Index() {
         } 
     };
 
+    function getSpanishDayName(dateString) {
+        let date = new Date(dateString);
+
+        if (date.getUTCHours() === 0 && date.getUTCMinutes() === 0) {
+            date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
+        }
+
+        const dayName = date.toLocaleDateString('es-ES', { weekday: 'long' });
+        return dayName.charAt(0).toUpperCase() + dayName.slice(1);
+    }
+
+    function getDayNumber(dateString) {
+        let date = new Date(dateString);
+        if (date.getUTCHours() === 0 && date.getUTCMinutes() === 0) {
+            date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
+        }
+        return date.getDate();
+    }
+
     return (
         <>
         {loading ? <p>Cargando</p> : (
@@ -99,7 +128,7 @@ export function Index() {
                     <div className={styles['welcome-section-text-container']}>
                         <h1>¡Bienvenido/a, {session.nombres}!</h1>
                         <p>Gestiona tu planificación semanal, compromisos y más desde Profit</p>
-                        <button>
+                        <button onClick={() => navigate(`/profile/${session.rut_personal}`)}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             Mi Perfil
                         </button>
@@ -136,22 +165,74 @@ export function Index() {
                                 </button>
                             </div>
                             <div className={styles['weekly-planning-content']}>
-                                <p>Contenido de la planificación semanal...</p>
+                                {planification.length > 0 ? (
+                                    planification.map((day) => (
+                                    <div key={day.date} className={styles['weekly-planning-item']}>
+                                        <div className={styles['weekly-planning-item-header']}>
+                                            <span className={styles['weekly-planning-item-day-string']}>
+                                                {getSpanishDayName(day.date)}
+                                            </span>
+                                            <span className={styles['weekly-planning-item-day-number']}>
+                                                {getDayNumber(day.date)}
+                                            </span>
+                                        </div>
+                                        <div className={styles['weekly-planning-item-content']}>
+                                            {day.planification.length > 0 ? (
+                                                day.planification.map((planification) => (
+                                                    <div key={planification.id_planificacion}>
+                                                        <span className={styles['weekly-planning-item-project']}>
+                                                            {planification.id_proyecto}
+                                                        </span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <span className={styles['weekly-planning-item-project']}>
+                                                    No hay planificaciones para este día.
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    )
+                                )) : (
+                                    <p>No tienes planificaciones para esta semana.</p>
+                                )}
                             </div>
                         </section>
                         {/* Commitment Section */}
                         <section className={styles['my-commitments']}>
                             <div className={styles['my-commitments-header']}>
-                                <div>
+                                <div className={styles['my-commitments-header-left']}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 3v5h5M16 13H8M16 17H8M10 9H8"/></svg>
                                     <h1>Mis Compromisos</h1>
+                                </div>
+                                <div className={styles['my-commitments-header-right']}>
+                                    <div>
+                                        <label>Proyecto:</label>
+                                        <select className={styles['filter-select']} value={projectFilter} onChange={(e) => setProjectFilter(e.target.value)}>
+                                            <option value="">Todos</option>
+                                            {projects.map((project) => (
+                                                <option value={project.id_proyecto} key={project.id_proyecto}>{project.id_proyecto}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label>Tipo de Reunión:</label>
+                                        <select className={styles['filter-select']} value={meetingTypeFilter} onChange={(e) => setMeetingTypeFilter(e.target.value)}>
+                                            <option value="">Todos</option>
+                                            {meetingType.map((type) => (
+                                                <option value={type.id_tipo_reunion} key={type.id_tipo_reunion}>{type.descripcion_tipo_reunion}</option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             {/* Commitment List */}
                             <div className={styles['my-commitments-list']}>
                                 {
                                     commitments.length > 0 ? (
-                                        commitments.map((commitment) => (
+                                        commitments
+                                        .filter((commitment) => (projectFilter === "" || commitment.id_proyecto === projectFilter) && (meetingTypeFilter === "" || commitment.id_tipo_reunion === Number(meetingTypeFilter)))
+                                        .map((commitment) => (
                                             <div key={commitment.id_compromiso} className={styles['commitment-item']}>
                                                 <div className={styles['commitment-item-header']}>
                                                     <div className={styles['commitment-item-header-left']}>
@@ -185,8 +266,8 @@ export function Index() {
                                                 </div>
                                             </div>
                                         ))
-                                    ) 
-                                    : 
+                                    )
+                                    :
                                     (
                                         <p>No tienes compromisos pendientes.</p>
                                     )
@@ -204,7 +285,7 @@ export function Index() {
                             <div className={styles['my-team-list']}>
                                 {team.length > 0 ? (
                                     team.map((team) => (
-                                        <div key={team.rut_personal} className={styles['team-member']}>
+                                        <div key={team.rut_personal} className={styles['team-member']} onClick={() => navigate(`/profile/${team.rut_personal}`)}>
                                             <div className={styles['team-member-avatar']}>
                                                 <span>{team.iniciales_nombre}</span>
                                             </div>
@@ -219,15 +300,6 @@ export function Index() {
                                 (
                                     <p>No hay miembros en tu equipo.</p>
                                 )}
-                            </div>
-                        </section>
-                        <section className={styles['my-profile']}>
-                            <div className={styles['profile-header']}>
-                                <h1>Mi Perfil</h1>
-                            </div>
-                            <div className={styles['profile-content']}>
-                                <p>Nombre: {session.nombres} {session.apellido_p} {session.apellido_m}</p>
-                                <p>Email: {session.email}</p>
                             </div>
                         </section>
                     </div>

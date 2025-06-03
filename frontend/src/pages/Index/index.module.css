@@ -1,14 +1,606 @@
 @media (min-width: 700px) and (max-width: 1024px){
-}
-
-@media (min-width: 1025px) and (max-width: 1440px){
-}
-
-@media (min-width: 1441px){
     .main{
         display: flex;
         flex-direction: column;
-        width: 80%;
+        width: 95%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+        padding-bottom: 30px;
+    }
+    /* Welcome Section and Buttons */
+    .welcome-section{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 250px;
+        padding: 40px 20px 50px 20px;
+        margin-top: 50px;
+        border-radius: 16px;
+        background: linear-gradient(150deg, #3b5513, #73a727);
+        box-sizing: border-box;
+    }
+    .welcome-section-text-container{
+        display: flex;
+        flex-direction: column;
+    }
+    .welcome-section-text-container button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 42px;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+        transition: 0.1s ease-in-out;
+    }
+    .welcome-section-text-container button:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .welcome-section-logo-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 125px;
+        height: 125px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .logo{
+        width: 125px;
+        height: 125px;
+        margin-bottom: 8px;
+        object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
+    }
+    .welcome-section h1{
+        height: 15px;
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+    }
+    .welcome-section p{
+        font-size: 18px;
+        color: #f0fdf4;
+    }
+    .buttons-container{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 80px;
+        gap: 16px;
+    }
+    .buttons-container .my-commitment-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 200px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .buttons-container .my-commitment-button:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .buttons-container .my-planification-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 200px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .buttons-container .my-planification-button:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .buttons-container .logout-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        border: 1px solid #fca5a5;
+        border-radius: 6px;
+        background-color: white;
+        font-weight: bold;
+        color: #dc2626;
+        cursor: pointer;
+        gap: 8px;
+        transition: 0.1s ease-in-out;
+    }
+    .buttons-container .logout-button:hover{
+        background-color: #fef2f2;
+        color: #b91c1c;
+    }
+    .buttons-container .logout-button svg:hover{
+        stroke: #b91c1c;
+    }
+
+    /* Content Section */
+
+    .content-container{
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+        gap: 28px;
+    }
+
+    /* Left Containers */
+
+    .content-container-left{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        border-radius: 8px;
+        gap: 32px;
+    }
+
+    /* Left Containers | Weekly Planning */
+
+    .weekly-planning{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 300px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    .weekly-planning-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .weekly-planning-header div{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+        gap: 8px;
+    }
+    .weekly-planning-header div h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .weekly-planning-header button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 320px;
+        height: 40px;
+        background-color: #1f2937;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+        gap: 8px;
+    }
+    .weekly-planning-header button:hover{
+        background-color: #111827;
+        transition: 0.1s ease-in-out;
+    }
+    .weekly-planning-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        max-height: 1024px;
+        gap: 16px;
+        overflow-y: auto;
+    }
+    .weekly-planning-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 180px;
+        height: 180px;
+        padding: 10px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        gap: 12px;
+    }
+    .weekly-planning-item-header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+    .weekly-planning-item-day-string{
+        font-size: 14px;
+        font-weight: bold;
+        color: #4b5563;
+    }
+    .weekly-planning-item-day-number{
+        font-size: 20px;
+        font-weight: bold;
+        color: #111827;
+    }
+    .weekly-planning-item-content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 106px;
+        min-height: 120px;
+        max-height: 120px;
+        padding: 10px;
+        background-color: #f0fdf4;
+        border: 2px solid #86efac;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #374151;
+        text-align: left;
+        word-break: break-word;
+        overflow-y: auto;
+        overflow-x: hidden;
+        gap: 4px;
+    }
+    .weekly-planning-item-content:hover {
+        background-color: #dcfce7;
+        border-color: #4ade80;
+        color: #111827;
+        transition: 0.1s ease-in-out;
+    }
+
+    /* Left Containers | My Commitments */
+
+    .my-commitments{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 324px;
+        max-height: 714px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+        gap: 18px;
+    }
+    .my-commitments-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .my-commitments-header-left{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 40%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+        gap: 8px;
+    }
+    .my-commitments-header-left h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .my-commitments-header-right{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 60%;
+        height: 50px;
+        gap: 16px;
+    }
+    .my-commitments-header-right div{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .my-commitments-header-right div label{
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .my-commitments-header-right div select{
+        width: 150px;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+        cursor: pointer;
+    }
+    .my-commitments-list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        width: 100%;
+        max-height: 1024px;
+        padding: 10px;
+        gap: 16px;
+        overflow-y: auto;
+    }
+    .commitment-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 250px;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-left: 3px solid #16a34a;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background-color: #f9fafb;
+        gap: 12px;
+    }
+    .commitment-item:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .commitment-item-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        font-size: 15px;
+        color: #1f2937;
+    }
+    .commitment-item-header-left{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 50%;
+        gap: 4px;
+    }
+    .commitment-date-medium{
+        font-size: 15px;
+        font-weight: bold;
+        color: #ca8a04;
+    }
+    .commitment-date-far{
+        font-size: 15px;
+        font-weight: bold;
+        color: #15803d;
+    }
+    .commitment-date-soon{
+        font-size: 15px;
+        font-weight: bold;
+        color: #b91c1c;
+    }
+    .commitment-item-priority-low{
+        font-size: 15px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .commitment-item-priority-high{
+        font-size: 15px;
+        font-weight: bold;
+        color: #b91c1c;
+    }
+    .commitment-item-header-right{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        width: 50%;
+        gap: 4px;
+    }
+    .commitment-item-content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 104px;
+        max-height: 104px;
+        padding: 10px;
+        font-size: 16px;
+        color: #374151;
+        text-align: justify;
+        overflow-y: auto;
+    }
+    .commitment-item-footer{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .commitment-item-footer button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 34px;
+        background-color: #16a34a;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+    }
+    .commitment-item-footer button:hover{
+        background-color: #15803d;
+        transition: 0.1s ease-in-out;
+    }
+
+    /* Right Containers */
+
+    .content-container-right{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 32px;
+    }
+
+    /* Right Containers | My Team */
+
+    .my-team{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 300px;
+        max-height: 657px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    .my-team-header{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-weight: bold;
+        color: #1f2937;
+        gap: 8px;
+    }
+    .my-team-header h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .my-team-list{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: flex-start;
+        box-sizing: border-box;
+        width: 85%;
+        min-height: 200px;
+        padding: 10px 0px 0px 0px;
+        gap: 8px;
+        overflow-y: auto;
+    }
+    .team-member{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 300px;
+        height: 70px;
+        padding: 10px;
+        gap: 12px;
+        border-radius: 12px;
+        box-sizing: border-box;
+        cursor: pointer;
+    }
+    .team-member:hover{
+        background-color: #f9fafb;
+        transition: 0.1s ease-in-out;
+    }
+    .team-member-avatar{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 50px;
+        border-radius: 50%;
+        background-color: #bbf7d0;
+        object-fit: cover;
+    }
+    .team-member-avatar span{
+        font-size: 14px;
+        color: #16a34a;
+    }
+    .team-member-info{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 4px;
+    }
+    .team-member-info-specialty{
+        font-size: 15px;
+        color: #444444;
+    }
+
+    /* Right Containers | My Profile */
+
+    .my-profile{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 300px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 95%;
         min-height: 100vh;
         margin: 0 auto;
         margin-top: 90px;
@@ -67,6 +659,10 @@
         height: 150px;
         margin-bottom: 8px;
         object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
     }
     .welcome-section h1{
         height: 15px;
@@ -229,6 +825,72 @@
         background-color: #111827;
         transition: 0.1s ease-in-out;
     }
+    .weekly-planning-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        max-height: 1024px;
+        gap: 16px;
+        overflow-y: auto;
+    }
+    .weekly-planning-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 180px;
+        height: 180px;
+        padding: 10px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        gap: 12px;
+    }
+    .weekly-planning-item-header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+    .weekly-planning-item-day-string{
+        font-size: 14px;
+        font-weight: bold;
+        color: #4b5563;
+    }
+    .weekly-planning-item-day-number{
+        font-size: 20px;
+        font-weight: bold;
+        color: #111827;
+    }
+    .weekly-planning-item-content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 106px;
+        min-height: 120px;
+        max-height: 120px;
+        padding: 10px;
+        background-color: #f0fdf4;
+        border: 2px solid #86efac;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #374151;
+        text-align: left;
+        word-break: break-word;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        gap: 4px;
+    }
+    .weekly-planning-item-content:hover {
+        background-color: #dcfce7;
+        border-color: #4ade80;
+        color: #111827;
+        transition: 0.1s ease-in-out;
+    }
 
     /* Left Containers | My Commitments */
 
@@ -255,41 +917,50 @@
         font-weight: bold;
         color: #1f2937;
     }
-    .my-commitments-header div{
+    .my-commitments-header-left{
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        width: 100%;
+        width: 40%;
         height: 50px;
         font-size: 24px;
         font-weight: bold;
         color: #1f2937;
         gap: 8px;
     }
-    .my-commitments-header div h1{
+    .my-commitments-header-left h1{
         font-size: 24px;
         font-weight: bold;
         color: #1f2937;
     }
-    .my-commitments-header button{
+    .my-commitments-header-right{
         display: flex;
+        justify-content: flex-end;
         align-items: center;
-        justify-content: center;
-        width: 320px;
-        height: 40px;
-        background-color: #1f2937;
-        border: none;
-        border-radius: 8px;
-        font-size: 14px;
-        font-weight: bold;
-        color: white;
-        cursor: pointer;
-        transition: 0.1s ease-in-out;
-        gap: 8px;
+        width: 60%;
+        height: 50px;
+        gap: 32px;
     }
-    .my-commitments-header button:hover{
-        background-color: #111827;
-        transition: 0.1s ease-in-out;
+    .my-commitments-header-right div{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+    }
+    .my-commitments-header-right div label{
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .my-commitments-header-right div select{
+        width: 150px;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+        cursor: pointer;
     }
     .my-commitments-list{
         display: flex;
@@ -315,6 +986,10 @@
         box-sizing: border-box;
         background-color: #f9fafb;
         gap: 12px;
+    }
+    .commitment-item:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
     }
     .commitment-item-header{
         display: flex;
@@ -370,6 +1045,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        min-height: 104px;
         max-height: 104px;
         padding: 10px;
         font-size: 16px;
@@ -406,7 +1082,6 @@
         transition: 0.1s ease-in-out;
     }
 
-
     /* Right Containers */
 
     .content-container-right{
@@ -426,7 +1101,7 @@
         flex-direction: column;
         align-items: center;
         width: 100%;
-        min-height: 657px;
+        min-height: 300px;
         max-height: 657px;
         padding: 20px;
         border: 1px solid #d1d5db;
@@ -452,9 +1127,10 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+        box-sizing: border-box;
         width: 100%;
-        min-height: 380px;
-        padding: 10px;
+        min-height: 246px;
+        padding: 10px 0px 0px 0px;
         gap: 8px;
         overflow-y: auto;
     }
@@ -465,9 +1141,605 @@
         width: 100%;
         height: 70px;
         padding: 10px;
+        gap: 12px;
         border-radius: 12px;
         box-sizing: border-box;
+        cursor: pointer;
+    }
+    .team-member:hover{
+        background-color: #f9fafb;
+        transition: 0.1s ease-in-out;
+    }
+    .team-member-avatar{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        width: 50px;
+        border-radius: 50%;
+        background-color: #bbf7d0;
+        object-fit: cover;
+    }
+    .team-member-avatar span{
+        font-size: 14px;
+        color: #16a34a;
+    }
+    .team-member-info{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        gap: 4px;
+    }
+    .team-member-info-specialty{
+        font-size: 15px;
+        color: #444444;
+    }
+
+    /* Right Containers | My Profile */
+
+    .my-profile{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 300px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+}
+
+@media (min-width: 1441px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+        padding-bottom: 30px;
+    }
+    /* Welcome Section and Buttons */
+    .welcome-section{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 250px;
+        padding: 40px 100px 50px 50px;
+        margin-top: 50px;
+        border-radius: 16px;
+        background: linear-gradient(150deg, #3b5513, #73a727);
+        box-sizing: border-box;
+    }
+    .welcome-section-text-container{
+        display: flex;
+        flex-direction: column;
+    }
+    .welcome-section-text-container button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 42px;
+        padding: 10px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+        transition: 0.1s ease-in-out;
+    }
+    .welcome-section-text-container button:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .welcome-section-logo-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .logo{
+        width: 150px;
+        height: 150px;
+        margin-bottom: 8px;
+        object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
+    }
+    .welcome-section h1{
+        height: 15px;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+    }
+    .welcome-section p{
+        font-size: 20px;
+        color: #f0fdf4;
+    }
+    .buttons-container{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 80px;
+        gap: 16px;
+    }
+    .buttons-container .my-commitment-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 200px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .buttons-container .my-commitment-button:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .buttons-container .my-planification-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 200px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .buttons-container .my-planification-button:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .buttons-container .logout-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        border: 1px solid #fca5a5;
+        border-radius: 6px;
+        background-color: white;
+        font-weight: bold;
+        color: #dc2626;
+        cursor: pointer;
+        gap: 8px;
+        transition: 0.1s ease-in-out;
+    }
+    .buttons-container .logout-button:hover{
+        background-color: #fef2f2;
+        color: #b91c1c;
+    }
+    .buttons-container .logout-button svg:hover{
+        stroke: #b91c1c;
+    }
+
+    /* Content Section */
+
+    .content-container{
+        flex: 1;
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+    }
+
+    /* Left Containers */
+
+    .content-container-left{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 68%;
+        height: 100%;
+        border-radius: 8px;
+        gap: 32px;
+    }
+
+    /* Left Containers | Weekly Planning */
+
+    .weekly-planning{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 300px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    .weekly-planning-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .weekly-planning-header div{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+        gap: 8px;
+    }
+    .weekly-planning-header div h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .weekly-planning-header button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 320px;
+        height: 40px;
+        background-color: #1f2937;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+        gap: 8px;
+    }
+    .weekly-planning-header button:hover{
+        background-color: #111827;
+        transition: 0.1s ease-in-out;
+    }
+    .weekly-planning-content{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+        max-height: 1024px;
+        padding: 10px;
+        gap: 16px;
+        overflow-y: auto;
+    }
+    .weekly-planning-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 180px;
+        height: 180px;
+        padding: 10px;
+        border-radius: 8px;
+        box-sizing: border-box;
         gap: 12px;
+    }
+    .weekly-planning-item-header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+    .weekly-planning-item-day-string{
+        font-size: 14px;
+        font-weight: bold;
+        color: #4b5563;
+    }
+    .weekly-planning-item-day-number{
+        font-size: 20px;
+        font-weight: bold;
+        color: #111827;
+    }
+    .weekly-planning-item-content{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 80%;
+        min-height: 120px;
+        max-height: 120px;
+        padding: 10px;
+        background-color: #f0fdf4;
+        border: 2px solid #86efac;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #374151;
+        text-align: left;
+        overflow-y: auto;
+        overflow-x: hidden;
+        gap: 4px;
+    }
+    .weekly-planning-item-content:hover {
+        background-color: #dcfce7;
+        border-color: #4ade80;
+        color: #111827;
+        transition: 0.1s ease-in-out;
+    }
+
+    /* Left Containers | My Commitments */
+
+    .my-commitments{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 324px;
+        max-height: 714px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+        gap: 18px;
+    }
+    .my-commitments-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .my-commitments-header-left{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 40%;
+        height: 50px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+        gap: 8px;
+    }
+    .my-commitments-header-left h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .my-commitments-header-right{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 60%;
+        height: 50px;
+        gap: 32px;
+    }
+    .my-commitments-header-right div{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 4px;
+    }
+    .my-commitments-header-right div label{
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .my-commitments-header-right div select{
+        width: 150px;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+        cursor: pointer;
+    }
+    .my-commitments-list{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-sizing: border-box;
+        width: 100%;
+        max-height: 1024px;
+        padding: 10px;
+        gap: 16px;
+        overflow-y: auto;
+    }
+    .commitment-item{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        height: 250px;
+        padding: 10px;
+        border: 1px solid #d1d5db;
+        border-left: 3px solid #16a34a;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background-color: #f9fafb;
+        gap: 12px;
+    }
+    .commitment-item:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .commitment-item-header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        font-size: 15px;
+        color: #1f2937;
+    }
+    .commitment-item-header-left{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        width: 50%;
+        gap: 4px;
+    }
+    .commitment-date-medium{
+        font-size: 15px;
+        font-weight: bold;
+        color: #ca8a04;
+    }
+    .commitment-date-far{
+        font-size: 15px;
+        font-weight: bold;
+        color: #15803d;
+    }
+    .commitment-date-soon{
+        font-size: 15px;
+        font-weight: bold;
+        color: #b91c1c;
+    }
+    .commitment-item-priority-low{
+        font-size: 15px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .commitment-item-priority-high{
+        font-size: 15px;
+        font-weight: bold;
+        color: #b91c1c;
+    }
+    .commitment-item-header-right{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        width: 50%;
+        gap: 4px;
+    }
+    .commitment-item-content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 104px;
+        max-height: 104px;
+        padding: 10px;
+        font-size: 16px;
+        color: #374151;
+        text-align: justify;
+        overflow-y: auto;
+    }
+    .commitment-item-footer{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        height: 40px;
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .commitment-item-footer button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 120px;
+        height: 34px;
+        background-color: #16a34a;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+    }
+    .commitment-item-footer button:hover{
+        background-color: #15803d;
+        transition: 0.1s ease-in-out;
+    }
+
+    /* Right Containers */
+
+    .content-container-right{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 30%;
+        height: 100%;
+        gap: 32px;
+    }
+
+    /* Right Containers | My Team */
+
+    .my-team{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        min-height: 300px;
+        max-height: 657px;
+        padding: 20px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        box-sizing: border-box;
+    }
+    .my-team-header{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        font-weight: bold;
+        color: #1f2937;
+        gap: 8px;
+    }
+    .my-team-header h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .my-team-list{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 246px;
+        padding: 10px 0px 0px 0px;
+        gap: 8px;
+        overflow-y: auto;
+    }
+    .team-member{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        height: 70px;
+        padding: 10px;
+        gap: 12px;
+        border-radius: 12px;
+        box-sizing: border-box;
+        cursor: pointer;
     }
     .team-member:hover{
         background-color: #f9fafb;

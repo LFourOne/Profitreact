@@ -1,0 +1,16 @@
+@media (min-width: 700px) and (max-width: 1024px){}
+
+@media (min-width: 1025px) and (max-width: 1440px){}
+
+@media (min-width: 1441px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+        padding-bottom: 30px;
+        border: 1px solid black;
+    }
+}

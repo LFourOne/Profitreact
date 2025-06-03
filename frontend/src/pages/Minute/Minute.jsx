@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { data, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Select from 'react-select'
 import axios from 'axios';
 import Modal from 'react-modal';
@@ -54,17 +54,13 @@ export function Minute() {
             setCommitments(response.data.commitments);
             setAgreements(response.data.agreements);
             setTopics(response.data.topics);
-            console.log(response.data);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
             } 
-            if (error.response && error.response.status === 403) {
+            else if (error.response && error.response.status === 403) {
                 navigate('/meeting');
-            }
-            else {
-                console.error('Error inesperado:', error);
             }
         } finally {
             setLoading(false);
