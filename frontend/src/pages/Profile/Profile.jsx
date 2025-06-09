@@ -32,7 +32,9 @@ export function Profile() {
         <>
         {loading ? <p id='loading'>Cargando</p> : (
             <main className={styles['main']}>
-
+                <div>
+                    
+                </div>
             </main>
         )}
         </>
