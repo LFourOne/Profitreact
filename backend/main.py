@@ -1,4 +1,4 @@
-from app_flask.controllers import controllers, training_controllers, gantt_controllers, authentication_controllers, profile_controllers
+from app_flask.controllers import controllers, training_controllers, gantt_controllers, authentication_controllers, profile_controllers, admin_management_controllers
 from waitress import serve
 from app_flask import app
 

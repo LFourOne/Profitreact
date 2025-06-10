@@ -9,9 +9,8 @@ class Staff:
         self.apellido_p = data.get('apellido_p')
         self.apellido_m = data.get('apellido_m')
         self.iniciales_nombre = data.get('iniciales_nombre')
-        self.cargo = data.get('cargo')
         self.profesion = data.get('profesion')
-        self.mail = data.get('mail')
+        self.email = data.get('email')
         self.telefono = data.get('telefono')
         self.fecha_nacimiento = data.get('fecha_nacimiento')
         self.fecha_contratacion = data.get('fecha_contratacion')
@@ -64,6 +63,17 @@ class Staff:
                 JOIN especialidades ON maestro_personal.id_especialidad = especialidades.id_especialidad
                 WHERE maestro_personal.id_especialidad = %(id_especialidad)s AND maestro_personal.estado = 1
                 ORDER BY maestro_personal.apellido_p DESC;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def get_profile(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT maestro_personal.rut_personal, maestro_personal.usuario, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, maestro_personal.iniciales_nombre, maestro_personal.email, maestro_personal.fecha_nacimiento, maestro_personal.fecha_contratacion, maestro_personal.estado, maestro_personal.color, especialidades.especialidad, roles.rol FROM maestro_personal
+                JOIN especialidades ON maestro_personal.id_especialidad = especialidades.id_especialidad
+                JOIN roles ON maestro_personal.id_rol = roles.id_rol
+                WHERE maestro_personal.rut_personal = %(rut_personal)s;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
 

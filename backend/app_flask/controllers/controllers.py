@@ -71,7 +71,7 @@ def index():
     projects = Project.get_projects_for_commitments()
     meeting_type = Meeting.select_meeting_type()
 
-    response_data = {
+    session_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
         'apellido_p': session['apellido_p'],
@@ -86,7 +86,7 @@ def index():
         'planification' : planification_grouped,
         'projects' : projects,
         'meeting_type' : meeting_type,
-        'session' : response_data,
+        'session' : session_data,
         }), 200
 
 @app.route('/meeting')
@@ -98,7 +98,7 @@ def meeting():
     if session['id_rol'] not in [1, 2, 3, 4, 5, 6, 7]:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
-    response_data = {
+    session_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
         'apellido_p': session['apellido_p'],
@@ -115,7 +115,7 @@ def meeting():
     project_list = Project.get_projects()
 
     return jsonify({
-        'session' : response_data,
+        'session' : session_data,
         'meetings' : meetings,
         'projects' : project_list,
         'meeting_type' : meeting_type
@@ -130,7 +130,7 @@ def create_meeting():
     if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
-    response_data = {
+    session_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
         'apellido_p': session['apellido_p'],
@@ -145,7 +145,7 @@ def create_meeting():
 
 
     return jsonify({
-        'session' : response_data,
+        'session' : session_data,
         'projects' : projects,
         'meetings' : meetings,
         'staff' : staff
@@ -237,7 +237,7 @@ def minute(id_reunion):
     if meeting_type not in allowed_types:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
-    response_data = {
+    session_data = {
         'rut_personal': session['rut_personal'],
         'nombres': session['nombres'],
         'apellido_p': session['apellido_p'],
@@ -270,7 +270,7 @@ def minute(id_reunion):
         commitment['responsable_nombre'] = responsable_raw[0]['nombres'] + ' ' + responsable_raw[0]['apellido_p'] + ' ' + responsable_raw[0]['apellido_m']
 
     return jsonify({
-        'session' : response_data,
+        'session' : session_data,
         'name_and_last_name' : name_and_last_name,
         'project_chief_name' : nombre_jefe_proyecto,
         'meeting_data' : meeting_data,

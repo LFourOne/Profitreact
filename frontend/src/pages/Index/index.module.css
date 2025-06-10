@@ -85,7 +85,7 @@
         gap: 16px;
     }
     .buttons-container .my-commitment-button{
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         height: 40px;
@@ -363,7 +363,6 @@
         border: 1px solid #d1d5db;
         border-radius: 8px;
         background-color: white;
-        cursor: pointer;
     }
     .my-commitments-list{
         display: flex;
@@ -683,7 +682,7 @@
         gap: 16px;
     }
     .buttons-container .my-commitment-button{
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         height: 40px;
@@ -960,7 +959,6 @@
         border: 1px solid #d1d5db;
         border-radius: 8px;
         background-color: white;
-        cursor: pointer;
     }
     .my-commitments-list{
         display: flex;
@@ -1279,7 +1277,7 @@
         gap: 16px;
     }
     .buttons-container .my-commitment-button{
-        display: flex;
+        display: none;
         align-items: center;
         justify-content: center;
         height: 40px;
@@ -1555,7 +1553,6 @@
         border: 1px solid #d1d5db;
         border-radius: 8px;
         background-color: white;
-        cursor: pointer;
     }
     .my-commitments-list{
         display: flex;

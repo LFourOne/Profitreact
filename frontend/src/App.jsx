@@ -3,6 +3,7 @@ import { NavBar } from './components/NavBar/NavBar';
 import { CompanySelect } from './pages/CompanySelect/CompanySelect';
 import { Login } from './pages/Login/Login';
 import { Register } from './pages/Register/Register';
+import { UserManagement } from './pages/UserManagement/UserManagement';
 import { Profile } from './pages/Profile/Profile';
 import { Index } from './pages/Index/Index';
 import { CreateMeeting } from './pages/CreateMeeting/CreateMeeting';
@@ -25,7 +26,8 @@ export function App() {
         <Routes>
           <Route path="/" element={<CompanySelect />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+          <Route path="/admin/register" element={<Register />} />
+          <Route path="/admin/user-management" element={<UserManagement />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/index" element={<Index />} />
           <Route path="/meeting" element={<Meeting />} />

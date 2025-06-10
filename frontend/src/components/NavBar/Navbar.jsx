@@ -74,7 +74,16 @@ export function NavBar() {
             <NavLink to="/training" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
             {
               (role === 1 || role === 2 || role === 3) && (
-                <NavLink to="/register" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Registrar</NavLink>
+                <div className={styles['dropdown']}>
+                  <button onClick={() => toggleDropdown('admin')} className={`${styles['dropdown-button']} ${['/admin', '/admin/user-management'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
+                      Panel Admin
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+                  </button>
+                  <div className={`${styles['dropdown-content']} ${activeDropdown === 'admin' ? styles['open'] : ''}`}>
+                      <NavLink to="/admin/user-management" onClick={() => setActiveDropdown(null)}>Personas</NavLink>
+                      <NavLink to="/admin/register" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Registrar</NavLink>
+                  </div>
+              </div>
               )
             }
         </div>

@@ -89,7 +89,7 @@ def login_process():
     # Retornamos un mensaje de éxito
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/register')
+@app.route('/admin/register')
 def register():
 
     if 'rut_personal' not in session:
@@ -104,7 +104,7 @@ def register():
         'specialty': specialty
     }), 200
 
-@app.route('/register/process', methods=['POST'])
+@app.route('/admin/register/process', methods=['POST'])
 def register_process():
 
     if 'rut_personal' not in session:

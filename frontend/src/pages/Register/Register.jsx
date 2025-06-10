@@ -20,7 +20,7 @@ export function Register() {
     const fetchApi = async () => {
         try {
             
-            const response = await axios.get('http://localhost:5500/register', { withCredentials: true });
+            const response = await axios.get('http://localhost:5500/admin/register', { withCredentials: true });
             
             setSpecialty(response.data.specialty);
 
@@ -46,7 +46,7 @@ export function Register() {
     }, []);
 
     const onSubmitRegister = async (data) => {
-        const response = await axios.post('http://localhost:5500/register/process', data, {
+        const response = await axios.post('http://localhost:5500/admin/register/process', data, {
             withCredentials: true,
             headers: {
                 'Content-Type': 'application/json',
