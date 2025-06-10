@@ -708,7 +708,7 @@ export function Gantt() {
                             </div>
                             <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
                                 <div id={styles['modal-body']}>
-                                    <span className={styles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
+                                    <span className={styles['span-profile']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
                                     <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     <span className={styles['span-block']}>Área:</span>
                                     <select name="specialty" id={styles['specialty']} {...registerAdd("specialty", { required: true })} value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
@@ -793,7 +793,7 @@ export function Gantt() {
                             </div>
                             <form onSubmit={handleSubmitEdit(editSubmit)}>
                                 <div id={styles['modal-body']}>
-                                    <span className={styles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
+                                    <span className={styles['span-block']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
                                     <span className={styles['span-block']}>Responsable: Sergio Dávila </span>
                                     <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     <span className={styles['span-block']}>Área: {selectedPlan.especialidad}</span>

@@ -16,6 +16,8 @@ export function UserManagement() {
     const [modalType, setModalType] = useState('');
     const [selectedStaff, setSelectedStaff] = useState(null);
 
+    const [showPasswordInput, setShowPasswordInput] = useState(false);
+
     const [isEditing, setIsEditing] = useState(false);
 
     const [staff, setStaff] = useState([]);
@@ -78,17 +80,19 @@ export function UserManagement() {
         setModalType('');
         setSelectedStaff(null);
         setIsEditing(false);
+        setShowPasswordInput(false);
         resetEdit();
         resetAdd();
     };
 
     const handleIsEditing = () => {
         setIsEditing(!isEditing);
+        setShowPasswordInput(false);
     }
 
     const onSubmitAdd = async (data) => {
         try {
-            const response = await axios.post('http://localhost:5500/admin/user-management/add/process', data, 
+            const response = await axios.post('http://localhost:5500/admin/user-management/register/process', data, 
                 {
                     withCredentials: true, 
                     headers: {
@@ -121,6 +125,7 @@ export function UserManagement() {
 
     const onSubmitEdit = async (data) => {
         try {
+            console.log(data);
             const response = await axios.patch(`http://localhost:5500/admin/user-management/edit/process`, data, 
                 {
                     withCredentials: true, 
@@ -129,6 +134,7 @@ export function UserManagement() {
                     },
                 });
 
+            console.log(data);
             console.log(response.data);
         }
         catch (error) {
@@ -149,6 +155,7 @@ export function UserManagement() {
             setShowModal(false);
             setSelectedStaff(null);
             setIsEditing(false);
+            setShowPasswordInput(false);
             resetEdit();
             fetchApi();
         }
@@ -299,7 +306,7 @@ export function UserManagement() {
                                                         </button>
                                                     </div>
                                                 </header>
-                                                <form onSubmit={handleSubmitAdd()} className={styles['add-form']}>
+                                                <form onSubmit={handleSubmitAdd(onSubmitAdd)} className={styles['add-form']}>
                                                     <div className={styles['add-info-container']}>
                                                         <header className={styles['add-info-header']}>
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
@@ -355,7 +362,8 @@ export function UserManagement() {
                                                         <div className={styles['add-info-content']}>
                                                             <div className={styles['add-info-item']}>
                                                                 <label>Rol</label>
-                                                                <select className={styles['add-input']} {...registerAdd('id_rol', {required: true})}>
+                                                                <select className={styles['add-input']} defaultValue="" {...registerAdd('id_rol', {required: true})}>
+                                                                    <option value="" disabled>Seleccionar rol</option>
                                                                     {role.map((role) => (
                                                                         <option key={role.id_rol} value={role.id_rol}>{role.rol}</option>
                                                                     ))}
@@ -363,7 +371,8 @@ export function UserManagement() {
                                                             </div>
                                                             <div className={styles['add-info-item']}>
                                                                 <label>Especialidad</label>
-                                                                <select className={styles['add-input']} {...registerAdd('id_especialidad', {required: true})}>
+                                                                <select className={styles['add-input']} defaultValue="" {...registerAdd('id_especialidad', {required: true})}>
+                                                                    <option value="" disabled>Seleccionar especialidad</option>
                                                                     {specialty.map((specialty) => (
                                                                         <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
                                                                     ))}
@@ -371,7 +380,8 @@ export function UserManagement() {
                                                             </div>
                                                             <div className={styles['add-info-item']}>
                                                                 <label>Reporta HH</label>
-                                                                <select className={styles['add-input']} {...registerAdd('reporta_hh', {required: true})}>
+                                                                <select className={styles['add-input']} defaultValue="" {...registerAdd('reporta_hh', {required: true})}>
+                                                                    <option value="" disabled>Seleccionar opción</option>
                                                                     <option value="1">Sí</option>
                                                                     <option value="0">No</option>
                                                                 </select>
@@ -379,6 +389,10 @@ export function UserManagement() {
                                                             <div className={styles['add-info-item']}>
                                                                 <label>Iniciales</label>
                                                                 <input type="text" className={styles['add-input']} placeholder='Ingresar iniciales' {...registerAdd('iniciales_nombre', {required: true})} />
+                                                            </div>
+                                                            <div className={styles['add-info-item']}>
+                                                                <label>Usuario</label>
+                                                                <input type="text" className={styles['add-input']} placeholder='Ingresar nombre de usuario' {...registerAdd('usuario', {required: true})} />
                                                             </div>
                                                             <div className={styles['add-info-item']}>
                                                                 <label>Fecha de Contratación</label>
@@ -417,6 +431,9 @@ export function UserManagement() {
                                                                     <button type='submit' form='edit-form' className={styles['view-edit-button-primary']}>
                                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                                                         Guardar
+                                                                    </button>
+                                                                    <button type="button" className={styles['view-edit-button-secondary']} onClick={() => setShowPasswordInput((v) => !v)}>
+                                                                        {showPasswordInput ? 'Volver Atrás' : 'Cambiar contraseña'}
                                                                     </button>
                                                                     <button type='button' onClick={handleIsEditing} className={styles['view-edit-button-secondary']}>
                                                                         Cancelar
@@ -546,6 +563,12 @@ export function UserManagement() {
                                                                             <label>Color de Usuario</label>
                                                                             <input type="color" defaultValue={selectedStaff.color} className={styles['edit-input']} {...registerEdit('color', {required: true})} />
                                                                         </div>
+                                                                        {showPasswordInput && (
+                                                                            <div className={styles['view-info-item']}>
+                                                                                <label>Nueva Contraseña</label>
+                                                                                <input type="password" className={styles['edit-input']} placeholder="Ingresar contraseña" {...registerEdit('password')} />
+                                                                            </div>
+                                                                        )}
                                                                         <div className={styles['view-info-item']}>
                                                                             <label>Fecha de Creación</label>
                                                                             <span>{formatDate(selectedStaff.creado_en)}</span>

@@ -1,8 +1,11 @@
 from app_flask import app
 from flask import Flask, request, jsonify, session
+from flask_bcrypt import Bcrypt
 from app_flask.models.user_models import User
 from app_flask.models.specialty_models import Specialty
 from app_flask.models.role_models import Role
+
+bcrypt = Bcrypt(app)
 
 @app.route('/admin/user-management')
 def user_management():
@@ -25,6 +28,41 @@ def user_management():
         'role': role
     }), 200
 
+@app.route('/admin/user-management/register/process', methods=['POST'])
+def register_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    encrypted_password = bcrypt.generate_password_hash(data['password'])
+
+    user_data = {
+        'rut_personal': data['rut_personal'],
+        'digito_verificador': data['digito_verificador'],
+        'usuario': data['usuario'],
+        'contraseña': encrypted_password,
+        'nombres': data['nombres'],
+        'apellido_p': data['apellido_p'],
+        'apellido_m': data['apellido_m'],
+        'iniciales_nombre': data['iniciales_nombre'],
+        'email': data['email'],
+        'fecha_nacimiento': data['fecha_nacimiento'],
+        'fecha_contratacion': data['fecha_contratacion'],
+        'estado': 1,
+        'id_especialidad': data['id_especialidad'],
+        'id_rol': data['id_rol'],
+        'reporta_hh': data['reporta_hh'],
+    }
+
+    User.create_one(user_data)
+
+    return jsonify({'status': 'success', 'message': 'success'}), 200
+
 @app.route('/admin/user-management/edit/process', methods=['PATCH'])
 def edit_user_process():
 
@@ -36,7 +74,7 @@ def edit_user_process():
     
     data = request.get_json()
 
-    data = {
+    user_data = {
         'rut_personal_old': data.get('rut_personal_old'),
         'rut_personal': data.get('rut_personal'),
         'digito_verificador': data.get('digito_verificador'),
@@ -56,7 +94,11 @@ def edit_user_process():
         'color': data.get('color')
     }
 
-    User.edit_user(data)
+    if data.get('password'):
+        user_data['contraseña'] = bcrypt.generate_password_hash(data['password'])
+        User.edit_user_with_password(user_data)
+    else:
+        User.edit_user(user_data)
     
     return jsonify({
         'status': 'success',

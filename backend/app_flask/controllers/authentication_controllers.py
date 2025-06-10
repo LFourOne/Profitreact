@@ -104,47 +104,6 @@ def register():
         'specialty': specialty
     }), 200
 
-@app.route('/admin/register/process', methods=['POST'])
-def register_process():
-
-    if 'rut_personal' not in session:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-    
-    if session['id_rol'] not in [1, 2, 3]:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
-
-    data = request.get_json()
-
-    encrypted_password = bcrypt.generate_password_hash(data['password'])
-
-    if data['report_hh'] == True:
-        data['report_hh'] = 1
-    else:
-        data['report_hh'] = 0
-
-    user_data = {
-        'rut_personal': data['rut'],
-        'digito_verificador': data['verification_digit'],
-        'email': data['email'],
-        'contraseña': encrypted_password,
-        'nombres': data['names'],
-        'apellido_p': data['last_name_p'],
-        'apellido_m': data['last_name_m'],
-        'usuario': data['user'],
-        'iniciales_nombre': data['initials'],
-        'id_especialidad': data['specialty'],
-        'id_rol': data['role'],
-        'fecha_nacimiento': data['birthdate'],
-        'fecha_contratacion': data['hiring-date'],
-        'reporta_hh': data['report_hh'],
-        'estado': 1,
-        'color': '#917CB1'
-    }
-
-    User.create_one(user_data)
-
-    return jsonify({'status': 'success', 'message': 'success'}), 200
-
 @app.route('/logout', methods=['POST'])
 def logout():
     

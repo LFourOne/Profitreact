@@ -50,7 +50,6 @@ export function GanttDelivery() {
             setOt(response.data.ot);
             setDeliveryType(response.data.delivery_type);
             setSessionData(response.data.session);
-            console.log("SESIÓN", response.data);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -611,7 +610,7 @@ export function GanttDelivery() {
                             </div>
                             <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
                                 <div id={styles['modal-body']}>
-                                    <span className={styles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
+                                    <span className={styles['span-profile']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
                                     <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     <span className={styles['span-block']}>Tipo de Entrega:</span>
                                     <select name="informe" id="informe" {...registerAdd('informe', {required: true})}>
@@ -730,7 +729,7 @@ export function GanttDelivery() {
                             </div>
                             <form onSubmit={handleSubmitEdit(editSubmit)}>
                                 <div id={styles['modal-body']}>
-                                    <span className={styles['span-block']}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
+                                    <span className={styles['span-profile']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
                                     <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     {isEditing ? (
                                         <>

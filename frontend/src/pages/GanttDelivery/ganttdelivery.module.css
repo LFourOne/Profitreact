@@ -201,6 +201,13 @@
     .span-block{
         display: block;
     }
+    .span-profile{
+        display: block;
+        cursor: pointer;
+    }
+    .span-profile:hover{
+        color: #15803d;
+    }
     .planned {
         height: 100%;
         width: 100%;
@@ -517,6 +524,13 @@
     }
     .span-block{
         display: block;
+    }
+    .span-profile{
+        display: block;
+        cursor: pointer;
+    }
+    .span-profile:hover{
+        color: #15803d;
     }
     .planned {
         height: 100%;
@@ -847,6 +861,13 @@
     .span-block{
         display: block;
     }
+    .span-profile{
+        display: block;
+        cursor: pointer;
+    }
+    .span-profile:hover{
+        color: #15803d;
+    }
     .planned {
         height: 100%;
         width: 100%;
@@ -1165,6 +1186,13 @@
     }
     .span-block{
         display: block;
+    }
+    .span-profile{
+        display: block;
+        cursor: pointer;
+    }
+    .span-profile:hover{
+        color: #15803d;
     }
     .planned {
         height: 100%;

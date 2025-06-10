@@ -44,7 +44,7 @@ class User:
         DATA_BASE = session.get('data_base')
         query = """
                 INSERT INTO maestro_personal(rut_personal, digito_verificador, usuario, contraseña, nombres, apellido_p, apellido_m, iniciales_nombre, email, fecha_nacimiento, fecha_contratacion, estado, id_especialidad, id_rol, reporta_hh, color)
-                VALUES (%(rut_personal)s, %(digito_verificador)s, %(usuario)s, %(contraseña)s, %(nombres)s, %(apellido_p)s, %(apellido_m)s, %(iniciales_nombre)s, %(email)s, %(fecha_nacimiento)s, %(fecha_contratacion)s, 1, %(id_especialidad)s, %(id_rol)s, %(reporta_hh)s, #000000);
+                VALUES (%(rut_personal)s, %(digito_verificador)s, %(usuario)s, %(contraseña)s, %(nombres)s, %(apellido_p)s, %(apellido_m)s, %(iniciales_nombre)s, %(email)s, %(fecha_nacimiento)s, %(fecha_contratacion)s, 1, %(id_especialidad)s, %(id_rol)s, %(reporta_hh)s, '#000000');
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
@@ -54,6 +54,18 @@ class User:
         query = """
                 UPDATE maestro_personal
                 SET rut_personal = %(rut_personal)s, digito_verificador = %(digito_verificador)s, usuario = %(usuario)s, nombres = %(nombres)s, apellido_p = %(apellido_p)s, 
+                apellido_m = %(apellido_m)s, iniciales_nombre = %(iniciales_nombre)s, email = %(email)s, telefono = %(telefono)s, fecha_nacimiento = %(fecha_nacimiento)s, 
+                fecha_contratacion = %(fecha_contratacion)s, estado = %(estado)s, id_especialidad = %(id_especialidad)s, id_rol = %(id_rol)s, reporta_hh = %(reporta_hh)s, color = %(color)s
+                WHERE rut_personal = %(rut_personal)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def edit_user_with_password(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE maestro_personal
+                SET rut_personal = %(rut_personal)s, digito_verificador = %(digito_verificador)s, usuario = %(usuario)s, contraseña = %(contraseña)s, nombres = %(nombres)s, apellido_p = %(apellido_p)s, 
                 apellido_m = %(apellido_m)s, iniciales_nombre = %(iniciales_nombre)s, email = %(email)s, telefono = %(telefono)s, fecha_nacimiento = %(fecha_nacimiento)s, 
                 fecha_contratacion = %(fecha_contratacion)s, estado = %(estado)s, id_especialidad = %(id_especialidad)s, id_rol = %(id_rol)s, reporta_hh = %(reporta_hh)s, color = %(color)s
                 WHERE rut_personal = %(rut_personal)s;
