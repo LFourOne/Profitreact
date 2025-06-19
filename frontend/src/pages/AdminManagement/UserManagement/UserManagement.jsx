@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { data, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import styles from './UserManagement.module.css';
-import logo from '../../assets/icon1.png'
+import logo from '../../../assets/icon1.png'
 
 export function UserManagement() {
 
@@ -128,7 +128,7 @@ export function UserManagement() {
             console.log(data);
             const response = await axios.patch(`http://localhost:5500/admin/user-management/edit/process`, data, 
                 {
-                    withCredentials: true, 
+                    withCredentials: true,
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -187,7 +187,7 @@ export function UserManagement() {
             <main className={styles['main']}>
                 <section className={styles['header-section']}>
                     <div className={styles['header-section-text-container']}>
-                        <h1>Gestión de Personas</h1>
+                        <h1>Mantenedor de Personas</h1>
                         <p>Administra y gestiona todos los usuarios del Profit</p>
                     </div>
                     <div className={styles['header-section-logo-container']}>
@@ -240,7 +240,7 @@ export function UserManagement() {
                         <div>
                             <button onClick={handleOpenAddModal}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                Agregar Usuario
+                                Crear Usuario
                             </button>
                         </div>
                     </header>
@@ -283,8 +283,6 @@ export function UserManagement() {
                                         </tr>
                                     ))
                                 }
-                                <tr>
-                                </tr>
                             </tbody>
                         </table>
                     </div>

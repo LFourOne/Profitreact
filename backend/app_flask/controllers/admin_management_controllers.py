@@ -4,8 +4,12 @@ from flask_bcrypt import Bcrypt
 from app_flask.models.user_models import User
 from app_flask.models.specialty_models import Specialty
 from app_flask.models.role_models import Role
+from app_flask.models.hh_models.task_type_models import TaskType
+from app_flask.models.hh_models.task_models import Task
 
 bcrypt = Bcrypt(app)
+
+# User Management Endpoints
 
 @app.route('/admin/user-management')
 def user_management():
@@ -104,3 +108,103 @@ def edit_user_process():
         'status': 'success',
         'message': 'Usuario actualizado correctamente',
     }), 200
+
+# HH Management Endpoints
+
+@app.route('/admin/project-report-task')
+def project_report_task():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    return jsonify({
+        'status': 'success',
+        'message': 'success'
+    }), 200
+
+@app.route('/admin/task')
+def task():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    tasks = Task.get_all()
+
+    task_types = TaskType.get_all()
+
+    return jsonify({
+        'tasks': tasks,
+        'task_types': task_types,
+    }), 200
+
+@app.route('/admin/task/add/process', methods=['POST'])
+def create_task_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    task_data = {
+        'nivel_1': data.get('task-level-1'),
+        'nivel_2': data.get('task-level-2'),
+        'nivel_3': data.get('task-level-3'),
+        'nombre': data.get('task-name'),
+        'id_tipo_tarea': data.get('task-type')
+    }
+
+    Task.create_task(task_data)
+
+    return jsonify({'status': 'success', 'message': 'Tarea creada correctamente'}), 200
+
+@app.route('/admin/task/edit/process', methods=['PATCH'])
+def edit_task_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    task_data = {
+        'id_tarea': data.get('task-id'),
+        'nivel_1': data.get('task-level-1'),
+        'nivel_2': data.get('task-level-2'),
+        'nivel_3': data.get('task-level-3'),
+        'nombre': data.get('task-name'),
+        'id_tipo_tarea': data.get('task-type')
+    }
+
+    Task.edit_task(task_data)
+
+    return jsonify({'status': 'success', 'message': 'Tarea actualizada correctamente'}), 200
+
+@app.route('/admin/task/delete/process', methods=['DELETE'])
+def delete_task_process():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    task_data = {
+        'id_tarea': data.get('data')
+    }
+
+    Task.delete_task(task_data)
+
+    return jsonify({'status': 'success', 'message': 'Tarea eliminada correctamente'}), 200

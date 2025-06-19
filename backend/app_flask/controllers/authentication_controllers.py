@@ -89,21 +89,6 @@ def login_process():
     # Retornamos un mensaje de éxito
     return jsonify({'status': 'success', 'message': 'success'}), 200
 
-@app.route('/admin/register')
-def register():
-
-    if 'rut_personal' not in session:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-    
-    if session['id_rol'] not in [1, 2, 3]:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
-
-    specialty = Specialty.get_specialities()
-
-    return jsonify({
-        'specialty': specialty
-    }), 200
-
 @app.route('/logout', methods=['POST'])
 def logout():
     
