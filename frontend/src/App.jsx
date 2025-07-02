@@ -15,6 +15,7 @@ import { Gantt } from './pages/Gantt/Gantt';
 import { GanttDelivery } from './pages/GanttDelivery/GanttDelivery';
 import { CreateTraining } from './pages/CreateTraining/CreateTraining';
 import { TrainingDetails } from './pages/TrainingDetails/TrainingDetails';
+import { HHRegister } from './pages/HHRegister/HHRegister';
 
 export function App() {
 
@@ -32,11 +33,12 @@ export function App() {
           <Route path="/admin/task" element={<Task />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/index" element={<Index />} />
+          <Route path="/gantt" element={<Gantt />} />
+          <Route path="/gantt/delivery" element={<GanttDelivery />} />
+          <Route path="/hh-register" element={<HHRegister />} />
           <Route path="/meeting" element={<Meeting />} />
           <Route path="/meeting/create-meeting" element={<CreateMeeting />} />
           <Route path="/meeting/minute/:id_reunion" element={<Minute />} />
-          <Route path="/gantt" element={<Gantt />} />
-          <Route path="/gantt/delivery" element={<GanttDelivery />} />
           <Route path="/training" element={<Training />} />
           <Route path="/training/:id_capacitacion" element={<TrainingDetails />} />
           <Route path="/training/create" element={<CreateTraining />} />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import axios from 'axios';
 import styles from './ProjectReportTask.module.css';
 import logo from '../../../../assets/icon1.png'
@@ -9,18 +9,39 @@ export function ProjectTaskReport() {
 
     const navigate = useNavigate();
 
-    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd } = useForm();
-    const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit } = useForm();
+    const { register: registerAddTask, handleSubmit: handleSubmitAddTask, reset: resetAddTask } = useForm();
+    const { register: registerEditTask, handleSubmit: handleSubmitEditTask, reset: resetEditTask } = useForm();
+    const { register: registerAddReportVersion, handleSubmit: handleSubmitAddReportVersion, reset: resetAddReportVersion } = useForm();
 
+    const [project, setProject] = useState([]);
+    const [report, setReport] = useState([]);
+    const [projectTask, setProjectTask] = useState([]);
+    const [projectReport, setProjectReport] = useState([]);
+    const [task, setTask] = useState([]);
+    
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
-    const [projectReportTask, setSelectedTask] = useState(null);
+    const [selectedTask, setSelectedTask] = useState(null);
+
+    const [projectFilter, setProjectFilter] = useState('');
+    const [reportFilter, setReportFilter] = useState('');
+
+    const [selectedProjectReportVersion, setSelectedProjectReportVersion] = useState('');
 
     const [loading, setLoading] = useState(true);
 
     const fetchApi = async () => {
         try {
+
             const response = await axios.get('http://localhost:5500/admin/project-report-task', { withCredentials: true });
+
+            setProject(response.data.project);
+            setReport(response.data.report);
+            setProjectReport(response.data['project-report']);
+            setProjectTask(response.data['project-task']);
+            setTask(response.data.task);
+
+            console.log('Datos obtenidos:', response.data);
         }
         catch (error) {
             if (error.response && error.response.status === 401) {
@@ -37,29 +58,101 @@ export function ProjectTaskReport() {
         fetchApi();
     }, []);
 
-    const handleOpenAddModal = () => {
-        setModalType('add');
+    useEffect(() => {
+        if (project.length > 0) {
+            setProjectFilter(project[0].id_proyecto);
+        }
+    }, [project]);
+
+    const handleOpenAddTaskModal = () => {
+        setModalType('add-task');
         setShowModal(true);
     };
-    
-    const handleCloseAddModal = () => {
+
+    const handleCloseAddTaskModal = () => {
         setModalType('');
         setShowModal(false);
-        resetAdd();
+        resetAddTask();
     }
 
-    const handleOpenEditModal = (projectReportTask) => {
-        setModalType('edit');
+    const handleOpenAddReportVersionModal = () => {
+        setModalType('add-report-version');
+        setShowModal(true);
+        resetAddReportVersion();
+    };
+
+    const handleCloseAddReportVersionModal = () => {
+        setModalType('');
+        setShowModal(false);
+        resetAddReportVersion();
+    };
+
+    const handleOpenEditTaskModal = (projectReportTask) => {
+        setModalType('edit-task');
         setShowModal(true);
         setSelectedTask(projectReportTask);
     };
 
-    const handleCloseEditModal = () => {
+    const handleCloseEditTaskModal = () => {
         setModalType('');
         setShowModal(false);
         setSelectedTask(null);
-        resetEdit();
+        resetEditTask();
     };
+
+    const onSubmitAddTask = async (data) => {
+
+        const confirmed = window.confirm('¿Estás seguro que deseas añadir este Proyecto | Informe | Tarea?');
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5500/admin/project-report-task/add/process', data, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+             });
+
+            console.log('Tarea agregada:', response.data);
+        } catch (error) {
+            console.error('Error al agregar tarea:', error);
+        }
+        finally {
+            resetAddTask();
+            handleCloseAddTaskModal();
+            fetchApi();
+            setProjectFilter(data['id-project']);
+        }
+    }
+
+    const onSubmitAddReportVersion = async (data) => {
+
+        const confirmed = window.confirm('¿Estás seguro que deseas añadir la siguiente versión del informe?');
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5500/admin/project-report-task/add-report-version/process', data, {
+                withCredentials: true,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log('Versión de informe agregada:', response.data);
+        } catch (error) {
+            console.error('Error al agregar versión de informe:', error);
+        }
+        finally {
+            resetAddReportVersion();
+            handleCloseAddReportVersionModal();
+            fetchApi();
+            setProjectFilter(data['id-project']);
+        }
+    }
 
     return(
         <>
@@ -74,6 +167,39 @@ export function ProjectTaskReport() {
                         <img src={logo} className={styles['logo']} alt="Logo de Profit" />
                     </div>
                 </section>
+                <section className={styles['filter-section']}>
+                    <header>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+                        <h1>Filtrar Proyecto / Informe / Tarea</h1>
+                    </header>
+                    <div className={styles['content']}>
+                        <div className={styles['filter-input']}>
+                            <label htmlFor="project-select">Filtrar por Proyecto:</label>
+                            <select id="project-select" onChange={(e) => setProjectFilter(e.target.value)}>
+                                {project
+                                .filter(project => project.id_proyecto !== 'JE')
+                                .map((project) => (
+                                    <option key={project.id_proyecto} value={project.id_proyecto}>
+                                        {project.id_proyecto}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className={styles['filter-input']}>
+                            <label htmlFor="report-select">Filtrar por Informe:</label>
+                            <select id="report-select" onChange={(e) => setReportFilter(e.target.value)}>
+                                <option value="">Todos</option>
+                                {report
+                                .filter(report => report.id_informe !== 12)
+                                .map((report) => (
+                                    <option key={report.id_informe} value={report.id_informe}>
+                                        {report.nombre}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </section>
                 <section className={styles['content-section']}>
                     <header>
                         <div className={styles['header-title']}>
@@ -85,7 +211,10 @@ export function ProjectTaskReport() {
                                 Ver Tareas
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
                             </button>
-                            <button>
+                            <button onClick={handleOpenAddReportVersionModal} className={styles['add-report-version-btn']}>
+                                Crear Versión de Informe
+                            </button>
+                            <button onClick={handleOpenAddTaskModal} className={styles['add-project-report-task-btn']}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 Crear Proyecto / Informe / Tarea
                             </button>
@@ -95,88 +224,164 @@ export function ProjectTaskReport() {
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Proyecto</th>
-                                    <th>Informe</th>
-                                    <th>Alias Tarea</th>
-                                    <th>Tarea Pool</th>
-                                    <th>Reporta HH</th>
-                                    <th>Acciones</th>
+                                    <th className={styles['project']}>Proyecto</th>
+                                    <th className={styles['report']}>Informe</th>
+                                    <th className={styles['task-alias']}>Alias Tarea</th>
+                                    <th className={styles['task-pool']}>Tarea Pool</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><span>a</span></td>
-                                    <td><span>a</span></td>
-                                    <td><span>a</span></td>
-                                    <td><span>a</span></td>
-                                    <td><span>a</span></td>
-                                    <td>
-                                        <div className={styles['action-btns']}>
-                                            <button className={styles['action-btn-edit']}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
-                                            </button>
-                                            <button className={styles['action-btn-delete']}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
+                                {
+                                    projectTask
+                                    .filter((projectTask) => (projectTask.id_proyecto === projectFilter) && (reportFilter === "" || projectTask.id_informe === Number(reportFilter)))
+                                    .map((projectTask) => (
+                                        <tr key={projectTask.id_proyecto_tarea}>
+                                            <td>{projectTask.id_proyecto}</td>
+                                            <td>{projectTask.nombre_informe}</td>
+                                            <td>{projectTask.alias_tarea}</td>
+                                            <td>{projectTask.nombre_tarea}</td>
+                                        </tr>
+                                    ))
+                                }
                             </tbody>
                         </table>
                     </div>
                 </section>
                 {
                     showModal && (
-                        modalType === 'add' ? (
-                            <div className={styles['modal-overlay']} onClick={handleCloseAddModal}>
+                        // Modal para agregar tarea
+                        modalType === 'add-task' ? (
+                            <div className={styles['modal-overlay']} onClick={handleCloseAddTaskModal}>
                                 <div className={styles['modal']} onClick={(e) => e.stopPropagation()}>
                                     <header>
-                                        <h2>Agregar Tarea</h2>
-                                        <button onClick={handleCloseAddModal}>
+                                        <h2>Agregar Proyecto / Informe / Tarea</h2>
+                                        <button onClick={handleCloseAddTaskModal}>
                                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                                         </button>
                                     </header>
-                                    <form onSubmit={handleSubmitAdd(onSubmitAdd)} id='add-task-form'>
+                                    <form onSubmit={handleSubmitAddTask(onSubmitAddTask)} id='add-task-form'>
+                                        {
+                                            project.length > 0 && (
+                                                <fieldset>
+                                                    <label>Proyecto:</label>
+                                                    <select id="id-project" defaultValue={(projectFilter || '')} {...registerAddTask('id-project', { required: true })}>
+                                                        {project
+                                                        .filter(project => project.id_proyecto !== 'JE')
+                                                        .map((project) => (
+                                                            <option key={project.id_proyecto} value={project.id_proyecto}>
+                                                                {project.id_proyecto}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </fieldset>
+                                            )
+                                        }
+                                        {
+                                            report.length > 0 && (
+                                                <fieldset>
+                                                    <label>Informe:</label>
+                                                    <select id="id-report" {...registerAddTask('id-report', { required: true })}>
+                                                        <option value="">Seleccione un informe</option>
+                                                        {report
+                                                        .filter(report => report.id_informe !== 12)
+                                                        .map((report) => (
+                                                            <option key={report.id_informe} value={report.id_informe}>
+                                                                {report.nombre}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </fieldset>
+                                            )
+                                        }
                                         <fieldset>
-                                            <label htmlFor="task-name">Nombre de la Tarea</label>
-                                            <input type="text" id="task-name" {...registerAdd('task-name', {required: true})} required />
+                                            <label>Alias Tarea:</label>
+                                            <input type="text" id="task-alias" {...registerAddTask('task-alias', { required: true })} />
                                         </fieldset>
-                                        <fieldset>
-                                            <label htmlFor="task-level">Nivel de la Tarea | 1</label>
-                                            <input type="number" id="task-level-1" {...registerAdd('task-level-1', {required: true})} required />
-                                        </fieldset>
-                                        <fieldset>
-                                            <label htmlFor="task-level">Nivel de la Tarea | 2</label>
-                                            <input type="number" id="task-level-2" {...registerAdd('task-level-2', {required: true})} required />
-                                        </fieldset>
-                                        <fieldset>
-                                            <label htmlFor="task-level">Nivel de la Tarea | 3</label>
-                                            <input type="number" id="task-level-3" {...registerAdd('task-level-3', {required: true})} required />
-                                        </fieldset>
-                                        <fieldset>
-                                            <label htmlFor="task-type">Tipo de la Tarea</label>
-                                            <select id="task-type" {...registerAdd('task-type', {required: true})} required>
-                                                {
-                                                    tasksTypes.map((taskType) => (
-                                                        <option key={taskType.id_tipo_tarea} value={taskType.id_tipo_tarea}>
-                                                            {taskType.tipo_tarea}
-                                                        </option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </fieldset>
+                                        {
+                                            task.length > 0 && (
+                                                <fieldset>
+                                                    <label>Tarea Pool:</label>
+                                                    <select id="task-pool" {...registerAddTask('id-task', { required: true })}>
+                                                        <option value="">Seleccione una tarea</option>
+                                                        {Object.entries(
+                                                            task.reduce((acc, t) => {
+                                                                acc[t.nivel_1] = acc[t.nivel_1] || [];
+                                                                acc[t.nivel_1].push(t);
+                                                                return acc;
+                                                            }, {})
+                                                        ).map(([nivel_1, tareas]) => (
+                                                            <optgroup key={nivel_1} label={`Nivel 1: ${nivel_1}`}>
+                                                                {tareas.map((t) => (
+                                                                    <option key={t.id_tarea} value={t.id_tarea}>
+                                                                        {`[ Nivel 2: ${t.nivel_2} ] - [ Nivel 3: ${t.nivel_3} ] `} - {t.nombre}
+                                                                    </option>
+                                                                ))}
+                                                            </optgroup>
+                                                        ))}
+                                                    </select>
+                                                </fieldset>
+                                            )
+                                        }
                                     </form>
                                     <footer>
-                                        <button onClick={handleCloseAddModal} className={styles['secundary-btn']}>Cancelar</button>
+                                        <button onClick={handleCloseAddTaskModal} className={styles['secundary-btn']}>Cancelar</button>
                                         <button form='add-task-form'  className={styles['primary-btn']}>Agregar</button>
                                     </footer>
                                 </div>
                             </div>
                         )
                         :
-                        (
-                            <div className={styles['modal-overlay']} onClick={handleCloseEditModal}>
+                        // Modal para agregar versión de informe
+                        modalType === 'add-report-version' && (
+                            <div className={styles['modal-overlay']} onClick={handleCloseAddReportVersionModal}>
                                 <div className={styles['modal']} onClick={(e) => e.stopPropagation()}>
+                                    <header>
+                                        <h2>Agregar Versión de Informe</h2>
+                                        <button onClick={handleCloseAddReportVersionModal}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                        </button>
+                                    </header>
+                                    <form id='add-report-version-form' onSubmit={handleSubmitAddReportVersion(onSubmitAddReportVersion)}>
+                                        {
+                                            project.length > 0 && (
+                                                <fieldset>
+                                                    <label>Proyecto:</label>
+                                                    <select id="id-project" defaultValue={(projectFilter || '')} {...registerAddReportVersion('id-project', { required: true })} onChange={(e) => setSelectedProjectReportVersion(e.target.value)}>
+                                                        {project
+                                                        .filter(project => project.id_proyecto !== 'JE')
+                                                        .map((project) => (
+                                                            <option key={project.id_proyecto} value={project.id_proyecto}>
+                                                                {project.id_proyecto}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                </fieldset>
+                                            )
+                                        }
+                                        <fieldset>
+                                            <label>Informe:</label>
+                                            <select id="id-report" defaultValue="" {...registerAddReportVersion('id-report', { required: true })}>
+                                                <option value="" disabled>Seleccione un informe</option>
+                                                {[...new Map(
+                                                    projectReport
+                                                    .filter(report => report.id_proyecto === projectFilter || report.id_proyecto === selectedProjectReportVersion)
+                                                    .map(report => [report.id_informe, report])
+                                                ).values()].map(report => (
+                                                    <option key={report.id_informe} value={report.id_informe}>
+                                                        {report.nombre}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </fieldset>
+                                        <fieldset>
+                                            <label>Versión del Informe:</label>
+                                            <span className={styles['version-info']}>Al presionar "Agregar" se creará la siguiente versión del informe</span>
+                                        </fieldset>
+                                    </form>
+                                    <footer>
+                                        <button onClick={handleCloseAddReportVersionModal} className={styles['secundary-btn']}>Cancelar</button>
+                                        <button form='add-report-version-form' className={styles['primary-btn']}>Agregar</button>
+                                    </footer>
                                 </div>
                             </div>
                         )

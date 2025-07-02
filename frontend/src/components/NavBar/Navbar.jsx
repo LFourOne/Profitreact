@@ -55,12 +55,7 @@ export function NavBar() {
             <NavLink to="/index"><img src={logo} alt="SOLUTIVA Logo" id={styles['solutiva-logo']} draggable="false" /></NavLink>
         </div>
         <div className={styles['navbar-links']}>
-            <NavLink to="/index" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Inicio</NavLink>
-            {
-              (role === 1 || role === 2 || role === 3 || role === 4 || role === 5 || role === 6 || role === 7) && (
-                <NavLink to="/meeting" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reuniones</NavLink>
-              )
-            }
+            <NavLink to="/index" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Dashboard</NavLink>
             <div className={styles['dropdown']}>
                 <button onClick={() => toggleDropdown('gantt')} className={`${styles['dropdown-button']} ${['/gantt', '/gantt/delivery'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
                     Gantt
@@ -71,19 +66,33 @@ export function NavBar() {
                     <NavLink to="/gantt/delivery" onClick={() => setActiveDropdown(null)}>Entregas</NavLink>
                 </div>
             </div>
-            <NavLink to="/training" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
+            <NavLink to="/hh-register" className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Registro HH</NavLink>
+            <div className={styles['dropdown']}>
+                <button onClick={() => toggleDropdown('resources')} className={`${styles['dropdown-button']} ${['/meeting', '/meeting/minute/', '/training'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
+                    Recursos
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+                </button>
+                <div className={`${styles['dropdown-content']} ${activeDropdown === 'resources' ? styles['open'] : ''}`}>
+                    {
+                      (role === 1 || role === 2 || role === 3 || role === 4 || role === 5 || role === 6 || role === 7) && (
+                        <NavLink to="/meeting" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Reuniones</NavLink>
+                      )
+                    }
+                    <NavLink to="/training" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
+                </div>
+            </div>
             {
               (role === 1 || role === 2 || role === 3) && (
                 <div className={styles['dropdown']}>
-                  <button onClick={() => toggleDropdown('admin')} className={`${styles['dropdown-button']} ${['/admin', '/admin/user-management', '/admin/hh-management'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
-                      Panel Admin
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
-                  </button>
-                  <div className={`${styles['dropdown-content']} ${activeDropdown === 'admin' ? styles['open'] : ''}`}>
-                      <NavLink to="/admin/user-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Personas</NavLink>
-                      <NavLink to="/admin/project-report-task" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor HH</NavLink>
-                  </div>
-              </div>
+                    <button onClick={() => toggleDropdown('admin')} className={`${styles['dropdown-button']} ${['/admin', '/admin/user-management', '/admin/hh-management'].includes(window.location.pathname) ? styles['selected-link'] : ''}`}>
+                        Gestión
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
+                    </button>
+                    <div className={`${styles['dropdown-content']} ${activeDropdown === 'admin' ? styles['open'] : ''}`}>
+                        <NavLink to="/admin/user-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Personas</NavLink>
+                        <NavLink to="/admin/project-report-task" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor HH</NavLink>
+                    </div>
+                </div>
               )
             }
         </div>

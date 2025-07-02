@@ -22,6 +22,14 @@ class Project:
         return connectToMySQL(DATA_BASE).query_db(query)
     
     @classmethod
+    def select_all_id_projects(cls):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT id_proyecto FROM proyectos
+                """
+        return connectToMySQL(DATA_BASE).query_db(query)
+    
+    @classmethod
     def get_projects(cls):
         DATA_BASE = session.get('data_base')
         query = """

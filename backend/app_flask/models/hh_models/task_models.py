@@ -9,6 +9,7 @@ class Task:
         self.nivel_3 = data.get('nivel_3')
         self.nombre = data.get('nombre')
         self.id_tipo_tarea = data.get('id_tipo_tarea')
+        self.id_estado = data.get('id_estado')
         self.creado_en = data.get('creado_en')
 
     @classmethod
@@ -17,7 +18,8 @@ class Task:
         query = """
                 SELECT tareas.*, tipo_tarea.tipo_tarea FROM tareas
                 JOIN tipo_tarea ON tareas.id_tipo_tarea = tipo_tarea.id_tipo_tarea
-                ORDER BY nivel_1 ASC, nivel_2 ASC, nivel_3 ASC;
+                WHERE id_estado = 1
+                ORDER BY nivel_1 ASC, nivel_2 ASC, nivel_3 ASC
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
     
@@ -25,8 +27,8 @@ class Task:
     def create_task(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                INSERT INTO tareas (nivel_1, nivel_2, nivel_3, nombre, id_tipo_tarea)
-                VALUES (%(nivel_1)s, %(nivel_2)s, %(nivel_3)s, %(nombre)s, %(id_tipo_tarea)s);
+                INSERT INTO tareas (nivel_1, nivel_2, nivel_3, nombre, id_tipo_tarea, id_estado)
+                VALUES (%(nivel_1)s, %(nivel_2)s, %(nivel_3)s, %(nombre)s, %(id_tipo_tarea)s, 1);
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
@@ -44,7 +46,7 @@ class Task:
     def delete_task(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                DELETE FROM tareas
+                UPDATE tareas SET id_estado = 3
                 WHERE id_tarea = %(id_tarea)s;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
