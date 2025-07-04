@@ -15,7 +15,7 @@
         align-items: center;
         width: 100%;
         height: 250px;
-        padding: 40px 100px 50px 50px;
+        padding: 50px 100px 50px 50px;
         margin-top: 50px;
         border-radius: 16px;
         background: linear-gradient(150deg, #3b5513, #73a727);
@@ -56,13 +56,13 @@
         flex-direction: column;
         align-items: space-between;
         justify-content: center;
+        box-sizing: border-box;
         width: 100%;
         height: 350px;
         padding: 30px;
         margin-top: 30px;
         border: 1px solid #d4d4d4;
         border-radius: 8px;
-        box-sizing: border-box;
         gap: 10px;
     }
     .form header {
@@ -75,20 +75,20 @@
         font-weight: bold;
         color: #1f2937;
     }
-    .form .content {
+    .form .form-content {
         display: flex;
         flex-direction: column;
         width: 100%;
         gap: 18px;
     }
-    .form .content .content-fields{
+    .form .form-content .content-fields{
         display: flex;
         justify-content: space-between;
         width: 100%;
         height: 100%;
         gap: 20px;
     }
-    .form .content fieldset {
+    .form .form-content fieldset {
         display: flex;
         flex-direction: column;
         border: none;
@@ -99,7 +99,7 @@
         font-weight: 500;
         color: #1f2937;
     }
-    .form .content .content-fields fieldset select {
+    .form .form-content .content-fields fieldset select {
         box-sizing: border-box;
         width: 350px;
         height: 40px;
@@ -110,12 +110,12 @@
         border-radius: 8px;
         background-color: white;
     }
-    .form .content fieldset select:focus {
+    .form .form-content fieldset select:focus {
         outline: none;
         border-color: #15803d;
         box-shadow: 0 0 0 1px #15803d;
     }
-    .form .content .content-fields fieldset .version{
+    .form .form-content .content-fields fieldset .version{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -127,7 +127,7 @@
         border-radius: 8px;
         background-color: white;
     }
-    .form .content fieldset .readonly{
+    .form .form-content fieldset .readonly{
         display: flex;
         align-items: center;
         justify-content: center;
@@ -139,7 +139,7 @@
         border-radius: 8px;
         background-color: #f9fafb;
     }
-    .form .content .content-fields fieldset .date-time-input{
+    .form .form-content .content-fields fieldset .date-time-input{
         box-sizing: border-box;
         width: 464px;
         height: 40px;
@@ -197,4 +197,70 @@
     .form footer .close-day-button:hover{
         background-color: #111827;
         transition: 0.1s ease-in-out;
+    }
+    .schedule-section {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 100%;
+        height: 1400px;
+        margin-top: 30px;
+        padding: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+    }
+    .schedule-section header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .schedule-section header h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .schedule-section .schedule-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    .schedule-section .schedule-content table {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+    }
+    .schedule-section .schedule-content table tr{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        height: 60px;
+        width: 100%;
+        padding: 0px 0px 0px 20px;
+        border-bottom: 1px solid #d1d5db;
+    }
+    .schedule-section .schedule-content table tr td {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #1f2937;
+        height: 100%;
+        width: 90px;
+        border-right: 1px solid #d1d5db;
+    }
+    .schedule-section .schedule-content table tr .td-hh {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        font-size: 14px;
+        color: #1f2937;
+        height: 100%;
+        width: 100%;
+        border-right: 1px solid #d1d5db;
     }
