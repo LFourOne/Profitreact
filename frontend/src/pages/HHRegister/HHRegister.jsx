@@ -14,13 +14,18 @@ export function HHRegister() {
     const [project, setProject] = useState([])
     const [reports, setReports] = useState([])
     const [tasks, setTasks] = useState([])
+
+    const [schedule, setSchedule] = useState([]);
     
     const [selectedProject, setSelectedProject] = useState('')
     const [selectedReport, setSelectedReport] = useState(null)
     const [selectedTask, setSelectedTask] = useState('')
+    const [selectedDate, setSelectedDate] = useState(() => {
+        const today = new Date();
+        return today.toISOString().split('T')[0];
+    });
 
     const [loading, setLoading] = useState(true);
-
     
 
     const fetchApi = async () => {
@@ -65,6 +70,7 @@ export function HHRegister() {
             setSelectedTask('');
             setReports([]);
             setTasks([]);
+            fetchApi();
             console.log('Datos enviados:', data);
         }
     }
@@ -75,7 +81,7 @@ export function HHRegister() {
 
             if (projectID) {
                 try {
-                    const response = await axios.get(`http://localhost:5500/hh-register/api/${projectID}`, { withCredentials: true });
+                    const response = await axios.get(`http://localhost:5500/hh-register/api/projects/${projectID}`, { withCredentials: true });
 
                     setReports(response.data.reports);
                     setTasks(response.data.tasks);
@@ -89,6 +95,21 @@ export function HHRegister() {
         }
         
     useEffect(() => {
+        if (selectedDate) {
+            const fetchSchedule = async () => {
+                try {
+                    const response = await axios.get(`http://localhost:5500/hh-register/api/schedule/${selectedDate}`, { withCredentials: true });
+                    setSchedule(response.data.schedule);
+                    console.log('Schedule data:', response.data.schedule);
+                } catch (error) {
+                    console.error('Error fetching schedule:', error);
+                }
+            };
+            fetchSchedule();
+        }
+    }, [selectedDate]);
+
+    useEffect(() => {
         if (reports.length > 0) {
             const maxReport = reports.reduce((max, curr) =>
                 Number(curr.id_informe) > Number(max.id_informe) ? curr : max,
@@ -99,6 +120,41 @@ export function HHRegister() {
             setSelectedReport(null);
         }
     }, [reports]);
+
+    const timeSlots = [
+        "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00",
+        "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00",
+        "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00",
+        "20:30", "21:00", "21:30", "22:00", "22:30", "23:00", "23:30"
+    ];
+
+    // Función para saber si un slot está ocupado por 
+    // .un registro
+    function getScheduleMap(schedule) {
+        // Crea un mapa: slot => registro o null
+        const map = {};
+        timeSlots.forEach(slot => { map[slot] = null; });
+
+        schedule.forEach(reg => {
+            // Convierte inicio y fin a minutos
+            const [startH, startM] = reg.inicio.split(':').map(Number);
+            const [endH, endM] = reg.fin.split(':').map(Number);
+            const startMin = startH * 60 + startM;
+            const endMin = endH * 60 + endM;
+
+            timeSlots.forEach(slot => {
+            const [slotH, slotM] = slot.split(':').map(Number);
+            const slotMin = slotH * 60 + slotM;
+            // Si el slot está dentro del rango, lo marca
+            if (slotMin >= startMin && slotMin < endMin) {
+                map[slot] = reg;
+            }
+            });
+        });
+        return map;
+    }
+
+    const scheduleMap = getScheduleMap(schedule);
 
     return (
         <>
@@ -221,23 +277,6 @@ export function HHRegister() {
                                 <label>Hora Inicio</label>
                                 <select className={styles['date-time-input']} defaultValue="" {...register('start-time', { required: true })}>
                                     <option value="" disabled>Selecciona una opción</option>
-                                    <option>00:00</option>
-                                    <option>00:30</option>
-                                    <option>01:00</option>
-                                    <option>01:30</option>
-                                    <option>02:00</option>
-                                    <option>02:30</option>
-                                    <option>03:00</option>
-                                    <option>03:30</option>
-                                    <option>04:00</option>
-                                    <option>04:30</option>
-                                    <option>05:00</option>
-                                    <option>05:30</option>
-                                    <option>06:00</option>
-                                    <option>06:30</option>
-                                    <option>07:00</option>
-                                    <option>07:30</option>
-                                    <option>08:00</option>
                                     <option>08:30</option>
                                     <option>09:00</option>
                                     <option>09:30</option>
@@ -275,23 +314,6 @@ export function HHRegister() {
                                 <label>Hora Término</label>
                                 <select className={styles['date-time-input']} defaultValue="" {...register('end-time', { required: true })}>
                                     <option value="" disabled>Selecciona una opción</option>
-                                    <option>00:00</option>
-                                    <option>00:30</option>
-                                    <option>01:00</option>
-                                    <option>01:30</option>
-                                    <option>02:00</option>
-                                    <option>02:30</option>
-                                    <option>03:00</option>
-                                    <option>03:30</option>
-                                    <option>04:00</option>
-                                    <option>04:30</option>
-                                    <option>05:00</option>
-                                    <option>05:30</option>
-                                    <option>06:00</option>
-                                    <option>06:30</option>
-                                    <option>07:00</option>
-                                    <option>07:30</option>
-                                    <option>08:00</option>
                                     <option>08:30</option>
                                     <option>09:00</option>
                                     <option>09:30</option>
@@ -336,96 +358,30 @@ export function HHRegister() {
                 </form>
                 <section className={styles['schedule-section']}>
                     <header>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        <h2>Cronograma</h2>
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <h1>Cronograma</h1>
+                        </div>
+                        <div>
+                            <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
+                        </div>
                     </header>
                     <div className={styles['schedule-content']}>
                         <table className={styles['schedule-table']}>
                             <tbody>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>08:30</td>
-                                    <td className={styles['td-hh']}></td>
+                            {timeSlots.map(slot => (
+                                <tr key={slot} className={styles['schedule-table-tr']}>
+                                    <td>{slot}</td>
+                                    <td className={styles['td-hh']}>
+                                        {scheduleMap[slot] ? (
+                                        <div className={styles['task-block']}>
+                                            <strong>{scheduleMap[slot].id_proyecto}</strong>
+                                            <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
+                                        </div>
+                                        ) : null}
+                                    </td>
                                 </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>09:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>09:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>10:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>10:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>11:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>11:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>12:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>12:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>13:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>13:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>14:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>14:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>15:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>15:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>16:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>16:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>17:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>17:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>18:00</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
-                                <tr className={styles['schedule-table-tr']}>
-                                    <td>18:30</td>
-                                    <td className={styles['td-hh']}></td>
-                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
