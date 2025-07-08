@@ -71,6 +71,7 @@ export function HHRegister() {
             setReports([]);
             setTasks([]);
             fetchApi();
+            fetchSchedule(selectedDate);
             console.log('Datos enviados:', data);
         }
     }
@@ -94,19 +95,20 @@ export function HHRegister() {
             }
         }
         
-    useEffect(() => {
-        if (selectedDate) {
-            const fetchSchedule = async () => {
-                try {
-                    const response = await axios.get(`http://localhost:5500/hh-register/api/schedule/${selectedDate}`, { withCredentials: true });
-                    setSchedule(response.data.schedule);
-                    console.log('Schedule data:', response.data.schedule);
-                } catch (error) {
-                    console.error('Error fetching schedule:', error);
-                }
-            };
-            fetchSchedule();
+    const fetchSchedule = async (date) => {
+        if (date) {
+            try {
+                const response = await axios.get(`http://localhost:5500/hh-register/api/schedule/${date}`, { withCredentials: true });
+                setSchedule(response.data.schedule);
+                console.log('Schedule data:', response.data.schedule);
+            } catch (error) {
+                console.error('Error fetching schedule:', error);
+            }
         }
+    };
+
+    useEffect(() => {
+        fetchSchedule(selectedDate);
     }, [selectedDate]);
 
     useEffect(() => {
@@ -131,7 +133,6 @@ export function HHRegister() {
     // Función para saber si un slot está ocupado por 
     // .un registro
     function getScheduleMap(schedule) {
-        // Crea un mapa: slot => registro o null
         const map = {};
         timeSlots.forEach(slot => { map[slot] = null; });
 
@@ -142,15 +143,46 @@ export function HHRegister() {
             const startMin = startH * 60 + startM;
             const endMin = endH * 60 + endM;
 
+            // Encuentra el primer slot que coincide con el inicio
+            let firstSlot = null;
+            let slotCount = 0;
+
             timeSlots.forEach(slot => {
-            const [slotH, slotM] = slot.split(':').map(Number);
-            const slotMin = slotH * 60 + slotM;
-            // Si el slot está dentro del rango, lo marca
-            if (slotMin >= startMin && slotMin < endMin) {
-                map[slot] = reg;
-            }
+                const [slotH, slotM] = slot.split(':').map(Number);
+                const slotMin = slotH * 60 + slotM;
+                
+                if (slotMin >= startMin && slotMin < endMin) {
+                    if (firstSlot === null) {
+                        firstSlot = slot;
+                    }
+                    slotCount++;
+                }
             });
+
+            // Solo marca el primer slot con la tarea completa y el número de slots que ocupa
+            if (firstSlot) {
+                map[firstSlot] = {
+                    ...reg,
+                    rowSpan: slotCount
+                };
+                
+                // Marca los demás slots como ocupados pero sin contenido
+                let foundFirst = false;
+                timeSlots.forEach(slot => {
+                    const [slotH, slotM] = slot.split(':').map(Number);
+                    const slotMin = slotH * 60 + slotM;
+                    
+                    if (slotMin >= startMin && slotMin < endMin) {
+                        if (foundFirst) {
+                            map[slot] = 'occupied';
+                        } else {
+                            foundFirst = true;
+                        }
+                    }
+                });
+            }
         });
+        
         return map;
     }
 
@@ -373,11 +405,17 @@ export function HHRegister() {
                                 <tr key={slot} className={styles['schedule-table-tr']}>
                                     <td>{slot}</td>
                                     <td className={styles['td-hh']}>
-                                        {scheduleMap[slot] ? (
-                                        <div className={styles['task-block']}>
-                                            <strong>{scheduleMap[slot].id_proyecto}</strong>
-                                            <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
-                                        </div>
+                                        {scheduleMap[slot] && scheduleMap[slot] !== 'occupied' ? (
+                                            <div 
+                                                className={styles['task-block']}
+                                                style={{
+                                                    height: `${scheduleMap[slot].rowSpan * 100}%`,
+                                                    minHeight: `${scheduleMap[slot].rowSpan * 30}px`
+                                                }}
+                                            >
+                                                <strong>{scheduleMap[slot].id_proyecto} | {scheduleMap[slot].nombre}</strong>
+                                                <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
+                                            </div>
                                         ) : null}
                                     </td>
                                 </tr>

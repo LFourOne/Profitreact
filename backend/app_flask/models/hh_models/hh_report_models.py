@@ -27,7 +27,9 @@ class HH_Report:
     def select_all(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT * FROM registro_hh
-                WHERE fecha = %(fecha)s AND rut_personal = %(rut_personal)s;
+                SELECT registro_hh.*, tareas.nombre FROM registro_hh
+                JOIN tareas ON registro_hh.id_tarea = tareas.id_tarea
+                WHERE fecha = %(fecha)s AND rut_personal = %(rut_personal)s
+                ORDER BY registro_hh.inicio ASC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
