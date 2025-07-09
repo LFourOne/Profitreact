@@ -33,3 +33,12 @@ class HH_Report:
                 ORDER BY registro_hh.inicio ASC;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def delete(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                DELETE FROM registro_hh 
+                WHERE id_registro_hh = %(id_registro_hh)s AND rut_personal = %(rut_personal)s;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)

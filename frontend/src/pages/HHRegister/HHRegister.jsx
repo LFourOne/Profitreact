@@ -25,6 +25,23 @@ export function HHRegister() {
         return today.toISOString().split('T')[0];
     });
 
+    const totalHours = schedule.reduce((sum, item) => sum + item.horas, 0);
+    const getTargetHours = (dateString) => {
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const dayOfWeek = date.getDay(); // 0=domingo, 1=lunes, etc.
+        
+        // Lunes=1, Martes=2, Miércoles=3 → 9 horas
+        // Jueves=4, Viernes=5 → 8 horas
+        if (dayOfWeek >= 1 && dayOfWeek <= 3) return 9; // Lunes a Miércoles
+        if (dayOfWeek === 4 || dayOfWeek === 5) return 8; // Jueves y Viernes
+        return 0; // Fin de semana
+    };
+
+    const targetHours = getTargetHours(selectedDate);
+
+    const isComplete = totalHours === targetHours;
+
     const [loading, setLoading] = useState(true);
     
 
@@ -53,6 +70,13 @@ export function HHRegister() {
     }, []);
 
     const onSubmit = async (data) => {
+
+        const confirmed = window.confirm('¿Estás seguro que deseas registrar esta HH?');
+
+        if (!confirmed) {
+            return;
+        }
+
         try {
             const response = await axios.post('http://localhost:5500/hh-register/process', data, {
                 withCredentials: true,
@@ -61,7 +85,9 @@ export function HHRegister() {
                 }
             });
         } catch (error) {
-            console.error('Error al procesar los datos:', error);
+            if (error.response && error.response.status === 400) {
+                alert(error.response.data.message);
+            }
         }
         finally {
             reset();
@@ -75,6 +101,36 @@ export function HHRegister() {
             console.log('Datos enviados:', data);
         }
     }
+
+    const deleteHH = async (e, id_registro_hh) => {
+        
+        e.preventDefault();
+        
+        const confirmed = window.confirm('¿Estás seguro que deseas eliminar esta HH?');
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+            const response = await axios.delete('http://localhost:5500/hh-register/delete', {
+                data: {id_registro_hh},
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true 
+            });
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            }
+            if (error.response && error.response.status === 400) {
+                alert(error.response.data.message);
+            }
+        } finally {
+            fetchSchedule(selectedDate);
+        }
+    };
 
     const handleProjectChange = async (event) => {
             const projectID = event.target.value;
@@ -123,7 +179,7 @@ export function HHRegister() {
         }
     }, [reports]);
 
-    const timeSlots = [
+     const timeSlots = [
         "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00",
         "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00",
         "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30", "20:00",
@@ -382,10 +438,21 @@ export function HHRegister() {
                         </div>
                     </div>
                     <footer>
-                        <button type="submit" className={styles['add-task-button']}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Agregar Tarea
-                        </button>
+                        {
+                            totalHours === targetHours ? (
+                                <span className={styles['add-task-button-disabled']}>
+                                    Agregar Tarea
+                                </span>
+                            )
+                            :
+                            (
+                               <button type="submit" className={styles['add-task-button']}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Agregar Tarea
+                                </button> 
+                            )
+                        }
+                        
                     </footer>
                 </form>
                 <section className={styles['schedule-section']}>
@@ -395,6 +462,17 @@ export function HHRegister() {
                             <h1>Cronograma</h1>
                         </div>
                         <div>
+                            {
+                                targetHours === 0 ? (
+                                    null
+                                ) 
+                                : 
+                                (
+                                    <span style={{color: isComplete ? '#16a34a' : '#ef4444'}}>
+                                        {totalHours}/{targetHours} horas
+                                    </span>
+                                )
+                            }
                             <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
                         </div>
                     </header>
@@ -405,18 +483,29 @@ export function HHRegister() {
                                 <tr key={slot} className={styles['schedule-table-tr']}>
                                     <td>{slot}</td>
                                     <td className={styles['td-hh']}>
-                                        {scheduleMap[slot] && scheduleMap[slot] !== 'occupied' ? (
-                                            <div 
-                                                className={styles['task-block']}
-                                                style={{
-                                                    height: `${scheduleMap[slot].rowSpan * 100}%`,
-                                                    minHeight: `${scheduleMap[slot].rowSpan * 30}px`
-                                                }}
-                                            >
-                                                <strong>{scheduleMap[slot].id_proyecto} | {scheduleMap[slot].nombre}</strong>
-                                                <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
-                                            </div>
-                                        ) : null}
+                                        {
+                                            scheduleMap[slot] && scheduleMap[slot] !== 'occupied' ? (
+                                                <div
+                                                    className={styles['task-block']}
+                                                    style={{
+                                                        height: `${scheduleMap[slot].rowSpan * 100}%`,
+                                                        minHeight: `${scheduleMap[slot].rowSpan * 30}px`
+                                                    }}
+                                                >
+                                                    <div className={styles['task-block-left']}>
+                                                        <strong>{scheduleMap[slot].id_proyecto} | Informe {scheduleMap[slot].id_informe} | {scheduleMap[slot].nombre}</strong>
+                                                        <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
+                                                    </div>
+                                                    <div className={styles['task-block-right']}>
+                                                        <button onClick={(e) => deleteHH(e, scheduleMap[slot].id_registro_hh)}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#030712" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )
+                                            :
+                                            null
+                                        }
                                     </td>
                                 </tr>
                             ))}

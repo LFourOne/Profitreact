@@ -49,12 +49,43 @@ def process_hh_register():
 
     data = request.get_json()
 
+    date_str = data.get('date')
+
+    date_obj = datetime.strptime(date_str, "%Y-%m-%d")  # Convertir a objeto datetime
+    day_of_week = date_obj.weekday() 
+
+    # 0= Lunes, 1 = Martes, 2 = Miércoles, 3 = Jueves, 4 = Viernes, 5 = Sábado, 6 = Domingo
+
+    if day_of_week in [0, 1, 2]:  # Lunes, Martes, Miércoles
+        max_daily_hours = 9
+    elif day_of_week in [3, 4]:  # Jueves, Viernes
+        max_daily_hours = 8
+    else:  # Sábado, Domingo
+        max_daily_hours = 0
+
+    # Si es fin de semana, no se pueden registrar horas
+    if max_daily_hours == 0:
+        return jsonify({'status': 'error', 'message': 'No se pueden registrar horas en fin de semana'}), 400
+
+    # Se recuperan las horas totales ya registradas para el día actual para validar si el registro no excede el máximo permitido
+    current_hh = HH_Report.select_all({'fecha': date_str, 'rut_personal': session['rut_personal']})
+
+    total_day_hh = 0
+
+    if current_hh:
+        for i in current_hh:
+            total_day_hh += i['horas']
+
     start_str = data.get('start-time')
     end_str = data.get('end-time')
 
     fmt = "%H:%M"
     start_dt = datetime.strptime(start_str, fmt)
     end_dt = datetime.strptime(end_str, fmt)
+
+    # Validar que la hora de inicio sea menor a la hora de fin
+    if start_dt >= end_dt:
+        return jsonify({'status': 'error', 'message': 'La hora de inicio debe ser menor a la hora de fin'}), 400
 
     total_hours = (end_dt - start_dt).total_seconds() / 3600
 
@@ -63,6 +94,10 @@ def process_hh_register():
 
     if start_dt < lunch_end and end_dt > lunch_start:
         total_hours -= 1
+
+    if (round(total_day_hh + total_hours, 1) > max_daily_hours):
+        print("OLAAAAAA", round(total_day_hh + total_hours, 1))
+        return jsonify({'status': 'error', 'message': f'No se pueden registrar más de {max_daily_hours} horas en un día'}), 400
     
     hh_data = {
         'id_proyecto': data.get('project'),
@@ -83,13 +118,31 @@ def process_hh_register():
         'message': 'Datos procesados correctamente'
     })
 
+@app.route('/hh-register/delete', methods=['DELETE'])
+def delete_hh():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    data = request.get_json()
+
+    delete_data = {
+        'id_registro_hh': data.get('id_registro_hh'),
+        'rut_personal': session['rut_personal']
+    }
+
+    validation = HH_Report.delete(delete_data)
+
+    if validation == 0 or validation is False:
+        return jsonify({'status': 'error', 'message': 'No se pudo eliminar la HH'}), 400
+
+    return jsonify({'status': 'success', 'message': 'HH eliminada correctamente'})
+
 @app.route('/hh-register/api/schedule/<string:date>', methods=['GET'])
 def get_schedule(date):
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-
-    print(date)
 
     schedule_data = {
         'fecha': date,
