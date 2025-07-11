@@ -58,7 +58,7 @@ export function CompanySelect(){
                             <h1>Solutiva Sistemas</h1>
                         </div>
                         <div className={styles['btn-container']}>
-                            <button type='submit' className={styles['enter-btn']} onClick={(e) => onSubmitCompany(e, 2)}>Ingresar</button>
+                            <button type='submit' className={styles['enter-btn']} onClick={(e) => onSubmitCompany(e, 2)} disabled>¡Proximamente!</button>
                         </div>
                     </div>
                 </section>

@@ -7,6 +7,7 @@ from app_flask.models.attendant_models import Attendant
 from app_flask.models.commitment_models import Commitment
 from app_flask.models.topic_agreement_models import Agreements, Topics 
 from app_flask.models.planning_models import Planning
+from app_flask.models.hh_models.hh_report_models import HH_Report
 from datetime import datetime, timedelta
 
 @app.route('/navbar')
@@ -31,6 +32,44 @@ def index():
 
     today = datetime.now()
     bussiness_days = {}
+
+    days_since_monday = today.weekday()
+
+    current_week_monday = today - timedelta(days=days_since_monday)
+
+    current_week_bussiness_days = {}
+
+    for i in range(5):
+        day = current_week_monday + timedelta(days=i)
+        if day.weekday() < 5:
+            date = day.strftime('%Y-%m-%d')
+            current_week_bussiness_days[i] = {'date': date}
+
+    hh_records = HH_Report.select_weekly({'fecha_inicio': current_week_bussiness_days[0]['date'], 'fecha_fin': current_week_bussiness_days[4]['date'], 'rut_personal': session['rut_personal']})
+
+    for record in hh_records:
+        if isinstance(record['fecha'], (datetime, )):
+            record['fecha'] = record['fecha'].strftime('%Y-%m-%d')
+        elif isinstance(record['fecha'], (type(datetime.now().date()), )):
+            record['fecha'] = record['fecha'].isoformat()
+
+    # Agrupa registros por fecha
+    hh_records_by_date = {}
+
+    for record in hh_records:
+        fecha = record['fecha']
+        if fecha not in hh_records_by_date:
+            hh_records_by_date[fecha] = []
+        hh_records_by_date[fecha].append(record)
+
+    # Junta días hábiles con sus registros (aunque estén vacíos)
+    hh_records_grouped = []
+    for idx, day in current_week_bussiness_days.items():
+        records = hh_records_by_date.get(day['date'], [])
+        hh_records_grouped.append({
+            'date': day['date'],
+            'hh_records': records
+        })
 
     idx = 0
     i = 0
@@ -86,6 +125,7 @@ def index():
         'planification' : planification_grouped,
         'projects' : projects,
         'meeting_type' : meeting_type,
+        'HHRecords' : hh_records_grouped,
         'session' : session_data,
         }), 200
 

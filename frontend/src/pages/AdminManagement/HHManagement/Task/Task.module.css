@@ -1,4 +1,749 @@
-.main{
+@media (min-width: 700px) and (max-width: 1024px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 95%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+    }
+
+    /* Header Section and Buttons */
+
+    .header-section{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 250px;
+        padding: 20px 20px 20px 20px;
+        margin-top: 50px;
+        border-radius: 16px;
+        background: linear-gradient(150deg, #3b5513, #73a727);
+        box-sizing: border-box;
+    }
+    .header-section-logo-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .logo{
+        width: 150px;
+        height: 150px;
+        margin-bottom: 8px;
+        object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
+    }
+    .header-section h1{
+        height: 24px;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+    }
+    .header-section p{
+        font-size: 20px;
+        color: #f0fdf4;
+    }
+
+    /* Content Section */
+
+    .content-section{
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 500px;
+        margin-top: 30px;
+        padding: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+    }
+    .content-section header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 8px;
+    }
+    .content-section header .header-title{
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    .content-section header .header-title h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .content-section header .header-buttons{
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        justify-content: flex-end;
+        gap: 16px;
+    }
+    .content-section header div button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 200px;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #16a34a;
+        font-size: 14px;
+        font-weight: bold;
+        gap: 10px;
+        cursor: pointer;
+    }
+    .content-section header div button:hover{
+        background-color: #15803d;
+        transition: 0.2s ease-in-out;
+    }
+    .content-section header div .navigate-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 300px;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #1f2937;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .content-section header div .navigate-btn:hover{
+        background-color: #111827;
+        transition: 0.2s ease-in-out;
+    }
+    .content-section .content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 460px;
+        max-height: 484px;
+        gap: 16px;
+        margin-top: 20px;
+        overflow-y: auto;
+    }
+    .content-section .content table{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #d4d4d4;
+    }
+    .content-section .content table thead{
+        height: 50px;
+        border: 1px solid lightgray;
+    }
+    .content-section .content table thead tr th{
+        box-sizing: border-box;
+        font-size: 16px;
+        font-weight: 500;
+        color: #6b7280;
+        text-align: left;
+        padding: 0px 0px 0px 10px;
+    }
+    .content-section .content table thead tr .task-level{
+        width: 54px;
+    }
+    .content-section .content table thead tr .task-name{
+        width: 300px;
+    }
+    .content-section .content table thead tr .task-type{
+        width: 100px;
+    }
+    .content-section .content table thead tr .task-created-at{
+        width: 100px;
+    }
+    .content-section .content table thead tr .task-actions{
+        width: 100px;
+    }
+    .content-section .content table tbody tr td{
+        box-sizing: border-box;
+        font-size: 14px;
+        height: 72px;
+        padding: 0px 0px 0px 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: left;
+    }
+    .content-section .content table tbody tr:hover{
+        background-color: #f9fafb;
+        transition: 0.1s ease-in-out;
+    }
+    .content-section .content table tbody tr td .action-btns{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    .content-section .content table tbody tr td .action-btns .action-btn-edit{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        border: none;
+        border-radius: 8px;
+        background-color: inherit;
+        cursor: pointer;
+    }
+    .content-section .content table tbody tr td .action-btns .action-btn-edit svg:hover{
+        stroke: #2563eb;
+        transition: 0.1s ease-in-out;
+    }
+    .content-section .content table tbody tr td .action-btns .action-btn-delete{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        border: none;
+        border-radius: 8px;
+        background-color: inherit;
+        cursor: pointer;
+    }
+    .content-section .content table tbody tr td .action-btn-delete svg:hover{
+        stroke: #b91c1c;
+        transition: 0.1s ease-in-out;
+    }
+
+    /* Modal */
+
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5000;
+    }
+    .modal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        box-sizing: border-box;
+        width: 600px;
+        max-width: 600px;
+        min-height: 700px;
+        max-height: 700px;
+        padding: 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 5001;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .modal header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 60px;
+        padding: 0px 0px 20px 0px;
+        border-bottom: 1px solid #d4d4d4;
+    }
+    .modal header button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding-right: 10px;
+        background-color: white;
+        border: none;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+    }
+    .modal header button:hover svg{
+        stroke: #111827;
+    }
+    .modal form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 32px;
+    }
+    .modal form fieldset {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: none;
+        gap: 8px;
+    }
+    .modal form fieldset label{
+        font-size: 14px;
+        font-weight: 500;
+        color: #1f2937;
+    }
+    .modal form fieldset input{
+        box-sizing: border-box;
+        width: 100%;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .modal form fieldset input:focus{
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 1px #15803d;
+    }
+    .modal form fieldset select{
+        box-sizing: border-box;
+        width: 100%;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .modal form fieldset select:focus{
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 1px #15803d;
+    }
+    .modal footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 60px;
+        padding: 20px 0px 0px 0px;
+        border-top: 1px solid #d4d4d4;
+    }
+    .modal footer .secundary-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .modal footer .secundary-btn:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .modal footer .primary-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        background-color: #16a34a;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .modal footer .primary-btn:hover{
+        background-color: #15803d;
+        transition: 0.1s ease-in-out;
+    }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+        padding-bottom: 30px;
+    }
+
+    /* Header Section and Buttons */
+
+    .header-section{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 250px;
+        padding: 40px 100px 50px 50px;
+        margin-top: 50px;
+        border-radius: 16px;
+        background: linear-gradient(150deg, #3b5513, #73a727);
+        box-sizing: border-box;
+    }
+    .header-section-logo-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .logo{
+        width: 150px;
+        height: 150px;
+        margin-bottom: 8px;
+        object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
+    }
+    .header-section h1{
+        height: 24px;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+    }
+    .header-section p{
+        font-size: 20px;
+        color: #f0fdf4;
+    }
+
+    /* Content Section */
+
+    .content-section{
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 500px;
+        margin-top: 30px;
+        padding: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+    }
+    .content-section header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        gap: 8px;
+    }
+    .content-section header .header-title{
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .content-section header .header-title h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .content-section header .header-buttons{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 16px;
+    }
+    .content-section header div button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 200px;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #16a34a;
+        font-size: 14px;
+        font-weight: bold;
+        gap: 10px;
+        cursor: pointer;
+    }
+    .content-section header div button:hover{
+        background-color: #15803d;
+        transition: 0.2s ease-in-out;
+    }
+    .content-section header div .navigate-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 300px;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        background-color: #1f2937;
+        font-size: 14px;
+        cursor: pointer;
+    }
+    .content-section header div .navigate-btn:hover{
+        background-color: #111827;
+        transition: 0.2s ease-in-out;
+    }
+    .content-section .content{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        min-height: 400px;
+        max-height: 420px;
+        gap: 16px;
+        margin-top: 20px;
+        overflow-y: auto;
+    }
+    .content-section .content table{
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #d4d4d4;
+    }
+    .content-section .content table thead{
+        height: 50px;
+        border: 1px solid lightgray;
+    }
+    .content-section .content table thead tr th{
+        box-sizing: border-box;
+        font-size: 16px;
+        font-weight: 500;
+        color: #6b7280;
+        text-align: left;
+        padding: 0px 0px 0px 20px;
+    }
+    .content-section .content table thead tr .task-level{
+        width: 54px;
+    }
+    .content-section .content table thead tr .task-name{
+        width: 300px;
+    }
+    .content-section .content table thead tr .task-type{
+        width: 100px;
+    }
+    .content-section .content table thead tr .task-created-at{
+        width: 100px;
+    }
+    .content-section .content table thead tr .task-actions{
+        width: 100px;
+    }
+    .content-section .content table tbody tr td{
+        box-sizing: border-box;
+        font-size: 16px;
+        height: 72px;
+        padding: 0px 0px 0px 20px;
+        border-bottom: 1px solid lightgray;
+        text-align: left;
+    }
+    .content-section .content table tbody tr:hover{
+        background-color: #f9fafb;
+        transition: 0.1s ease-in-out;
+    }
+    .content-section .content table tbody tr td .action-btns{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    .content-section .content table tbody tr td .action-btns .action-btn-edit{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        border: none;
+        border-radius: 8px;
+        background-color: inherit;
+        cursor: pointer;
+    }
+    .content-section .content table tbody tr td .action-btns .action-btn-edit svg:hover{
+        stroke: #2563eb;
+        transition: 0.1s ease-in-out;
+    }
+    .content-section .content table tbody tr td .action-btns .action-btn-delete{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        width: 32px;
+        border: none;
+        border-radius: 8px;
+        background-color: inherit;
+        cursor: pointer;
+    }
+    .content-section .content table tbody tr td .action-btn-delete svg:hover{
+        stroke: #b91c1c;
+        transition: 0.1s ease-in-out;
+    }
+
+    /* Modal */
+
+    .modal-overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5000;
+    }
+    .modal {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        box-sizing: border-box;
+        width: 600px;
+        max-width: 600px;
+        min-height: 700px;
+        max-height: 700px;
+        padding: 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 5001;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .modal header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 60px;
+        padding: 0px 0px 20px 0px;
+        border-bottom: 1px solid #d4d4d4;
+    }
+    .modal header button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        padding-right: 10px;
+        background-color: white;
+        border: none;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+    }
+    .modal header button:hover svg{
+        stroke: #111827;
+    }
+    .modal form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 32px;
+    }
+    .modal form fieldset {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        border: none;
+        gap: 8px;
+    }
+    .modal form fieldset label{
+        font-size: 14px;
+        font-weight: 500;
+        color: #1f2937;
+    }
+    .modal form fieldset input{
+        box-sizing: border-box;
+        width: 100%;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .modal form fieldset input:focus{
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 1px #15803d;
+    }
+    .modal form fieldset select{
+        box-sizing: border-box;
+        width: 100%;
+        height: 34px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .modal form fieldset select:focus{
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 1px #15803d;
+    }
+    .modal footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 60px;
+        padding: 20px 0px 0px 0px;
+        border-top: 1px solid #d4d4d4;
+    }
+    .modal footer .secundary-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #1f2937;
+        background-color: white;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .modal footer .secundary-btn:hover{
+        background-color: #f3f4f6;
+        transition: 0.1s ease-in-out;
+    }
+    .modal footer .primary-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        background-color: #16a34a;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .modal footer .primary-btn:hover{
+        background-color: #15803d;
+        transition: 0.1s ease-in-out;
+    }
+}
+
+@media (min-width: 1441px){
+    .main{
         display: flex;
         flex-direction: column;
         width: 80%;
@@ -7,8 +752,6 @@
         margin-top: 90px;
         padding-bottom: 30px;
     }
-
-@media (min-width: 1441px){
 
     /* Header Section and Buttons */
 

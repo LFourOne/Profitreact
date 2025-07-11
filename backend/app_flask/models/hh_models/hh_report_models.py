@@ -35,6 +35,17 @@ class HH_Report:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
+    def select_weekly(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT fecha, SUM(horas) as total_horas FROM registro_hh
+                WHERE fecha BETWEEN %(fecha_inicio)s AND %(fecha_fin)s AND rut_personal = %(rut_personal)s
+                GROUP BY fecha
+                ORDER BY fecha ASC;
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
     def delete(cls, data):
         DATA_BASE = session.get('data_base')
         query = """

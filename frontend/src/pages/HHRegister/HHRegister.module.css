@@ -1,12 +1,14 @@
-.main{
+@media (min-width: 700px) and (max-width: 1024px){
+    .main{
         display: flex;
         flex-direction: column;
-        width: 80%;
+        width: 95%;
         min-height: 100vh;
         margin: 0 auto;
         margin-top: 90px;
         padding-bottom: 30px;
     }
+    
     /* Header Section and Buttons */
 
     .header-section{
@@ -14,8 +16,8 @@
         justify-content: space-between;
         align-items: center;
         width: 100%;
-        height: 250px;
-        padding: 50px 100px 50px 50px;
+        height: 172px;
+        padding: 25px 25px 25px 25px;
         margin-top: 50px;
         border-radius: 16px;
         background: linear-gradient(150deg, #3b5513, #73a727);
@@ -86,7 +88,7 @@
         justify-content: space-between;
         width: 100%;
         height: 100%;
-        gap: 20px;
+        gap: 8px;
     }
     .form .form-content fieldset {
         display: flex;
@@ -101,7 +103,7 @@
     }
     .form .form-content .content-fields fieldset select {
         box-sizing: border-box;
-        width: 350px;
+        width: 164px;
         height: 40px;
         padding: 5px;
         font-size: 14px;
@@ -119,7 +121,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 350px;
+        width: 164px;
         height: 38px;
         font-size: 14px;
         color: #1f2937;
@@ -131,7 +133,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 350px;
+        width: 164px;
         height: 40px;
         font-size: 14px;
         color: #1f2937;
@@ -141,7 +143,7 @@
     }
     .form .form-content .content-fields fieldset .date-time-input{
         box-sizing: border-box;
-        width: 464px;
+        width: 214px;
         height: 40px;
         padding: 5px;
         font-size: 14px;
@@ -319,3 +321,654 @@
         transition: 0.1s ease-in-out;
         stroke: #a70000;
     }
+}
+
+@media (min-width: 1025px) and (max-width: 1440px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 90%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+        padding-bottom: 30px;
+    }
+    
+    /* Header Section and Buttons */
+
+    .header-section{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 172px;
+        padding: 50px 100px 50px 50px;
+        margin-top: 50px;
+        border-radius: 16px;
+        background: linear-gradient(150deg, #3b5513, #73a727);
+        box-sizing: border-box;
+    }
+    .header-section-logo-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .logo{
+        width: 150px;
+        height: 150px;
+        margin-bottom: 8px;
+        object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
+    }
+    .header-section h1{
+        height: 24px;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+    }
+    .header-section p{
+        font-size: 20px;
+        color: #f0fdf4;
+    }
+    .form {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        height: 350px;
+        padding: 30px;
+        margin-top: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        gap: 10px;
+    }
+    .form header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form header h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .form .form-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 18px;
+    }
+    .form .form-content .content-fields{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        gap: 20px;
+    }
+    .form .form-content fieldset {
+        display: flex;
+        flex-direction: column;
+        border: none;
+        gap: 8px;
+    }
+    .form .content fieldset label {
+        font-size: 14px;
+        font-weight: normal;
+        color: #1f2937;
+    }
+    .form .form-content .content-fields fieldset select {
+        box-sizing: border-box;
+        width: 224px;
+        height: 40px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .form .form-content fieldset select:focus {
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 1px #15803d;
+    }
+    .form .form-content .content-fields fieldset .version{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 224px;
+        height: 38px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .form .form-content fieldset .readonly{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 224px;
+        height: 40px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: #f9fafb;
+    }
+    .form .form-content .content-fields fieldset .date-time-input{
+        box-sizing: border-box;
+        width: 280px;
+        height: 40px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .form footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        margin-top: 20px;
+        gap: 10px;
+    }
+    .form footer .add-task-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        background-color: #16a34a;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .form footer .add-task-button:hover{
+        background-color: #15803d;
+        transition: 0.1s ease-in-out;
+    }
+    .form footer .add-task-button-disabled{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: normal;
+        color: #444444;
+        background-color: #f3f4f6;
+        border: 1px solid lightgray;
+        border-radius: 8px;
+        cursor: not-allowed;
+        gap: 8px;
+    }
+    .schedule-section {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 100%;
+        height: 1400px;
+        margin-top: 30px;
+        padding: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+    }
+    .schedule-section header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    .schedule-section header div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .schedule-section header div h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .schedule-section header div input {
+        box-sizing: border-box;
+        width: 200px;
+        height: 40px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .schedule-section .schedule-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    .schedule-section .schedule-content table {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 95%;
+        overflow-x: auto;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+    }
+    .schedule-section .schedule-content table tr{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        height: 60px;
+        width: 100%;
+        padding: 0px 0px 0px 20px;
+        border-bottom: 1px solid #d1d5db;
+    }
+    .schedule-section .schedule-content table tr td {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #1f2937;
+        height: 100%;
+        width: 90px;
+        border-right: 1px solid #d1d5db;
+    }
+    .schedule-section .schedule-content table tr .td-hh {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        font-size: 14px;
+        color: #1f2937;
+        height: 100%;
+        width: 100%;
+        border-right: none;
+        padding: 0;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        background-color: #d1fae5;
+        gap: 8px;
+        border-radius: 8px;
+        border: 1px solid #a7f3d0;
+        margin: 2px;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-left {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding: 8px;
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-right{
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        height: 100%;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-right button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: inherit;
+        border: none;
+        height: 30px;
+        width: 30px;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-right button:hover svg{
+        transition: 0.1s ease-in-out;
+        stroke: #a70000;
+    }
+}
+
+@media (min-width: 1441px){
+    .main{
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        min-height: 100vh;
+        margin: 0 auto;
+        margin-top: 90px;
+        padding-bottom: 30px;
+    }
+
+    /* Header Section and Buttons */
+
+    .header-section{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 172px;
+        padding: 50px 100px 50px 50px;
+        margin-top: 50px;
+        border-radius: 16px;
+        background: linear-gradient(150deg, #3b5513, #73a727);
+        box-sizing: border-box;
+    }
+    .header-section-logo-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .logo{
+        width: 150px;
+        height: 150px;
+        margin-bottom: 8px;
+        object-fit: contain;
+    }
+    .logo:hover{
+        transform: scale(1.02);
+        transition: 0.2s ease-in-out;
+    }
+    .header-section h1{
+        height: 24px;
+        font-size: 32px;
+        font-weight: bold;
+        color: white;
+    }
+    .header-section p{
+        font-size: 20px;
+        color: #f0fdf4;
+    }
+    .form {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        justify-content: center;
+        box-sizing: border-box;
+        width: 100%;
+        height: 350px;
+        padding: 30px;
+        margin-top: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+        gap: 10px;
+    }
+    .form header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form header h1{
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .form .form-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: 18px;
+    }
+    .form .form-content .content-fields{
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        gap: 20px;
+    }
+    .form .form-content fieldset {
+        display: flex;
+        flex-direction: column;
+        border: none;
+        gap: 8px;
+    }
+    .form .content fieldset label {
+        font-size: 14px;
+        font-weight: 500;
+        color: #1f2937;
+    }
+    .form .form-content .content-fields fieldset select {
+        box-sizing: border-box;
+        width: 300px;
+        height: 40px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .form .form-content fieldset select:focus {
+        outline: none;
+        border-color: #15803d;
+        box-shadow: 0 0 0 1px #15803d;
+    }
+    .form .form-content .content-fields fieldset .version{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 38px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .form .form-content fieldset .readonly{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 300px;
+        height: 40px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: #f9fafb;
+    }
+    .form .form-content .content-fields fieldset .date-time-input{
+        box-sizing: border-box;
+        width: 400px;
+        height: 40px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .form footer {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        height: 50px;
+        margin-top: 20px;
+        gap: 10px;
+    }
+    .form footer .add-task-button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: bold;
+        color: white;
+        background-color: #16a34a;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        gap: 8px;
+    }
+    .form footer .add-task-button:hover{
+        background-color: #15803d;
+        transition: 0.1s ease-in-out;
+    }
+    .form footer .add-task-button-disabled{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        width: 150px;
+        font-size: 14px;
+        font-weight: normal;
+        color: #444444;
+        background-color: #f3f4f6;
+        border: 1px solid lightgray;
+        border-radius: 8px;
+        cursor: not-allowed;
+        gap: 8px;
+    }
+    .schedule-section {
+        display: flex;
+        flex-direction: column;
+        align-items: space-between;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        width: 100%;
+        height: 1400px;
+        margin-top: 30px;
+        padding: 30px;
+        border: 1px solid #d4d4d4;
+        border-radius: 8px;
+    }
+    .schedule-section header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+    }
+    .schedule-section header div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .schedule-section header div h1 {
+        font-size: 24px;
+        font-weight: bold;
+        color: #1f2937;
+    }
+    .schedule-section header div input {
+        box-sizing: border-box;
+        width: 200px;
+        height: 40px;
+        padding: 5px;
+        font-size: 14px;
+        color: #1f2937;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        background-color: white;
+    }
+    .schedule-section .schedule-content {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+    .schedule-section .schedule-content table {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 95%;
+        overflow-x: auto;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+    }
+    .schedule-section .schedule-content table tr{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        box-sizing: border-box;
+        height: 60px;
+        width: 100%;
+        padding: 0px 0px 0px 20px;
+        border-bottom: 1px solid #d1d5db;
+    }
+    .schedule-section .schedule-content table tr td {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        color: #1f2937;
+        height: 100%;
+        width: 90px;
+        border-right: 1px solid #d1d5db;
+    }
+    .schedule-section .schedule-content table tr .td-hh {
+        display: flex;
+        align-items: stretch;
+        justify-content: flex-start;
+        font-size: 14px;
+        color: #1f2937;
+        height: 100%;
+        width: 100%;
+        border-right: none;
+        padding: 0;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        background-color: #d1fae5;
+        gap: 8px;
+        border-radius: 8px;
+        border: 1px solid #a7f3d0;
+        margin: 2px;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-left {
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+        padding: 8px;
+        font-size: 14px;
+        color: #1f2937;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-right{
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        height: 100%;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-right button{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: inherit;
+        border: none;
+        height: 30px;
+        width: 30px;
+        cursor: pointer;
+        transition: 0.1s ease-in-out;
+    }
+    .schedule-section .schedule-content table tr .td-hh .task-block-right button:hover svg{
+        transition: 0.1s ease-in-out;
+        stroke: #a70000;
+    }
+}

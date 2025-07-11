@@ -12,6 +12,7 @@ export function Index() {
     const [commitments, setCommitments] = useState([]);
     const [team, setTeam] = useState([]);
     const [planification, setPlanification] = useState([]);
+    const [HHRecords, setHHRecords] = useState([]);
     const [projects, setProjects] = useState([]);
     const [meetingType, setMeetingType] = useState([]);
 
@@ -29,6 +30,7 @@ export function Index() {
         setCommitments(response.data.commitments);
         setTeam(response.data.team);
         setPlanification(response.data.planification);
+        setHHRecords(response.data.HHRecords);
         setProjects(response.data.projects);
         setMeetingType(response.data.meeting_type);
         setSession(response.data.session);
@@ -153,6 +155,7 @@ export function Index() {
                 </section>
                 <div className={styles['content-container']}>
                     <div className={styles['content-container-left']}>
+                        {/* Weekly Planning Section */}
                         <section className={styles['weekly-planning']}>
                             <div className={styles['weekly-planning-header']}>
                                 <div>
@@ -188,6 +191,52 @@ export function Index() {
                                             ) : (
                                                 <span className={styles['weekly-planning-item-project']}>
                                                     No hay planificaciones para este día.
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                    )
+                                )) : (
+                                    <p>No tienes planificaciones para esta semana.</p>
+                                )}
+                            </div>
+                        </section>
+                        {/* Weekly HH Section */}
+                        <section className={styles['weekly-hh']}>
+                            <div className={styles['weekly-hh-header']}>
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                                    <h1>Registro HH Semanal</h1>
+                                </div>
+                                <button onClick={() => navigate('/hh-register')}>
+                                    Ver Registro HH
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                                </button>
+                            </div>
+                            <div className={styles['weekly-hh-content']}>
+                                {HHRecords.length > 0 ? (
+                                    HHRecords.map((day) => (
+                                    <div key={day.date} className={styles['weekly-hh-item']}>
+                                        <div className={styles['weekly-hh-item-header']}>
+                                            <span className={styles['weekly-hh-item-day-string']}>
+                                                {getSpanishDayName(day.date)}
+                                            </span>
+                                            <span className={styles['weekly-hh-item-day-number']}>
+                                                {getDayNumber(day.date)}
+                                            </span>
+                                        </div>
+                                        <div className={styles['weekly-hh-item-content']}>
+                                            {day.hh_records.length > 0 ? (
+                                                day.hh_records.map((hh_record, idx) => (
+                                                    <div key={idx}>
+                                                        <span className={styles['weekly-hh-item-project']}>
+                                                            {hh_record.total_horas} horas registradas
+                                                        </span>
+                                                    </div>
+                                                ))
+                                            ) : (
+                                                <span className={styles['weekly-hh-item-project']}>
+                                                    0 horas registradas
                                                 </span>
                                             )}
                                         </div>

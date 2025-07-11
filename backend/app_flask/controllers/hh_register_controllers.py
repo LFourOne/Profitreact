@@ -94,10 +94,6 @@ def process_hh_register():
 
     if start_dt < lunch_end and end_dt > lunch_start:
         total_hours -= 1
-
-    if (round(total_day_hh + total_hours, 1) > max_daily_hours):
-        print("OLAAAAAA", round(total_day_hh + total_hours, 1))
-        return jsonify({'status': 'error', 'message': f'No se pueden registrar más de {max_daily_hours} horas en un día'}), 400
     
     hh_data = {
         'id_proyecto': data.get('project'),

@@ -71,7 +71,11 @@ export function HHRegister() {
 
     const onSubmit = async (data) => {
 
-        const confirmed = window.confirm('¿Estás seguro que deseas registrar esta HH?');
+        const message = totalHours >= targetHours 
+        ? 'Has alcanzado el límite de horas para este día. ¿Deseas continuar registrando más horas?'
+        : '¿Estás seguro que deseas registrar esta HH?';
+    
+        const confirmed = window.confirm(message);
 
         if (!confirmed) {
             return;
@@ -438,21 +442,10 @@ export function HHRegister() {
                         </div>
                     </div>
                     <footer>
-                        {
-                            totalHours === targetHours ? (
-                                <span className={styles['add-task-button-disabled']}>
-                                    Agregar Tarea
-                                </span>
-                            )
-                            :
-                            (
-                               <button type="submit" className={styles['add-task-button']}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                                    Agregar Tarea
-                                </button> 
-                            )
-                        }
-                        
+                        <button type="submit" className={styles['add-task-button']}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Agregar Tarea
+                        </button>
                     </footer>
                 </form>
                 <section className={styles['schedule-section']}>
@@ -469,7 +462,7 @@ export function HHRegister() {
                                 : 
                                 (
                                     <span style={{color: isComplete ? '#16a34a' : '#ef4444'}}>
-                                        {totalHours}/{targetHours} horas
+                                        {totalHours}/{targetHours} horas | {(totalHours/targetHours * 100).toFixed(1)}%
                                     </span>
                                 )
                             }
