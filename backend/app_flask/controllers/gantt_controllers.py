@@ -12,6 +12,8 @@ from app_flask.models.report_models import Report
 from app_flask.models.report_models import Version
 from app_flask.models.ot_models import Ot
 from app_flask.models.ot_models import Ot_Proyecto
+from datetime import datetime
+import calendar
 
 @app.route('/gantt')
 def gantt():
@@ -64,7 +66,74 @@ def gantt():
             }
         )
 
-    base_planification = Planning.select_planning()
+    company = session['data_base']
+    
+    if company == 'profit2':
+        company = 1
+    elif company == 'profit2_sistemas':
+        company = 2
+
+    response_data = {
+        'rut_personal': session['rut_personal'],
+        'nombres': session['nombres'],
+        'apellido_p': session['apellido_p'],
+        'apellido_m': session['apellido_m'],
+        'email': session['email'],
+        'id_especialidad': session['id_especialidad'],
+        'id_rol' : session['id_rol'],
+        'color' : session['color'],
+        'company': company
+    }
+
+    return jsonify({
+            'projects': project_list,
+            'staff': staff_list,
+            'specialty': specialty_list,
+            'planification': [],
+            'session': response_data,
+            'delivery': [],
+            'report': [],
+            'version': [],
+            'delivery_type': [],
+            'ot': []
+         }
+    )
+
+# Función Fetch para obtener las planificaciones filtradas por especialidad y fecha
+@app.route('/gantt/api/get-specialty-date', methods=['GET'])
+def get_specialty_by_date():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    specialty_id = request.args.get('specialty_id')
+    date = request.args.get('date')
+
+    date_object = datetime.strptime(date, '%Y-%m-%d')
+    year = date_object.year
+    month = date_object.month
+
+    # Obtener el primer día del mes
+    first_day_of_month = datetime(year, month, 1)
+    # Obtener el último día del mes
+    last_day_of_month = datetime(year, month, calendar.monthrange(year, month)[1])
+    # Convertir las fechas a formato de cadena
+    first_day_str = first_day_of_month.strftime('%Y-%m-%d')
+    last_day_str = last_day_of_month.strftime('%Y-%m-%d')
+
+    # Filtrar las planificaciones por especialidad y rango de fechas
+    data = {
+        'id_especialidad': specialty_id,
+        'fecha_inicio': first_day_str,
+        'fecha_fin': last_day_str
+    }
+
+    base_planification = Planning.select_planning(data)
+
+    if not base_planification:
+        return jsonify({
+            'planification': []
+        })
 
     grouped_planification = {}
     for plan in base_planification:
@@ -89,36 +158,51 @@ def gantt():
 
     consolidated_planification = list(grouped_planification.values())
 
-    company = session['data_base']
-    
-    if company == 'profit2':
-        company = 1
-    elif company == 'profit2_sistemas':
-        company = 2
+    return jsonify({
+        'planification': consolidated_planification,
+    })
 
-    response_data = {
-        'rut_personal': session['rut_personal'],
-        'nombres': session['nombres'],
-        'apellido_p': session['apellido_p'],
-        'apellido_m': session['apellido_m'],
-        'email': session['email'],
-        'id_especialidad': session['id_especialidad'],
-        'id_rol' : session['id_rol'],
-        'color' : session['color'],
-        'company': company
+# Función Fetch para obtener las entregas filtradas por fecha
+@app.route('/gantt/api/get-delivery-date', methods=['GET'])
+def get_delivery_by_date():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    date = request.args.get('date')
+
+    date_object = datetime.strptime(date, '%Y-%m-%d')
+    year = date_object.year
+    month = date_object.month
+
+    # Obtener el primer día del mes
+    first_day_of_month = datetime(year, month, 1)
+    # Obtener el último día del mes
+    last_day_of_month = datetime(year, month, calendar.monthrange(year, month)[1])
+    # Convertir las fechas a formato de cadena
+    first_day_str = first_day_of_month.strftime('%Y-%m-%d')
+    last_day_str = last_day_of_month.strftime('%Y-%m-%d')
+
+    # Filtrar las planificaciones por especialidad y rango de fechas
+    data = {
+        'fecha_inicio': first_day_str,
+        'fecha_fin': last_day_str
     }
-
-    # Todo el código para abajo corresponde al código para renderizar posteriormente la entrega
 
     reports = Report.select_reports()
 
     versions = Version.select_versions()
 
-    base_delivery = Delivery.select_delivery()
-
     ots = Ot.select_ot()
 
     delivery_type = Delivery_Type.select_delivery_type()
+
+    base_delivery = Delivery.select_delivery(data)
+
+    if not base_delivery:
+        return jsonify({
+            'delivery': []
+        })
 
     grouped_delivery = {}
 
@@ -127,7 +211,6 @@ def gantt():
         delivery_id = delivery['id_entrega']
 
         grouped_ots = Ot_Proyecto.select_ot_proyecto({'id_gantt_entrega': delivery_id})
-
 
         if delivery_id not in grouped_delivery:
             grouped_delivery[delivery_id] = {
@@ -149,20 +232,15 @@ def gantt():
     
     consolidated_delivery = list(grouped_delivery.values())
 
-    return jsonify(
-        {
-            'projects': project_list,
-            'staff': staff_list,
-            'specialty': specialty_list,
-            'planification': consolidated_planification,
-            'session': response_data,
-            'delivery': consolidated_delivery,
-            'report': reports,
-            'version': versions,
-            'delivery_type': delivery_type,
-            'ot': ots
-         }
-    )
+    print("Consolidated Delivery:", consolidated_delivery)
+
+    return jsonify({
+        'delivery': consolidated_delivery,
+        'report': reports,
+        'version': versions,
+        'delivery_type': delivery_type,
+        'ot': ots
+    })
 
 @app.route('/gantt/planificacion', methods=['POST'])
 def planification():
@@ -197,14 +275,9 @@ def planification():
 
         Assigned.insert_assigned(assigned_data)
 
-    updated_planification = Planning.select_planning()
-
-    for plan in updated_planification:
-        plan['fecha'] = plan['fecha'].strftime('%Y-%m-%d')
 
     return jsonify({
         'message': 'success',
-        'planification': updated_planification
     })
 
 @app.route('/gantt/editar', methods=['PATCH'])
@@ -357,17 +430,81 @@ def gantt_delivery():
             }
         )
 
+    company = session['data_base']
+    
+    if company == 'profit2':
+        company = 1
+    elif company == 'profit2_sistemas':
+        company = 2
+
+    response_data = {
+        'rut_personal': session['rut_personal'],
+        'nombres': session['nombres'],
+        'apellido_p': session['apellido_p'],
+        'apellido_m': session['apellido_m'],
+        'email': session['email'],
+        'id_especialidad': session['id_especialidad'],
+        'id_rol' : session['id_rol'],
+        'company': company
+    }
+
+    return jsonify(
+        {
+            'projects': project_list,
+            'session': response_data,
+        }
+    )
+
+@app.route('/gantt/delivery/api/get-delivery', methods=['GET'])
+def delivery_get_delivery_by_date():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3, 4, 5]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    date = request.args.get('date')
+
+    date_object = datetime.strptime(date, '%Y-%m-%d')
+    year = date_object.year
+    month = date_object.month
+
+    # Obtener el primer día del mes
+    first_day_of_month = datetime(year, month, 1)
+    # Obtener el último día del mes
+    last_day_of_month = datetime(year, month, calendar.monthrange(year, month)[1])
+    # Convertir las fechas a formato de cadena
+    first_day_str = first_day_of_month.strftime('%Y-%m-%d')
+    last_day_str = last_day_of_month.strftime('%Y-%m-%d')
+
+    # Filtrar las planificaciones por especialidad y rango de fechas
+    data = {
+        'fecha_inicio': first_day_str,
+        'fecha_fin': last_day_str
+    }
+
     reports = Report.select_reports()
 
     versions = Version.select_versions()
-
-    base_delivery = Delivery.select_delivery()
 
     ots = Ot.select_ot()
 
     specialty = Specialty.get_specialities()
 
     delivery_type = Delivery_Type.select_delivery_type()
+
+    base_delivery = Delivery.select_delivery(data)
+
+    if not base_delivery:
+        return jsonify({
+            'planification': [],
+            'report': reports,
+            'version': versions,
+            'specialty': specialty,
+            'delivery_type': delivery_type,
+            'ot': ots
+        })
 
     grouped_delivery = {}
 
@@ -398,36 +535,14 @@ def gantt_delivery():
     
     consolidated_delivery = list(grouped_delivery.values())
 
-    company = session['data_base']
-    
-    if company == 'profit2':
-        company = 1
-    elif company == 'profit2_sistemas':
-        company = 2
-
-    response_data = {
-        'rut_personal': session['rut_personal'],
-        'nombres': session['nombres'],
-        'apellido_p': session['apellido_p'],
-        'apellido_m': session['apellido_m'],
-        'email': session['email'],
-        'id_especialidad': session['id_especialidad'],
-        'id_rol' : session['id_rol'],
-        'company': company
-    }
-
-    return jsonify(
-        {
-            'projects': project_list,
-            'planification': consolidated_delivery,
-            'session': response_data,
-            'report': reports,
-            'version': versions,
-            'specialty': specialty,
-            'delivery_type': delivery_type,
-            'ot': ots
-        }
-    )
+    return jsonify({
+        'planification': consolidated_delivery,
+        'report': reports,
+        'version': versions,
+        'specialty': specialty,
+        'delivery_type': delivery_type,
+        'ot': ots
+    })
 
 @app.route('/gantt/delivery/insert', methods=['POST'])
 def insert_delivery():
@@ -472,17 +587,12 @@ def insert_delivery():
 
             Ot_Proyecto.insert_ot_proyecto(gantt_ot_proyecto_data)
 
-    updated_delivery = Delivery.select_delivery()
-
-    for delivery in updated_delivery:
-        delivery['fecha'] = delivery['fecha'].strftime('%Y-%m-%d')
     
     return jsonify(
         {
-            'planification': updated_delivery
+            'message': 'success',
         }
     )
-
 
 @app.route('/gantt/delivery/editar', methods=['PATCH'])
 def edit_delivery():

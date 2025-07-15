@@ -46,12 +46,6 @@ export function Gantt() {
             setArray(response.data.projects);
             setStaff(response.data.staff);
             setSpecialty(response.data.specialty);
-            setPlanification(response.data.planification);
-            setDelivery(response.data.delivery);
-            setReports(response.data.report);
-            setVersion(response.data.version);
-            setOt(response.data.ot);
-            setDeliveryType(response.data.delivery_type);
             setSessionData(response.data.session);
             
             console.log(response.data);
@@ -76,23 +70,53 @@ export function Gantt() {
     }, [selectedMonth]);
 
     const handleMonthChange = (event) => {
-        setSelectedMonth(event.target.value);
+        const newMonth = event.target.value;
+        setSelectedMonth(newMonth);
+        
+        // Cargar datos filtrados
+        if (selectedFilterSpecialty && newMonth) {
+            const dateStr = `${newMonth}-01`;
+            fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
+        }
+
+        // Cargar entregas filtradas
+        fetchFilteredDelivery(`${newMonth}-01`);
     };
 
     const handlePreviousMonth = () => {
         const [year, month] = selectedMonth.split('-').map(Number);
         const newDate = new Date(year, month - 1, 1); 
         newDate.setMonth(newDate.getMonth() - 1);
-    
-        setSelectedMonth(newDate.toISOString().slice(0, 7));
+        
+        const newMonth = newDate.toISOString().slice(0, 7);
+        setSelectedMonth(newMonth);
+        
+        // Cargar datos filtrados
+        if (selectedFilterSpecialty && newMonth) {
+            const dateStr = `${newMonth}-01`;
+            fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
+        }
+
+        // Cargar entregas filtradas
+        fetchFilteredDelivery(`${newMonth}-01`);
     };
     
     const handleNextMonth = () => {
         const [year, month] = selectedMonth.split('-').map(Number);
         const newDate = new Date(year, month - 1, 1);
         newDate.setMonth(newDate.getMonth() + 1);
-    
-        setSelectedMonth(newDate.toISOString().slice(0, 7));
+        
+        const newMonth = newDate.toISOString().slice(0, 7);
+        setSelectedMonth(newMonth);
+        
+        // Cargar datos filtrados
+        if (selectedFilterSpecialty && newMonth) {
+            const dateStr = `${newMonth}-01`;
+            fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
+        }
+
+        // Cargar entregas filtradas
+        fetchFilteredDelivery(`${newMonth}-01`);
     };
 
     function generateMonthDates(year, month) {
@@ -148,42 +172,90 @@ export function Gantt() {
     };
 
     const onSubmitAdd = async (data) => {
-        const staffArray = Object.values(data.staff).filter(value => value && value !== ""); // Extrae los valores de "staff" como un array
-        const formattedData = {
-            ...data,
-            staff: staffArray, // Cambia "staff" a un array
-        };
-        const response = await axios.post('http://localhost:5500/gantt/planificacion', formattedData, { withCredentials: true });
-        await fetchApi();
-        closeModal();
+        try {
+
+            const staffArray = Object.values(data.staff).filter(value => value && value !== ""); // Extrae los valores de "staff" como un array
+
+            const formattedData = {
+                ...data,
+                staff: staffArray, // Cambia "staff" a un array
+            };
+
+            const response = await axios.post('http://localhost:5500/gantt/planificacion', formattedData, { withCredentials: true });
+
+            if (selectedFilterSpecialty && selectedMonth) {
+                const dateStr = `${selectedMonth}-01`;
+                await fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
+                await fetchFilteredDelivery(dateStr);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            } else {
+                console.error('Error inesperado:', error);
+            }
+        } finally {
+            closeModal();
+        }
     };
 
     const editSubmit = async (data) => {
-        // Extrae los valores actuales del formulario
-        const staffArray = Object.values(data.staff).filter((value) => value && value !== "");
+        try {
+            // Extrae los valores actuales del formulario
+            const staffArray = Object.values(data.staff).filter((value) => value && value !== "");
 
-        // Obtén los valores originales de la planificación
-        const originalStaff = selectedPlan.asignados.map((asignado) => asignado.rut_personal);
+            // Obtén los valores originales de la planificación
+            const originalStaff = selectedPlan.asignados.map((asignado) => asignado.rut_personal);
 
-        // Filtra solo los valores nuevos o diferentes
-        const updatedStaff = staffArray.filter((rut) => !originalStaff.includes(rut));
+            // Filtra solo los valores nuevos o diferentes
+            const updatedStaff = staffArray.filter((rut) => !originalStaff.includes(rut));
 
-        // Prepara el objeto con los datos formateados
-        const formattedData = {
-            ...data,
-            staff: updatedStaff, // Solo las personas nuevas
-        };
+            // Prepara el objeto con los datos formateados
+            const formattedData = {
+                ...data,
+                staff: updatedStaff, // Solo las personas nuevas
+            };
 
-        // Enviar la solicitud al backend
-        const response = await axios.patch('http://localhost:5500/gantt/editar', formattedData, { withCredentials: true });
-        await fetchApi(); // Refresca los datos
-        closeModal(); // Cierra la modal
-        };
+            // Enviar la solicitud al backend
+            const response = await axios.patch('http://localhost:5500/gantt/editar', formattedData, { withCredentials: true });
+
+            if (selectedFilterSpecialty && selectedMonth) {
+                const dateStr = `${selectedMonth}-01`;
+                await fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
+                await fetchFilteredDelivery(dateStr);
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            } else {
+                console.error('Error inesperado:', error);
+            }
+        } finally {
+            closeModal(); // Cierra la modal
+            
+        }
+    };
 
     const deleteSubmit = async (data) => {
-        const response = await axios.delete('http://localhost:5500/gantt/eliminar', {data, withCredentials: true });
-        await fetchApi();
-        closeModal();
+        try {
+            const response = await axios.delete('http://localhost:5500/gantt/eliminar', {data, withCredentials: true });
+
+            if (selectedFilterSpecialty && selectedMonth) {
+                const dateStr = `${selectedMonth}-01`;
+                console.log('Recargando datos filtrados después del delete...');
+                await fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
+                await fetchFilteredDelivery(dateStr);
+            }
+
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            } else {
+                console.error('Error inesperado:', error);
+            }
+        } finally {
+            closeModal();
+        }
     };
 
     const customizeSubmit = async (data) => {
@@ -252,21 +324,76 @@ export function Gantt() {
         }
     }, [sessionData]);
 
-
     // Con esta constante se obtiene la especialidad para filtrar las planificaciones por área.
 
     const [selectedFilterSpecialty, setSelectedFilterSpecialty] = useState();
 
-
     // Este useEffect hace que filtre inicialmente por la especialidad del usuario que inicia sesión.
     useEffect(() => {
-        setSelectedFilterSpecialty(sessionData.id_especialidad);
-    }, [sessionData]);
-
+        // Solo establecer la especialidad inicial si no hay una ya seleccionada
+        if (sessionData.id_especialidad && !selectedFilterSpecialty) {
+            setSelectedFilterSpecialty(sessionData.id_especialidad);
+            fetchFilteredPlanifications(sessionData.id_especialidad, `${selectedMonth}-01`);
+        }
+        // Si ya hay una especialidad seleccionada, mantenerla y solo actualizar los datos
+        else if (selectedFilterSpecialty && selectedMonth) {
+            fetchFilteredPlanifications(selectedFilterSpecialty, `${selectedMonth}-01`);
+        }
+    }, [sessionData, selectedMonth]);
 
     // Esta función se encarga de cambiar la especialidad seleccionada en el select.
     const handleSpecialtyChange = (event) => {
-        setSelectedFilterSpecialty(Number(event.target.value)); // Convertir a número por seguridad
+        const newSpecialty = Number(event.target.value);
+        setSelectedFilterSpecialty(newSpecialty);
+        
+        // Cargar datos filtrados inmediatamente
+        if (newSpecialty && selectedMonth) {
+            const dateStr = `${selectedMonth}-01`;
+            fetchFilteredPlanifications(newSpecialty, dateStr);
+        }
+    };
+
+    // Esta función se encarga de filtrar las planificaciones por especialidad y mes.
+    const fetchFilteredPlanifications = async (specialtyId, date) => {
+        try {
+            const response = await axios.get(`http://localhost:5500/gantt/api/get-specialty-date`, {
+                params: {
+                    specialty_id: specialtyId,
+                    date: date
+                },
+                withCredentials: true
+            });
+            
+            if (response.data.planification) {
+                setPlanification(response.data.planification);
+            }
+
+            console.log('Planificaciones filtradas:', response.data.planification);
+        } catch (error) {
+            console.error('Error al cargar planificaciones filtradas:', error);
+        }
+    };
+
+    const fetchFilteredDelivery = async (date) => {
+        try {
+            const response = await axios.get(`http://localhost:5500/gantt/api/get-delivery-date`, {
+                params: {
+                    date: date
+                },
+                withCredentials: true
+            });
+
+            if (response.data.delivery) {
+                setDelivery(response.data.delivery);
+                setReports(response.data.report);
+                setVersion(response.data.version);
+                setOt(response.data.ot);
+                setDeliveryType(response.data.delivery_type);
+            }
+            console.log('Entregas filtradas:', response.data);
+        } catch (error) {
+            console.error('Error al cargar entregas filtradas:', error);
+        }
     };
 
     return (

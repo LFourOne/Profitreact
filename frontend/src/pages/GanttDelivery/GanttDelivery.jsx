@@ -43,12 +43,6 @@ export function GanttDelivery() {
             const response = await axios.get('http://localhost:5500/gantt/delivery', { withCredentials: true });
             
             setProject(response.data.projects);
-            setPlanification(response.data.planification);
-            setReports(response.data.report);
-            setVersion(response.data.version);
-            setSpecialty(response.data.specialty);
-            setOt(response.data.ot);
-            setDeliveryType(response.data.delivery_type);
             setSessionData(response.data.session);
 
         } catch (error) {
@@ -70,8 +64,18 @@ export function GanttDelivery() {
         setDates(generatedDates);
     }, [selectedMonth]);
 
+    useEffect(() => {
+        if (selectedMonth) {
+            const dateStr = `${selectedMonth}-01`;
+            fetchFilteredDelivery(dateStr);
+        }
+    }, [selectedMonth]);
+
     const handleMonthChange = (event) => {
-        setSelectedMonth(event.target.value);
+        const newMonth = event.target.value;
+        setSelectedMonth(newMonth);
+        // Cargar entregas filtradas
+        fetchFilteredDelivery(`${newMonth}-01`);
     };
 
     const handlePreviousMonth = () => {
@@ -79,7 +83,10 @@ export function GanttDelivery() {
         const newDate = new Date(year, month - 1, 1); 
         newDate.setMonth(newDate.getMonth() - 1);
     
-        setSelectedMonth(newDate.toISOString().slice(0, 7));
+        const newMonth = (newDate.toISOString().slice(0, 7));
+        setSelectedMonth(newMonth);
+        // Cargar entregas filtradas
+        fetchFilteredDelivery(`${newMonth}-01`);
     };
     
     const handleNextMonth = () => {
@@ -87,7 +94,10 @@ export function GanttDelivery() {
         const newDate = new Date(year, month - 1, 1);
         newDate.setMonth(newDate.getMonth() + 1);
     
-        setSelectedMonth(newDate.toISOString().slice(0, 7));
+        const newMonth = (newDate.toISOString().slice(0, 7));
+        setSelectedMonth(newMonth);
+        // Cargar entregas filtradas
+        fetchFilteredDelivery(`${newMonth}-01`);
     };
 
     function generateMonthDates(year, month) {
@@ -145,40 +155,90 @@ export function GanttDelivery() {
         setIsEditing(false);
     };
 
+    const fetchFilteredDelivery = async (date) => {
+        try {
+            const response = await axios.get(`http://localhost:5500/gantt/delivery/api/get-delivery`, {
+                params: {
+                    date: date
+                },
+                withCredentials: true
+            });
+
+            if (response.data.planification) {
+                setPlanification(response.data.planification);
+                setSpecialty(response.data.specialty);
+                setReports(response.data.report);
+                setVersion(response.data.version);
+                setOt(response.data.ot);
+                setDeliveryType(response.data.delivery_type);
+            }
+            console.log('Entregas filtradas:', response.data);
+        } catch (error) {
+            console.error('Error al cargar entregas filtradas:', error);
+        }
+    };
+            
+
     const onSubmitAdd = async (data) => {
-        const response = await axios.post('http://localhost:5500/gantt/delivery/insert', data, { withCredentials: true });
-        await fetchApiDelivery();
-        closeModal();
+        try {
+            const response = await axios.post('http://localhost:5500/gantt/delivery/insert', data, { withCredentials: true });
+            await fetchApiDelivery();
+        } catch (error) {
+            console.error('Error al insertar entrega:', error);
+        }
+        finally {
+            const dateStr = `${selectedMonth}-01`;
+            fetchFilteredDelivery(dateStr); // Refresca las entregas filtradas
+            resetAdd();
+            closeModal();
+        }
+            
     };
 
     const editSubmit = async (data) => {
 
-        const formattedData = {
-        newData: {
-            ...data,
-            ot: selectedOts.map(ot => ot.value) // Agrega las OT seleccionadas
-        },
-        oldData: {
-            id_informe: selectedPlan.id_informe,
-            id_version: selectedPlan.id_version,
-            adenda: selectedPlan.adenda,
-            especialidad: selectedPlan.id_especialidad,
-            ot: selectedPlan.ot.map(ot => ot.id_numero_ot),
-            comentarios: selectedPlan.comentarios
-        } // Incluye los datos antiguos
-    };
+        try {
+            const formattedData = {
+                newData: {
+                    ...data,
+                    ot: selectedOts.map(ot => ot.value) // Agrega las OT seleccionadas
+                },
+                oldData: {
+                    id_informe: selectedPlan.id_informe,
+                    id_version: selectedPlan.id_version,
+                    adenda: selectedPlan.adenda,
+                    especialidad: selectedPlan.id_especialidad,
+                    ot: selectedPlan.ot.map(ot => ot.id_numero_ot),
+                    comentarios: selectedPlan.comentarios
+                } // Incluye los datos antiguos
+            };
 
-        // Enviar la solicitud al backend
-        const response = await axios.patch('http://localhost:5500/gantt/delivery/editar', formattedData, { withCredentials: true });
-        await fetchApiDelivery(); // Refresca los datos
-        closeModal(); // Cierra la modal
-
+            // Enviar la solicitud al backend
+            const response = await axios.patch('http://localhost:5500/gantt/delivery/editar', formattedData, { withCredentials: true });
+            await fetchApiDelivery(); // Refresca los datos   
+        } catch (error) {
+            console.error('Error al editar entrega:', error);
+        }
+        finally {
+            const dateStr = `${selectedMonth}-01`;
+            fetchFilteredDelivery(dateStr); // Refresca las entregas filtradas
+            resetEdit();
+            closeModal(); // Cierra la modal
+        }
     };
 
     const deleteSubmit = async (data) => {
-        const response = await axios.delete('http://localhost:5500/gantt/delivery/eliminar', {data, withCredentials: true });
-        await fetchApiDelivery();
-        closeModal();
+        try {
+            const response = await axios.delete('http://localhost:5500/gantt/delivery/eliminar', {data, withCredentials: true });
+            await fetchApiDelivery();
+        } catch (error) {
+            console.error('Error al eliminar entrega:', error);
+        }
+        finally {
+            const dateStr = `${selectedMonth}-01`;
+            fetchFilteredDelivery(dateStr); // Refresca las entregas filtradas
+            closeModal();
+        }
     };
 
     const switchEdit = () => { 
@@ -613,8 +673,8 @@ export function GanttDelivery() {
                                     <span className={styles['span-profile']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
                                     <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     <span className={styles['span-block']}>Tipo de Entrega:</span>
-                                    <select name="informe" id="informe" {...registerAdd('informe', {required: true})}>
-                                        <option value="" disabled selected>Seleccione un tipo de entrega</option>
+                                    <select name="informe" id="informe" defaultValue='' {...registerAdd('informe', {required: true})}>
+                                        <option value="" disabled>Seleccione un tipo de entrega</option>
                                         {reports.map((report) => (
                                             <option key={report.id_informe} value={report.id_informe}>
                                                 {report.nombre}
@@ -622,8 +682,8 @@ export function GanttDelivery() {
                                         ))}
                                     </select>
                                     <span className={styles['span-block']}>Versión:</span>
-                                    <select name="version" id="version" {...registerAdd('version', {required: true})}>
-                                        <option value="" disabled selected>Seleccione la versión</option>
+                                    <select name="version" id="version" defaultValue='' {...registerAdd('version', {required: true})}>
+                                        <option value="" disabled>Seleccione la versión</option>
                                         {version.map((version) => (
                                             <option key={version.id_version} value={version.id_version}>
                                                 {version.version}
@@ -635,8 +695,8 @@ export function GanttDelivery() {
                                         <input type="checkbox" {...registerAdd('adenda')}/>
                                     </div>
                                     <span>Especialidades Involucradas</span>
-                                    <select name="especialidad" id="especialidad" {...registerAdd('especialidad', {required: true})}>
-                                        <option value="" disabled selected>Seleccione una especialidad</option>
+                                    <select name="especialidad" id="especialidad" defaultValue='' {...registerAdd('especialidad', {required: true})}>
+                                        <option value="" disabled>Seleccione una especialidad</option>
                                         {specialty.map((specialty) => (
                                             <option key={specialty.id_especialidad} value={specialty.id_especialidad}>
                                                 {specialty.especialidad}

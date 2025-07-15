@@ -23,15 +23,16 @@ class Delivery:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
-    def select_delivery(cls):
+    def select_delivery(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
                 SELECT gantt_entregas.*, informes.*, proyectos.id_ot, especialidades.especialidad, especialidades.color_especialidad FROM gantt_entregas
                 JOIN informes ON gantt_entregas.id_informe = informes.id_informe
                 JOIN proyectos ON gantt_entregas.id_proyecto = proyectos.id_proyecto
                 JOIN especialidades ON gantt_entregas.id_especialidad = especialidades.id_especialidad
+                WHERE gantt_entregas.fecha BETWEEN %(fecha_inicio)s AND %(fecha_fin)s;
                 """
-        return connectToMySQL(DATA_BASE).query_db(query)
+        return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
     def select_delivery_by_project_date(cls, data):

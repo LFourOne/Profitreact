@@ -18,15 +18,17 @@ class Planning:
         return connectToMySQL(DATA_BASE).query_db(query, data)
 
     @classmethod
-    def select_planning(cls):
+    def select_planning(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
                 SELECT gantt_planificacion.*, gantt_asignados.id_planificacion, gantt_asignados.rut_personal, maestro_personal.iniciales_nombre, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, maestro_personal.color, especialidades.especialidad FROM gantt_planificacion
                 JOIN gantt_asignados ON gantt_planificacion.id_planificacion = gantt_asignados.id_planificacion
                 JOIN maestro_personal ON gantt_asignados.rut_personal = maestro_personal.rut_personal
-                JOIN especialidades ON gantt_planificacion.id_especialidad = especialidades.id_especialidad;
+                JOIN especialidades ON gantt_planificacion.id_especialidad = especialidades.id_especialidad
+                WHERE gantt_planificacion.id_especialidad = %(id_especialidad)s
+                AND gantt_planificacion.fecha BETWEEN %(fecha_inicio)s AND %(fecha_fin)s;
                 """
-        return connectToMySQL(DATA_BASE).query_db(query)
+        return connectToMySQL(DATA_BASE).query_db(query, data)
 
     @classmethod
     def select_planning_id(cls, data):
