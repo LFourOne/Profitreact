@@ -11,6 +11,10 @@ export function HHRegister() {
 
     const navigate = useNavigate();
 
+
+    const [role, setRole] = useState([]);
+    const [HHReportState, setHHReportState] = useState([]);
+
     const [project, setProject] = useState([])
     const [reports, setReports] = useState([])
     const [tasks, setTasks] = useState([])
@@ -51,6 +55,8 @@ export function HHRegister() {
             const response = await axios.get('http://localhost:5500/hh-register', { withCredentials: true });
 
             setProject(response.data.project);
+            setRole(response.data.role);
+            setHHReportState(response.data.hh_report_state);
             console.log(response.data);
 
         }
@@ -133,6 +139,37 @@ export function HHRegister() {
             }
         } finally {
             fetchSchedule(selectedDate);
+        }
+    };
+
+    const handleHHReportStateChange = async () => {
+
+        const confirmed = window.confirm('¿Estás seguro que deseas cambiar el estado del día?');
+        if (!confirmed) {
+            return;
+        }
+        
+        try {
+            const response = await axios.put('http://localhost:5500/hh-register/api/hh-report-state', {}, {
+                withCredentials: true
+            });
+
+            if (response.data?.message) {
+                alert(response.data.message);
+            }
+
+        } catch (error) {
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            }
+            if (error.response && error.response.status === 403) {
+                navigate('/');
+            }
+            if (error.response && error.response.status === 400) {
+                alert(error.response.data.message);
+            }
+        } finally {
+            fetchApi();
         }
     };
 
@@ -442,10 +479,32 @@ export function HHRegister() {
                         </div>
                     </div>
                     <footer>
-                        <button type="submit" className={styles['add-task-button']}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            Agregar Tarea
-                        </button>
+                        {
+                            HHReportState[0]['id_estado'] === 4 ? (
+                                <button type="submit" className={styles['add-task-button']}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Agregar Tarea
+                                </button>
+                            )
+                            :
+                            HHReportState[0]['id_estado'] === 5 && (
+                                <span className={styles['add-task-button-disabled']}>Día Cerrado</span>
+                            )
+                        }
+                        {
+                        (role === 1 || role === 2 || role === 3) && (
+                            <div>
+                                {
+                                HHReportState[0]['id_estado'] === 4 ? (
+                                    <button className={styles['add-task-button']} onClick={handleHHReportStateChange}>Cerrar Día</button>
+                                ) 
+                                :
+                                HHReportState[0]['id_estado'] === 5 && (
+                                    <button className={styles['add-task-button']} onClick={handleHHReportStateChange}>Abrir Día</button>
+                                )
+                                }
+                            </div>
+                        )}
                     </footer>
                 </form>
                 <section className={styles['schedule-section']}>

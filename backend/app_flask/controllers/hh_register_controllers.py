@@ -7,6 +7,7 @@ from app_flask.models.hh_models.task_models import Task
 from app_flask.models.hh_models.project_report_models import ProjectReport
 from app_flask.models.hh_models.project_task_models import ProjectTask
 from app_flask.models.hh_models.hh_report_models import HH_Report
+from app_flask.models.hh_models.hh_report_state_models import HH_Report_State
 from datetime import datetime, time, timedelta
 
 @app.route('/hh-register')
@@ -15,11 +16,16 @@ def hh_register():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
 
+    hh_report_state = HH_Report_State.select()
+
     project = Project.select_projects_by_state()
+
+    role = session['id_rol']
     
     return jsonify({
         'project': project,
-
+        'role': role,
+        'hh_report_state': hh_report_state
     })
 
 @app.route('/hh-register/api/projects/<string:project_id>', methods=['GET'])
@@ -170,4 +176,27 @@ def get_schedule(date):
 
     return jsonify({
         'schedule': schedule
+    })
+
+@app.route('/hh-register/api/hh-report-state', methods=['PUT'])
+def hh_report_state():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    state = HH_Report_State.select()
+
+    state = state[0]['id_estado']
+
+    if state == 4:
+        HH_Report_State.update({'id_estado': 5})
+    elif state == 5:
+        HH_Report_State.update({'id_estado': 4})
+
+    return jsonify({
+        'status': 'success', 
+        'message': 'El estado del registro de horas ha sido actualizado correctamente'
     })
