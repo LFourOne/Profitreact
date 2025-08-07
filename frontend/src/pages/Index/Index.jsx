@@ -144,7 +144,7 @@ export function Index() {
                         Mi Planificación
                     </button>
                     {
-                    (session.id_rol === 1 || session.id_rol === 2 || session.id_rol === 3) && (
+                    (session.id_rol === 1 || session.id_rol === 2 || session.id_rol === 3 || session.id_rol === 4 || session.id_rol === 5) && (
                     <a href="https://patotorres.pythonanywhere.com/" target="_blank" rel="noopener noreferrer" className={styles['my-planification-button']}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
                         Licitaciones
