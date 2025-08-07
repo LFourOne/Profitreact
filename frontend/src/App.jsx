@@ -16,6 +16,7 @@ import { GanttDelivery } from './pages/GanttDelivery/GanttDelivery';
 import { CreateTraining } from './pages/CreateTraining/CreateTraining';
 import { TrainingDetails } from './pages/TrainingDetails/TrainingDetails';
 import { HHRegister } from './pages/HHRegister/HHRegister';
+import { Request } from './pages/Request/Request';
 
 export function App() {
 
@@ -42,6 +43,7 @@ export function App() {
           <Route path="/training" element={<Training />} />
           <Route path="/training/:id_capacitacion" element={<TrainingDetails />} />
           <Route path="/training/create" element={<CreateTraining />} />
+          <Route path="/request" element={<Request />} />
           <Route path='*' element={<Navigate to="/" replace />}></Route>
         </Routes>
     </>

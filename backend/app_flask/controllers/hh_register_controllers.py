@@ -52,7 +52,7 @@ def process_hh_register():
 
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-
+    
     data = request.get_json()
 
     date_str = data.get('date')
@@ -73,7 +73,7 @@ def process_hh_register():
     if max_daily_hours == 0:
         return jsonify({'status': 'error', 'message': 'No se pueden registrar horas en fin de semana'}), 400
 
-    # Se recuperan las horas totales ya registradas para el día actual para validar si el registro no excede el máximo permitido
+    # Se recuperan las horas totales ya registradas para el día actual
     current_hh = HH_Report.select_all({'fecha': date_str, 'rut_personal': session['rut_personal']})
 
     total_day_hh = 0
@@ -82,6 +82,7 @@ def process_hh_register():
         for i in current_hh:
             total_day_hh += i['horas']
 
+    # Guardamos en una variable string la hora de inicio y fin
     start_str = data.get('start-time')
     end_str = data.get('end-time')
 
@@ -93,13 +94,23 @@ def process_hh_register():
     if start_dt >= end_dt:
         return jsonify({'status': 'error', 'message': 'La hora de inicio debe ser menor a la hora de fin'}), 400
 
+    # Recuperamos y validamos que el registro actual no se sobreponga con otro registro
+    overlap = HH_Report.select_between_hours({'rut_personal': session['rut_personal'], 'fecha': date_str, 'inicio': start_str, 'fin': end_str })
+
+    if overlap:
+        return jsonify({'status': 'error', 'message': f'No puedes registrar HH en un horario ya registrado previamente. ({start_str} - {end_str})'}), 400
+
     total_hours = (end_dt - start_dt).total_seconds() / 3600
 
-    lunch_start = datetime.strptime("13:30", fmt)
-    lunch_end = datetime.strptime("14:30", fmt)
+    """
+    Se define 13:31 y 14:29 porque el select es de cada 30 minutos, por lo tanto, no es necesario realizar una validación
+    si la hora de inicio o fin está dentro de 13:30 o 14:30, ya que no se pueden registrar horas en ese rango
+    """
+    lunch_start = datetime.strptime("13:31", fmt)
+    lunch_end = datetime.strptime("14:29", fmt)
 
     if start_dt < lunch_end and end_dt > lunch_start:
-        total_hours -= 1
+        return jsonify({'status': 'error', 'message': 'No puedes registrar HH en horario de colación'}), 400
     
     hh_data = {
         'id_proyecto': data.get('project'),

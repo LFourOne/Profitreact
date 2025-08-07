@@ -35,7 +35,7 @@ class ProjectTask:
     def get_all_by_project(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT * FROM profit2.proyecto_tarea
+                SELECT * FROM proyecto_tarea
                 WHERE id_proyecto = %(id_proyecto)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)

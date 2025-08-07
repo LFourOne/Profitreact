@@ -97,4 +97,4 @@ def logout():
     
     session.clear()
     
-    return jsonify({'status': 'success', 'message': 'success'}), 200
+    return jsonify({'status': 'success', 'message': 'success'}), 200 

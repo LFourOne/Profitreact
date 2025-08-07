@@ -334,6 +334,7 @@ export function Gantt() {
         if (sessionData.id_especialidad && !selectedFilterSpecialty) {
             setSelectedFilterSpecialty(sessionData.id_especialidad);
             fetchFilteredPlanifications(sessionData.id_especialidad, `${selectedMonth}-01`);
+            fetchFilteredDelivery(`${selectedMonth}-01`);
         }
         // Si ya hay una especialidad seleccionada, mantenerla y solo actualizar los datos
         else if (selectedFilterSpecialty && selectedMonth) {
@@ -341,7 +342,6 @@ export function Gantt() {
         }
     }, [sessionData, selectedMonth]);
 
-    // Esta función se encarga de cambiar la especialidad seleccionada en el select.
     const handleSpecialtyChange = (event) => {
         const newSpecialty = Number(event.target.value);
         setSelectedFilterSpecialty(newSpecialty);

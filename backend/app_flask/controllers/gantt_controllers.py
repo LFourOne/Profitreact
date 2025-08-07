@@ -364,7 +364,6 @@ def delete_planification():
     planification_id = Planning.select_planning_id(data_to_planification)
     planification_id = planification_id[0]['id_planificacion']
     
-
     # Primero partimos eliminando los asignados de la planificación para no tener problemas con las llaves foráneas
 
     # Eliminamos todos los asignados de la planificación

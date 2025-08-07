@@ -79,6 +79,7 @@ export function NavBar() {
                       )
                     }
                     <NavLink to="/training" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
+                    <NavLink to="/request" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Solicitudes</NavLink>
                 </div>
             </div>
             {

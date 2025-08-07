@@ -35,6 +35,17 @@ class HH_Report:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
+    def select_between_hours(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT * FROM registro_hh
+                WHERE rut_personal = %(rut_personal)s AND fecha = %(fecha)s AND inicio < %(fin)s AND fin > %(inicio)s
+                LIMIT 1;
+                """
+        results = connectToMySQL(DATA_BASE).query_db(query, data)
+        return bool(results)
+    
+    @classmethod
     def select_weekly(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
