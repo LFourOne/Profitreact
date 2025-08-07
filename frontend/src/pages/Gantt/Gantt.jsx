@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidvd4 } from 'uuid';
-import axios from 'axios';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router';
 import styles from './Gantt.module.css';
+import apiClient from '../../services/api';
 
 export function Gantt() {
     
@@ -41,7 +41,7 @@ export function Gantt() {
     const fetchApi = async () => {
         try {
 
-            const response = await axios.get('http://localhost:5500/gantt', { withCredentials: true });
+            const response = await apiClient.get('/gantt');
             
             setArray(response.data.projects);
             setStaff(response.data.staff);
@@ -181,7 +181,7 @@ export function Gantt() {
                 staff: staffArray, // Cambia "staff" a un array
             };
 
-            const response = await axios.post('http://localhost:5500/gantt/planificacion', formattedData, { withCredentials: true });
+            const response = await apiClient.post('/gantt/planificacion', formattedData);
 
             if (selectedFilterSpecialty && selectedMonth) {
                 const dateStr = `${selectedMonth}-01`;
@@ -217,7 +217,7 @@ export function Gantt() {
             };
 
             // Enviar la solicitud al backend
-            const response = await axios.patch('http://localhost:5500/gantt/editar', formattedData, { withCredentials: true });
+            const response = await apiClient.patch('/gantt/editar', formattedData);
 
             if (selectedFilterSpecialty && selectedMonth) {
                 const dateStr = `${selectedMonth}-01`;
@@ -238,7 +238,7 @@ export function Gantt() {
 
     const deleteSubmit = async (data) => {
         try {
-            const response = await axios.delete('http://localhost:5500/gantt/eliminar', {data, withCredentials: true });
+            const response = await apiClient.delete('/gantt/eliminar', { data });
 
             if (selectedFilterSpecialty && selectedMonth) {
                 const dateStr = `${selectedMonth}-01`;
@@ -259,7 +259,7 @@ export function Gantt() {
     };
 
     const customizeSubmit = async (data) => {
-        const response = await axios.patch('http://localhost:5500/gantt/customize', data, { withCredentials: true });
+        const response = await apiClient.patch('/gantt/customize', data);
         await fetchApi();
         closeModal();
     };
@@ -356,12 +356,11 @@ export function Gantt() {
     // Esta función se encarga de filtrar las planificaciones por especialidad y mes.
     const fetchFilteredPlanifications = async (specialtyId, date) => {
         try {
-            const response = await axios.get(`http://localhost:5500/gantt/api/get-specialty-date`, {
+            const response = await apiClient.get(`/gantt/api/get-specialty-date`, {
                 params: {
                     specialty_id: specialtyId,
                     date: date
-                },
-                withCredentials: true
+                }
             });
             
             if (response.data.planification) {
@@ -376,11 +375,10 @@ export function Gantt() {
 
     const fetchFilteredDelivery = async (date) => {
         try {
-            const response = await axios.get(`http://localhost:5500/gantt/api/get-delivery-date`, {
+            const response = await apiClient.get(`/gantt/api/get-delivery-date`, {
                 params: {
                     date: date
-                },
-                withCredentials: true
+                }
             });
 
             if (response.data.delivery) {

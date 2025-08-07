@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './Profile.module.css';
 
 export function Profile() {
@@ -15,7 +15,7 @@ export function Profile() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get(`http://localhost:5500/profile/${id}`, {withCredentials: true});
+            const response = await apiClient.get(`/profile/${id}`);
             setProfile(response.data.profile);
             console.log(response.data);
         } 

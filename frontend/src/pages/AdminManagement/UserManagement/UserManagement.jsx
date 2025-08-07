@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import apiClient from '../../../services/api';
 import styles from './UserManagement.module.css';
 import logo from '../../../assets/icon1.png'
 
@@ -33,7 +33,7 @@ export function UserManagement() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get('http://localhost:5500/admin/user-management', {withCredentials: true});
+            const response = await apiClient.get('/admin/user-management');
             setStaff(response.data.staff);
             setRole(response.data.role);
             setSpecialty(response.data.specialty);
@@ -92,13 +92,7 @@ export function UserManagement() {
 
     const onSubmitAdd = async (data) => {
         try {
-            const response = await axios.post('http://localhost:5500/admin/user-management/register/process', data, 
-                {
-                    withCredentials: true, 
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+            const response = await apiClient.post('/admin/user-management/register/process', data);
 
             console.log(response.data);
         } 
@@ -126,13 +120,7 @@ export function UserManagement() {
     const onSubmitEdit = async (data) => {
         try {
             console.log(data);
-            const response = await axios.patch(`http://localhost:5500/admin/user-management/edit/process`, data, 
-                {
-                    withCredentials: true,
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+            const response = await apiClient.patch(`/admin/user-management/edit/process`, data);
 
             console.log(data);
             console.log(response.data);

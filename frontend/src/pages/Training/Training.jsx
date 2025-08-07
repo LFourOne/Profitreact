@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './Training.module.css';
 import { TrainingCard } from '../../components/TrainingCard/TrainingCard';
 
@@ -16,7 +16,7 @@ export function Training() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get('http://localhost:5500/training', { withCredentials: true });
+            const response = await apiClient.get('/training');
             setTraining(response.data.trainings);
             setRol(response.data.session);
             setLoading(false);

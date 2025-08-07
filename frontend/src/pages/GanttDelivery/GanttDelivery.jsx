@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { MultiSelect } from "react-multi-select-component";
-import axios from 'axios';
+import apiClient from '../../services/api';
 import Modal from 'react-modal';
 import { useNavigate } from 'react-router';
 import styles from './GanttDelivery.module.css';
@@ -39,9 +39,9 @@ export function GanttDelivery() {
 
     const fetchApiDelivery = async () => {
         try {
-            
-            const response = await axios.get('http://localhost:5500/gantt/delivery', { withCredentials: true });
-            
+
+            const response = await apiClient.get('/gantt/delivery');
+
             setProject(response.data.projects);
             setSessionData(response.data.session);
 
@@ -157,11 +157,10 @@ export function GanttDelivery() {
 
     const fetchFilteredDelivery = async (date) => {
         try {
-            const response = await axios.get(`http://localhost:5500/gantt/delivery/api/get-delivery`, {
+            const response = await apiClient.get(`/gantt/delivery/api/get-delivery`, {
                 params: {
                     date: date
-                },
-                withCredentials: true
+                }
             });
 
             if (response.data.planification) {
@@ -181,7 +180,7 @@ export function GanttDelivery() {
 
     const onSubmitAdd = async (data) => {
         try {
-            const response = await axios.post('http://localhost:5500/gantt/delivery/insert', data, { withCredentials: true });
+            const response = await apiClient.post('/gantt/delivery/insert', data);
             await fetchApiDelivery();
         } catch (error) {
             console.error('Error al insertar entrega:', error);
@@ -214,7 +213,7 @@ export function GanttDelivery() {
             };
 
             // Enviar la solicitud al backend
-            const response = await axios.patch('http://localhost:5500/gantt/delivery/editar', formattedData, { withCredentials: true });
+            const response = await apiClient.patch('/gantt/delivery/editar', formattedData);
             await fetchApiDelivery(); // Refresca los datos   
         } catch (error) {
             console.error('Error al editar entrega:', error);
@@ -229,7 +228,7 @@ export function GanttDelivery() {
 
     const deleteSubmit = async (data) => {
         try {
-            const response = await axios.delete('http://localhost:5500/gantt/delivery/eliminar', {data, withCredentials: true });
+            const response = await apiClient.delete('/gantt/delivery/eliminar', { data });
             await fetchApiDelivery();
         } catch (error) {
             console.error('Error al eliminar entrega:', error);
@@ -252,14 +251,14 @@ export function GanttDelivery() {
     };
 
     const completeSubmit = async (data) => {
-        const response = await axios.patch('http://localhost:5500/gantt/delivery/completar', data, { withCredentials: true });
+        const response = await apiClient.patch('/gantt/delivery/completar', data);
         await fetchApiDelivery();
         closeModal();
     };
 
     const customizeSubmit = async (data) => {
 
-        const response = await axios.patch('http://localhost:5500/gantt/delivery/customize', data, { withCredentials: true });
+        const response = await apiClient.patch('/gantt/delivery/customize', data);
         await fetchApiDelivery();
         closeModal();
     };

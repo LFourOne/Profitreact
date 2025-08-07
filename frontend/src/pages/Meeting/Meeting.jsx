@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './Meeting.module.css';
 
 export function Meeting() {
@@ -19,8 +19,8 @@ export function Meeting() {
 
         try {
 
-            const response = await axios.get('http://localhost:5500/meeting', { withCredentials: true });
-            
+            const response = await apiClient.get('/meeting');
+
             setSessionData(response.data.session);
             setMeetingData(response.data.meetings);
             setProjects(response.data.projects);
@@ -50,12 +50,8 @@ export function Meeting() {
             return;
         }
 
-        const response = await axios.delete('http://localhost:5500/meeting/delete-meeting', {
+        const response = await apiClient.delete('/meeting/delete-meeting', {
             data: { id_reunion },
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
         });
         await fetchApi();
         resetDelete();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { set, useForm } from 'react-hook-form';
-import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import apiClient from '../../../../services/api';
 import styles from './Task.module.css';
 import logo from '../../../../assets/icon1.png'
 
@@ -23,7 +23,7 @@ export function Task() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get('http://localhost:5500/admin/task', { withCredentials: true });
+            const response = await apiClient.get('/admin/task');
 
             setTasks(response.data.tasks);
             setTasksTypes(response.data.task_types);
@@ -53,12 +53,7 @@ export function Task() {
         }
         
         try {
-            const response = await axios.post('http://localhost:5500/admin/task/add/process', data, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await apiClient.post('/admin/task/add/process', data);
         } 
         catch (error) {
             if (error.response && error.response.status === 401) {
@@ -83,12 +78,7 @@ export function Task() {
         }
 
         try {
-            const response = await axios.patch('http://localhost:5500/admin/task/edit/process', data, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await apiClient.patch('/admin/task/edit/process', data);
         }
         catch (error) {
             if (error.response && error.response.status === 401) {
@@ -113,12 +103,8 @@ export function Task() {
         }
 
         try {
-            const response = await axios.delete('http://localhost:5500/admin/task/delete/process', {
-                data: { data },
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                },
+            const response = await apiClient.delete('/admin/task/delete/process', {
+                data: { data }
             });
 
             fetchApi();

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { set, useForm } from 'react-hook-form';
-import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import apiClient from '../../../../services/api';
 import styles from './ProjectReportTask.module.css';
 import logo from '../../../../assets/icon1.png'
 
@@ -33,7 +33,7 @@ export function ProjectTaskReport() {
     const fetchApi = async () => {
         try {
 
-            const response = await axios.get('http://localhost:5500/admin/project-report-task', { withCredentials: true });
+            const response = await apiClient.get('/admin/project-report-task');
 
             setProject(response.data.project);
             setReport(response.data.report);
@@ -108,8 +108,7 @@ export function ProjectTaskReport() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5500/admin/project-report-task/add/process', data, {
-                withCredentials: true,
+            const response = await apiClient.post('/admin/project-report-task/add/process', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -135,8 +134,7 @@ export function ProjectTaskReport() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5500/admin/project-report-task/add-report-version/process', data, {
-                withCredentials: true,
+            const response = await apiClient.post('/admin/project-report-task/add-report-version/process', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import logo from '../../assets/solutiva-logo-solo.png'
 import styles from './NavBar.module.css';
 
@@ -21,7 +21,7 @@ export function NavBar() {
 
     const fetchApi = async () => {
       try {
-          const response = await axios.get('http://localhost:5500/navbar', { withCredentials: true });
+          const response = await apiClient.get('/navbar');
           setRole(response.data.role);
       }
       catch (error) {

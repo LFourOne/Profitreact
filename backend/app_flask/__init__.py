@@ -11,8 +11,6 @@ app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
 app.config["SESSION_COOKIE_SECURE"] = False
 cors = CORS(app, origins=[
     "http://localhost:5173",
-    "http://190.121.30.69",
-    "http://190.121.30.69:80"
     ], supports_credentials=True)
 
 UPLOAD_FOLDER = os.path.join(app.root_path, 'uploads')

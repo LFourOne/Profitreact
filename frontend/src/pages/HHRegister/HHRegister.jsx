@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './HHRegister.module.css';
 import logo from '../../assets/icon1.png'
 
@@ -52,7 +52,7 @@ export function HHRegister() {
     const fetchApi = async () => {
         try {
 
-            const response = await axios.get('http://localhost:5500/hh-register', { withCredentials: true });
+            const response = await apiClient.get('/hh-register');
 
             setProject(response.data.project);
             setRole(response.data.role);
@@ -88,12 +88,7 @@ export function HHRegister() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5500/hh-register/process', data, {
-                withCredentials: true,
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+            const response = await apiClient.post('/hh-register/process', data);
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 alert(error.response.data.message);
@@ -123,12 +118,8 @@ export function HHRegister() {
         }
 
         try {
-            const response = await axios.delete('http://localhost:5500/hh-register/delete', {
-                data: {id_registro_hh},
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true 
+            const response = await apiClient.delete('/hh-register/delete', {
+                data: {id_registro_hh}
             });
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -150,9 +141,7 @@ export function HHRegister() {
         }
         
         try {
-            const response = await axios.put('http://localhost:5500/hh-register/api/hh-report-state', {}, {
-                withCredentials: true
-            });
+            const response = await apiClient.put('/hh-register/api/hh-report-state', {});
 
             if (response.data?.message) {
                 alert(response.data.message);
@@ -179,7 +168,7 @@ export function HHRegister() {
 
             if (projectID) {
                 try {
-                    const response = await axios.get(`http://localhost:5500/hh-register/api/projects/${projectID}`, { withCredentials: true });
+                    const response = await apiClient.get(`/hh-register/api/projects/${projectID}`);
 
                     setReports(response.data.reports);
                     setTasks(response.data.tasks);
@@ -195,7 +184,7 @@ export function HHRegister() {
     const fetchSchedule = async (date) => {
         if (date) {
             try {
-                const response = await axios.get(`http://localhost:5500/hh-register/api/schedule/${date}`, { withCredentials: true });
+                const response = await apiClient.get(`/hh-register/api/schedule/${date}`);
                 setSchedule(response.data.schedule);
                 console.log('Schedule data:', response.data.schedule);
             } catch (error) {

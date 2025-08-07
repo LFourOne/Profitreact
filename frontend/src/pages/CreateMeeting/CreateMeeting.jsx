@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate } from 'react-router';
 import Select from 'react-select';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './CreateMeeting.module.css';
 
 export function CreateMeeting() {
@@ -34,7 +34,7 @@ export function CreateMeeting() {
 
         try {
 
-        const response = await axios.get('http://localhost:5500/meeting/create-meeting', { withCredentials: true });
+        const response = await apiClient.get('/meeting/create-meeting');
         
         setProjects(response.data.projects);
         setMeetingData(response.data.meetings);
@@ -67,12 +67,7 @@ export function CreateMeeting() {
             return;
         }
 
-        const response = await axios.post('http://localhost:5500/meeting/create-meeting/process', data, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
+        const response = await apiClient.post('/meeting/create-meeting/process', data);
         await fetchApi();
         
         navigate(`/meeting/minute/${response.data.meeting}`)

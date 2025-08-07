@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import Select from 'react-select'
-import axios from 'axios';
+import apiClient from '../../services/api';
 import Modal from 'react-modal';
 import styles from './Minute.module.css';
 
@@ -44,8 +44,8 @@ export function Minute() {
 
         try {
 
-            const response = await axios.get(`http://localhost:5500/reports/minute/${id_reunion}`, { withCredentials: true });
-            
+            const response = await apiClient.get(`/reports/minute/${id_reunion}`);
+
             setSessionData(response.data.session);
             setStaff(response.data.name_and_last_name);
             setProjects(response.data.projects);
@@ -82,12 +82,7 @@ export function Minute() {
 
         data.id_reunion = id_reunion;
 
-        const response = await axios.post('http://localhost:5500/meetings/minute/add-commitment', data, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.post('/meetings/minute/add-commitment', data);
 
         await fetchApi();
         resetAdd();
@@ -102,12 +97,7 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.post('http://localhost:5500/meetings/minute/complete-commitment', {id_compromiso}, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.post('/meetings/minute/complete-commitment', {id_compromiso});
 
         await fetchApi();
         resetComplete();
@@ -120,12 +110,8 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.patch('http://localhost:5500/meetings/minute/edit-commitment', data, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.patch('/meetings/minute/edit-commitment', data);
+
         await fetchApi();
         closeModal();
     }
@@ -139,13 +125,9 @@ export function Minute() {
             return;
         }
 
-        const response = await axios.delete('http://localhost:5500/meetings/minute/delete-commitment', {
-            data: {id_compromiso},
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.delete('/meetings/minute/delete-commitment', {
+            data: {id_compromiso}
+        });
 
         await fetchApi();
         resetDelete();
@@ -160,12 +142,7 @@ export function Minute() {
 
         data.id_reunion = id_reunion;
 
-        const response = await axios.post('http://localhost:5500/meetings/minute/add-agreement', data, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.post('/meetings/minute/add-agreement', data);
 
         await fetchApi();
         resetAgreement();
@@ -180,12 +157,7 @@ export function Minute() {
 
         data.id_reunion = id_reunion;
 
-        const response = await axios.post('http://localhost:5500/meetings/minute/add-topic', data, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.post('/meetings/minute/add-topic', data);
 
         await fetchApi();
         resetTopic();
@@ -200,12 +172,7 @@ export function Minute() {
         
         event.preventDefault();
 
-        const response = await axios.patch('http://localhost:5500/meetings/minute/close-meeting', {id_reunion}, {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        })
+        const response = await apiClient.patch('/meetings/minute/close-meeting', {id_reunion});
 
         await fetchApi();
         

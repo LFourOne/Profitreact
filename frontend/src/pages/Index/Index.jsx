@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './Index.module.css';
 import logo from '../../assets/icon1.png'
 import { useState, useEffect } from 'react';
@@ -25,8 +25,8 @@ export function Index() {
 
         try {
 
-        const response = await axios.get('http://localhost:5500/index', { withCredentials: true });
-        
+        const response = await apiClient.get('/index');
+
         setCommitments(response.data.commitments);
         setTeam(response.data.team);
         setPlanification(response.data.planification);
@@ -55,12 +55,7 @@ export function Index() {
         }
 
         try {
-            await axios.post('http://localhost:5500/logout', {}, {
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                withCredentials: true 
-            });
+            await apiClient.post('/logout', {});
         }
         catch (error) {
             console.error('Error al cerrar sesión:', error);
@@ -148,6 +143,13 @@ export function Index() {
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f2937" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
                         Mi Planificación
                     </button>
+                    {
+                    (session.id_rol === 1 || session.id_rol === 2 || session.id_rol === 3) && (
+                    <a href="https://patotorres.pythonanywhere.com/" target="_blank" rel="noopener noreferrer" className={styles['my-planification-button']}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f2937" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+                        Licitaciones
+                    </a>
+                    )}
                     <button className={styles['logout-button']} onClick={logout}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#dc2626" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 3H6a2 2 0 0 0-2 2v14c0 1.1.9 2 2 2h4M16 17l5-5-5-5M19.8 12H9"/></svg>
                         Cerrar Sesión

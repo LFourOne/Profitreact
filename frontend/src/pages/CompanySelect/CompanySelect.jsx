@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './CompanySelect.module.css';
 import groupLogo from '../../assets/icon1.png'
 
@@ -12,12 +12,7 @@ export function CompanySelect(){
 
         e.preventDefault();
 
-        const response = await axios.post('http://localhost:5500/company/process', data, {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await apiClient.post('/company/process', data);
 
         if (response.status === 200) {
             navigate('/login');

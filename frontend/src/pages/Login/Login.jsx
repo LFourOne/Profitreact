@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import styles from './Login.module.css';
 import logoC from '../../assets/solutiva-consultores-logo.png'
 import logoS from '../../assets/solutiva-sistemas-logo.png'
@@ -16,10 +16,9 @@ export function Login() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get('http://localhost:5500/login', { withCredentials: true });
+            const response = await apiClient.get('/login');
     
             setCompany(response.data.company);
-    
             setLoading(false);
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -40,8 +39,7 @@ export function Login() {
             formData.append('email', data.email);
             formData.append('password', data.password);
     
-            const response = await axios.post('http://localhost:5500/login/process', formData, {
-                withCredentials: true,
+            const response = await apiClient.post('/login/process', formData, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
-import axios from 'axios';
+import apiClient from '../../services/api';
 import Select from 'react-select'
 import styles from './TrainingDetails.module.css';
 
@@ -26,7 +26,7 @@ export function TrainingDetails() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get(`http://localhost:5500/training/${id_capacitacion}`, { withCredentials: true });
+            const response = await apiClient.get(`/training/${id_capacitacion}`);
 
             setTraining(response.data.trainings);
             setAssistant(response.data.assistants);
@@ -67,7 +67,7 @@ export function TrainingDetails() {
 
     const switchEdit = async () => {
         if (!staff.length) {
-            const response = await axios.get('http://localhost:5500/training/get-staff', { withCredentials: true });
+            const response = await apiClient.get('/training/get-staff');
             setStaff(response.data.staff);
             console.log(response.data.staff);
         }
@@ -77,12 +77,7 @@ export function TrainingDetails() {
     const onSubmitEdit = async (data) => {
         try {
             console.log(data);
-            const response = await axios.patch(`http://localhost:5500/training/edit/${id_capacitacion}`, data, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true 
-            });
+            const response = await apiClient.patch(`/training/edit/${id_capacitacion}`, data);
 
             setIsEditing(false);
             await fetchApi();
@@ -103,12 +98,7 @@ export function TrainingDetails() {
         }
 
         try {
-            const response = await axios.patch(`http://localhost:5500/training/complete/${id_capacitacion}`, {}, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true
-            });
+            const response = await apiClient.patch(`/training/complete/${id_capacitacion}`, {});
 
             await fetchApi();
 
@@ -128,12 +118,7 @@ export function TrainingDetails() {
             return;
         }
         try {
-            const response = await axios.delete(`http://localhost:5500/training/delete/${id_capacitacion}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true
-            });
+            const response = await apiClient.delete(`/training/delete/${id_capacitacion}`);
             navigate('/training');
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -158,11 +143,7 @@ export function TrainingDetails() {
     const onSubmitAttendance = async (e, id_capacitacion, session) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:5500/training/register-attendance`, {id_capacitacion, session}, {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true });
+            const response = await apiClient.post(`/training/register-attendance`, {id_capacitacion, session});
                 
                 await fetchApi();
 
@@ -183,13 +164,7 @@ export function TrainingDetails() {
         };
         
         try {
-            const response = await axios.delete(`http://localhost:5500/training/remove-attendance`, {
-                data: {id_capacitacion, rut_assistant},
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                withCredentials: true 
-            });
+            const response = await apiClient.delete(`/training/remove-attendance`, {data: {id_capacitacion, rut_assistant},});
                 await fetchApi();
             
         } catch (error) {
@@ -217,11 +192,10 @@ export function TrainingDetails() {
         formData.append('file', data.file[0]);
         formData.append('id_capacitacion', id_capacitacion);
 
-        const response = await axios.patch('http://localhost:5500/training/upload-file', formData, {
+        const response = await apiClient.patch('/training/upload-file', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },
-            withCredentials: true,
         });
 
         await fetchApi();
@@ -306,7 +280,7 @@ export function TrainingDetails() {
                                             <input type="date" defaultValue={formatDateEdit(training[0].fecha)} {...registerEdit('date', {required: true})} />
                                         </div>
                                         <div>
-                                        {
+                                            {
                                                 training[0].id_estado === 2 ? 
                                                 (
                                                     <span id={styles['complete-state']}>Completado</span>

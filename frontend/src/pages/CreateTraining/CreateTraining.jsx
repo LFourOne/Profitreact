@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select'
-import axios from 'axios';
+import apiClient from '../../services/api';
 
 export function CreateTraining() {
 
@@ -17,7 +17,7 @@ export function CreateTraining() {
 
     const fetchApi = async () => {
         try {
-            const response = await axios.get('http://localhost:5500/training/create', { withCredentials: true });
+            const response = await apiClient.get('/training/create');
             setStaff(response.data.staff);
             console.log(response.data);
             setLoading(false);
@@ -46,12 +46,7 @@ export function CreateTraining() {
             return;
         }
         
-        const response = await axios.post('http://localhost:5500//training/create/process', data, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true 
-        });
+        const response = await apiClient.post('/training/create/process', data);
 
         reset();
         navigate('/training');

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../../services/api'
 import styles from './Request.module.css';
 
 export function Request() {
@@ -16,7 +16,7 @@ export function Request() {
                         <p>¿Necesitas solicitar recursos, permisos o hacer una petición administrativa? Completa nuestro formulario de solicitudes.</p>
                     </header>
                     <div>
-                        <a href="https://forms.office.com/Pages/ResponsePage.aspx?id=3Nzh3jFSK0-7AeiXkSWejFOv_brU-AtDkT4wBIFwrERUNDVQTlMxWlZWNllCTklON0RIOUQ1UjZMUy4u" target='_blank' referrerPolicy='no-referrer'>Abrir formulario</a>
+                        <a href="https://forms.office.com/r/jiMT86T7HL" target='_blank' referrerPolicy='no-referrer'>Abrir formulario</a>
                     </div>
                 </section>
             </main>
