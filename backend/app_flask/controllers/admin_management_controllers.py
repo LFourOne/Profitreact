@@ -300,3 +300,16 @@ def delete_task_process():
     Task.delete_task(task_data)
 
     return jsonify({'status': 'success', 'message': 'Tarea eliminada correctamente'}), 200
+
+@app.route('/admin/clients-management')
+def clients_management():
+    
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    return jsonify({
+        'message': 'Success'
+    }), 200

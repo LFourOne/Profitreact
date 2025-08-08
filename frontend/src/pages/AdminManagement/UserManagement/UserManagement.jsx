@@ -176,7 +176,7 @@ export function UserManagement() {
                 <section className={styles['header-section']}>
                     <div className={styles['header-section-text-container']}>
                         <h1>Mantenedor de Personas</h1>
-                        <p>Administra y gestiona todos los usuarios del Profit</p>
+                        <p>Administra y gestiona todos los usuarios de Profit</p>
                     </div>
                     <div className={styles['header-section-logo-container']}>
                         <img src={logo} className={styles['logo']} alt="Logo de Profit" />

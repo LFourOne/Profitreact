@@ -87,14 +87,6 @@ export function Profile() {
                         <label>Iniciales</label>
                         <span>{profile.iniciales_nombre}</span>
                     </div>
-                    <div>
-                        <label>Fecha de Contratación</label>
-                        <span>{formatDate(profile.fecha_contratacion)}</span>
-                    </div>
-                    <div>
-                        <label>Fecha de Nacimiento</label>
-                        <span>{formatDate(profile.fecha_nacimiento)}</span>
-                    </div>
                 </div>
             </main>
         )}

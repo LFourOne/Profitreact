@@ -4,6 +4,7 @@ import { CompanySelect } from './pages/CompanySelect/CompanySelect';
 import { Login } from './pages/Login/Login';
 import { UserManagement } from './pages/AdminManagement/UserManagement/UserManagement';
 import { ProjectTaskReport } from './pages/AdminManagement/HHManagement/ProjectReportTask/ProjectReportTask';
+import { ClientManagement } from './pages/AdminManagement/ClientManagement/ClientManagement';
 import { Task } from './pages/AdminManagement/HHManagement/Task/Task';
 import { Profile } from './pages/Profile/Profile';
 import { Index } from './pages/Index/Index';
@@ -32,6 +33,7 @@ export function App() {
           <Route path="/admin/user-management" element={<UserManagement />} />
           <Route path="/admin/project-report-task" element={<ProjectTaskReport />} />
           <Route path="/admin/task" element={<Task />} />
+          <Route path="/admin/clients-management" element={<ClientManagement />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/index" element={<Index />} />
           <Route path="/gantt" element={<Gantt />} />
