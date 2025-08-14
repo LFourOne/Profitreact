@@ -7,10 +7,21 @@ class Project:
         self.nombre = data.get('nombre')
         self.id_tipo_estudio = data.get('id_tipo_estudio')
         self.rut_mandante = data.get('rut_mandante')
-        self.coordinador = data.get('coordinador')
+        self.jefe_proyectos = data.get('jefe_proyectos')
         self.fecha_inicio = data.get('fecha_inicio')
         self.fecha_termino = data.get('fecha_termino')
+        self.id_ot = data.get('id_ot')
         self.estado = data.get('estado')
+
+    @classmethod
+    def select_all(cls):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT proyectos.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, tipos_estudio.descripcion_tipo_estudio FROM proyectos
+                JOIN maestro_personal ON proyectos.jefe_proyectos = maestro_personal.rut_personal
+                LEFT JOIN tipos_estudio ON proyectos.id_tipo_estudio = tipos_estudio.id_tipo_estudio
+                """
+        return connectToMySQL(DATA_BASE).query_db(query)
 
     @classmethod
     def select_projects_by_state(cls):

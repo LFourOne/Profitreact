@@ -1,0 +1,512 @@
+.main{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    min-height: 100vh;
+    margin: 0 auto;
+    margin-top: 90px;
+    padding-bottom: 30px;
+}
+/* Header Section and Buttons */
+
+.header-section{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 250px;
+    padding: 40px 100px 50px 50px;
+    margin-top: 50px;
+    border-radius: 16px;
+    background: linear-gradient(150deg, #3b5513, #73a727);
+    box-sizing: border-box;
+}
+.header-section-logo-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.logo{
+    width: 150px;
+    height: 150px;
+    margin-bottom: 8px;
+    object-fit: contain;
+}
+.logo:hover{
+    transform: scale(1.02);
+    transition: 0.2s ease-in-out;
+}
+.header-section h1{
+    height: 24px;
+    font-size: 32px;
+    font-weight: bold;
+    color: white;
+}
+.header-section p{
+    font-size: 20px;
+    color: #f0fdf4;
+}
+
+/* Content Section */
+
+.content-section{
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 800px;
+    margin-top: 30px;
+    padding: 30px;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+}
+.content-section header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+}
+.content-section header .header-title{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.content-section header .header-title h1{
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f2937;
+}
+.content-section header .header-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+}
+.content-section header div .add-client-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    width: 180px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    background-color: #16a34a;
+    font-size: 14px;
+    font-weight: bold;
+    gap: 8px;
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+}
+.content-section header div .add-client-button:hover{
+    background-color: #15803d;
+}
+.content-section .content{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 700px;
+    max-height: 720px;
+    gap: 16px;
+    margin-top: 20px;
+    overflow-y: auto;
+}
+.content-section .content table{
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #d4d4d4;
+}
+.content-section .content table thead{
+    height: 50px;
+    border: 1px solid lightgray;
+}
+.content-section .content table thead tr th{
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: 500;
+    color: #6b7280;
+    text-align: left;
+    padding: 0px 0px 0px 20px;
+}
+.content-section .content table tbody tr {
+    cursor: pointer;
+}
+.content-section .content table tbody tr td{
+    box-sizing: border-box;
+    font-size: 16px;
+    height: 150px;
+    padding: 0px 0px 0px 20px;
+    border-bottom: 1px solid lightgray;
+    text-align: left;
+}
+.content-section .content table tbody tr:hover{
+    background-color: #f9fafb;
+    transition: 0.1s ease-in-out;
+}
+.content-section .content table tbody tr td a{
+    color: #16a34a;
+    text-decoration: none;
+}
+.content-section .content table tbody tr td a:hover{
+    color: #166534;
+    text-decoration: underline;
+}
+
+/* Modal */
+
+.modal-overlay{
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5000;
+}
+.modal{
+    position: relative;
+    box-sizing: border-box;
+    width: 1000px;
+    max-width: 1000px;
+    height: 570px;
+    padding: 30px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 5001;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Modal View, Edit & Create */
+
+.modal .view header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #d4d4d4;
+}
+.modal .view header .view-left-container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 60%;
+}
+.modal .view header .view-right-container .view-edit-buttons{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    width: 400px;
+    align-items: center;
+    gap: 16px;
+}
+.modal .view header .view-right-container .view-edit-button-primary{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 150px;
+    height: 42px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #16a34a;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+.modal .view header .view-right-container .view-edit-button-primary:hover{
+    background-color: #15803d;
+    transition: 0.1s ease-in-out;
+}
+.modal .view header .view-right-container .view-edit-button-secondary{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 150px;
+    height: 42px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #1f2937;
+    background-color: white;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+.modal .view header .view-right-container .view-edit-button-secondary:hover {
+    background-color: #f3f4f6;
+    transition: 0.1s ease-in-out;
+}
+
+/* Modal de Visualización */
+
+.modal .view .view-content .view-info-content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0px 0px 0px 20px;
+    margin-top: 20px;
+    gap: 20px;
+}
+.modal .view .view-content .view-info-content fieldset {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 200px;
+    min-height: 70px;
+    max-height: 90px;
+    gap: 4px;
+}
+.modal .view .view-content .view-info-content fieldset label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+}
+.modal .view .view-content .view-info-content fieldset span {
+    font-size: 16px;
+    color: #111827;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.modal .view .view-content .view-info-content fieldset span a {
+    color: #16a34a;
+    text-decoration: none;
+}
+.modal .view .view-content .view-info-content fieldset span a:hover {
+    color: #15803d;
+    text-decoration: underline;
+}
+
+/* Modal de Edición */
+
+.modal .view .view-content form {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0px 0px 0px 20px;
+    margin-top: 20px;
+    gap: 20px;
+}
+.modal .view .view-content form fieldset {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 200px;
+    min-height: 70px;
+    max-height: 90px;
+    gap: 4px;
+}
+.modal .view .view-content form fieldset .rut-container {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    width: 200px;
+    gap: 4px;
+}
+.modal .view .view-content form fieldset label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+}
+.modal .view .view-content form fieldset span {
+    font-size: 16px;
+    color: #111827;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.modal .view .view-content form fieldset input{
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 174px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+}
+.modal .view .view-content form fieldset select{
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 174px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+}
+.modal .view .view-content form fieldset .rut{
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 135px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+}
+.modal .view .view-content form fieldset .rut-verificator{
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 36px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+    text-align: center;
+}
+
+/* Modal de Creación */
+
+.modal .add {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 100%;
+}
+.modal .add header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;
+}
+.modal .add header .close-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    color: white;
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+.modal .add header .close-button svg:hover{
+    transition: 0.1s ease-in-out;
+    transform: scale(1.1);
+}
+.modal .add header h1{
+    font-size: 24px;
+    font-weight: bold;
+    color: #1f2937;
+}
+.modal .add form{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0px 0px 0px 20px;
+    margin-top: 20px;
+    gap: 20px;
+}
+.modal .add form fieldset {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    width: 200px;
+    min-height: 70px;
+    max-height: 90px;
+    gap: 4px;
+}
+.modal .add form fieldset .rut-container {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    width: 200px;
+    gap: 4px;
+}
+.modal .add form fieldset label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1f2937;
+}
+.modal .add form fieldset input {
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 174px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+}
+.modal .add form fieldset select {
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 174px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+}
+.add form footer{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    height: 60px;
+}
+.add form footer button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 150px;
+    height: 42px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: #16a34a;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.1s ease-in-out;
+}
+.add form footer button:hover{
+    background-color: #15803d;
+    transition: 0.1s ease-in-out;
+}

@@ -10,6 +10,10 @@ from app_flask.models.hh_models.task_type_models import TaskType
 from app_flask.models.hh_models.task_models import Task
 from app_flask.models.hh_models.project_report_models import ProjectReport
 from app_flask.models.hh_models.project_task_models import ProjectTask
+from app_flask.models.client_models import Clients
+from app_flask.models.region_models import Regions
+from app_flask.models.staff_models import Staff
+from app_flask.models.study_type_models import Study_type 
 
 bcrypt = Bcrypt(app)
 
@@ -310,6 +314,97 @@ def clients_management():
     if session['id_rol'] not in [1, 2, 3]:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
 
+    clients = Clients.select_all()
+
+    regions = Regions.select_all()
+
     return jsonify({
-        'message': 'Success'
+        'clients': clients,
+        'regions': regions
+    }), 200
+
+@app.route('/admin/clients-management/add/process', methods=['POST'])
+def add_client_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    client_data = {
+        'rut_mandante': data.get('rut_mandante'),
+        'digito_verificador_mandante': data.get('digito_verificador_mandante'),
+        'nombre_mandante': data.get('nombre_mandante'),
+        'direccion': data.get('direccion'),
+        'id_region': data.get('id_region'),
+        'comuna': data.get('comuna'),
+        'giro': data.get('giro'),
+        'telefono': data.get('telefono'),
+        'email': data.get('email'),
+        'sitio_web': data.get('sitio_web'),
+        'nombre_contacto': data.get('nombre_contacto'),
+        'telefono_contacto': data.get('telefono_contacto'),
+        'email_contacto': data.get('email_contacto'),
+    }
+
+    Clients.create(client_data)
+
+    return jsonify({'status': 'success', 'message': 'Cliente creado correctamente'}), 200
+
+@app.route('/admin/clients-management/edit/process', methods=['PATCH'])
+def edit_client_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    client_data = {
+        'rut_mandante': data.get('rut_mandante'),
+        'digito_verificador_mandante': data.get('digito_verificador_mandante'),
+        'nombre_mandante': data.get('nombre_mandante'),
+        'direccion': data.get('direccion'),
+        'id_region': data.get('id_region'),
+        'comuna': data.get('comuna'),
+        'giro': data.get('giro'),
+        'telefono': data.get('telefono'),
+        'email': data.get('email'),
+        'sitio_web': data.get('sitio_web'),
+        'nombre_contacto': data.get('nombre_contacto'),
+        'telefono_contacto': data.get('telefono_contacto'),
+        'email_contacto': data.get('email_contacto'),
+    }
+
+    Clients.update(client_data)
+
+    return jsonify({'status': 'success', 'message': 'Cliente actualizado correctamente'}), 200
+
+@app.route('/admin/projects-management')
+def projects_management():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+    
+    projects = Project.select_all()
+
+    staff = Staff.obtain_name_and_last_name()
+
+    study_types = Study_type.select_all()
+
+    clients = Clients.select_all_rut_and_name()
+
+    return jsonify({
+        'projects': projects,
+        'staff': staff,
+        'study_types': study_types,
+        'clients': clients
     }), 200

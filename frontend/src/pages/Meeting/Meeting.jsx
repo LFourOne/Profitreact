@@ -100,7 +100,7 @@ export function Meeting() {
                         </div>
                     </div>
                     <div id={styles['top-section-right-container']}>
-                        {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3) && (
+                        {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4) && (
                             <button id={styles['top-section-right-container-btn']} onClick={() => navigate('/meeting/create-meeting')}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                                 Crear Reunión

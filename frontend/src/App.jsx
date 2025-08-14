@@ -5,6 +5,7 @@ import { Login } from './pages/Login/Login';
 import { UserManagement } from './pages/AdminManagement/UserManagement/UserManagement';
 import { ProjectTaskReport } from './pages/AdminManagement/HHManagement/ProjectReportTask/ProjectReportTask';
 import { ClientManagement } from './pages/AdminManagement/ClientManagement/ClientManagement';
+import { ProjectManagement } from './pages/AdminManagement/ProjectManagement/ProjectManagement';
 import { Task } from './pages/AdminManagement/HHManagement/Task/Task';
 import { Profile } from './pages/Profile/Profile';
 import { Index } from './pages/Index/Index';
@@ -18,6 +19,7 @@ import { CreateTraining } from './pages/CreateTraining/CreateTraining';
 import { TrainingDetails } from './pages/TrainingDetails/TrainingDetails';
 import { HHRegister } from './pages/HHRegister/HHRegister';
 import { Request } from './pages/Request/Request';
+import { Feedback } from './pages/Feedback/Feedback';
 
 export function App() {
 
@@ -34,6 +36,7 @@ export function App() {
           <Route path="/admin/project-report-task" element={<ProjectTaskReport />} />
           <Route path="/admin/task" element={<Task />} />
           <Route path="/admin/clients-management" element={<ClientManagement />} />
+          <Route path="/admin/projects-management" element={<ProjectManagement />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/index" element={<Index />} />
           <Route path="/gantt" element={<Gantt />} />
@@ -46,6 +49,7 @@ export function App() {
           <Route path="/training/:id_capacitacion" element={<TrainingDetails />} />
           <Route path="/training/create" element={<CreateTraining />} />
           <Route path="/request" element={<Request />} />
+          <Route path="/feedback" element={<Feedback />} />
           <Route path='*' element={<Navigate to="/" replace />}></Route>
         </Routes>
     </>

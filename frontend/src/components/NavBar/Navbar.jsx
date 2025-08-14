@@ -80,6 +80,7 @@ export function NavBar() {
                     }
                     <NavLink to="/training" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Capacitaciones</NavLink>
                     <NavLink to="/request" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Solicitudes</NavLink>
+                    <NavLink to="/feedback" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Feedback</NavLink>
                 </div>
             </div>
             {
@@ -92,6 +93,7 @@ export function NavBar() {
                     <div className={`${styles['dropdown-content']} ${activeDropdown === 'admin' ? styles['open'] : ''}`}>
                         <NavLink to="/admin/user-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Personas</NavLink>
                         <NavLink to="/admin/project-report-task" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor HH</NavLink>
+                        <NavLink to="/admin/projects-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Proyectos</NavLink>
                         <NavLink to="/admin/clients-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Mandantes</NavLink>
                     </div>
                 </div>
