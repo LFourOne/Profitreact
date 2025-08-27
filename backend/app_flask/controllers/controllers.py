@@ -117,6 +117,7 @@ def index():
         'apellido_m': session['apellido_m'],
         'email': session['email'],
         'id_especialidad': session['id_especialidad'],
+        'id_rol': session['id_rol']
     }
 
     return jsonify({

@@ -89,6 +89,15 @@ class Delivery:
                 WHERE id_entrega = %(id_entrega)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def update_delivery_date(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE gantt_entregas SET fecha = %(fecha)s
+                WHERE id_entrega = %(id_entrega)s
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
 
     @classmethod
     def delete_delivery(cls, data):

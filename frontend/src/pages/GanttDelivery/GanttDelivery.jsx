@@ -252,14 +252,17 @@ export function GanttDelivery() {
 
     const completeSubmit = async (data) => {
         const response = await apiClient.patch('/gantt/delivery/completar', data);
-        await fetchApiDelivery();
+        const dateStr = `${selectedMonth}-01`;
+        fetchFilteredDelivery(dateStr);
+        fetchApiDelivery();
         closeModal();
     };
 
     const customizeSubmit = async (data) => {
-
         const response = await apiClient.patch('/gantt/delivery/customize', data);
-        await fetchApiDelivery();
+        const dateStr = `${selectedMonth}-01`;
+        fetchFilteredDelivery(dateStr);
+        fetchApiDelivery();
         closeModal();
     };
 
@@ -267,6 +270,16 @@ export function GanttDelivery() {
     const selectOptions = ot.map((ot) => (
         {label: ot.numero_ot, value: ot.id_numero_ot,}
     ));
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+    
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // +1 porque los meses van de 0 a 11
+        const year = date.getUTCFullYear();
+    
+        return `${day}/${month}/${year}`;
+    };
 
     return (
         <>
@@ -789,9 +802,10 @@ export function GanttDelivery() {
                             <form onSubmit={handleSubmitEdit(editSubmit)}>
                                 <div id={styles['modal-body']}>
                                     <span className={styles['span-profile']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
-                                    <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     {isEditing ? (
                                         <>
+                                        <span className={styles['span-block']}>Fecha:</span>
+                                        <input type="date" defaultValue={selectedDate.toISOString().split('T')[0]} {...registerEdit('fecha', {required: true})} />
                                         <span className={styles['span-block']}>Tipo de Entrega:</span>
                                         <select name="informe" id="informe" defaultValue={selectedPlan.id_informe} {...registerEdit('informe', {required: true})}>
                                             <option value="" disabled selected>Seleccione un tipo de entrega</option>
@@ -862,6 +876,7 @@ export function GanttDelivery() {
                                         </>
                                     ) : (
                                         <>
+                                        <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                         <span className={styles['span-block']}>Tipo de Entrega: Informe {selectedPlan.id_informe}</span>
                                         <span className={styles['span-block']}>Versión: {selectedPlan.id_version}</span>
                                         <span>

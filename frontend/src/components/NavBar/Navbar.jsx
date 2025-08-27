@@ -91,10 +91,13 @@ export function NavBar() {
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6" /></svg>
                     </button>
                     <div className={`${styles['dropdown-content']} ${activeDropdown === 'admin' ? styles['open'] : ''}`}>
-                        <NavLink to="/admin/user-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Personas</NavLink>
-                        <NavLink to="/admin/project-report-task" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor HH</NavLink>
-                        <NavLink to="/admin/projects-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Proyectos</NavLink>
-                        <NavLink to="/admin/clients-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mantenedor Mandantes</NavLink>
+                        <NavLink to="/admin/user-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Personas</NavLink>
+                        <NavLink to="/admin/project-report-task" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>HH</NavLink>
+                        <NavLink to="/admin/projects-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Proyectos</NavLink>
+                        <NavLink to="/admin/clients-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Mandantes</NavLink>
+                        <NavLink to="/admin/specialty-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Especialidad</NavLink>
+                        <NavLink to="/admin/meeting-type-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Tipos de Reunión</NavLink>
+                        <NavLink to="/admin/task-type-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Tipos de Tareas</NavLink>
                     </div>
                 </div>
               )

@@ -13,7 +13,9 @@ from app_flask.models.hh_models.project_task_models import ProjectTask
 from app_flask.models.client_models import Clients
 from app_flask.models.region_models import Regions
 from app_flask.models.staff_models import Staff
-from app_flask.models.study_type_models import Study_type 
+from app_flask.models.study_type_models import Study_type
+from app_flask.models.meeting_type_models import MeetingType 
+from app_flask.models.task_type_models import TaskType
 
 bcrypt = Bcrypt(app)
 
@@ -161,8 +163,6 @@ def create_project_report_task_process():
 
     if not current_report_version:
         current_report_version = 1
-
-    print(f"Current Report Version: {current_report_version}")
 
     project_report_data = {
         'id_proyecto': data.get('id-project'),
@@ -334,6 +334,9 @@ def add_client_process():
 
     data = request.get_json()
 
+    if data.get('rut_mandante') is None:
+        return jsonify({'status': 'error', 'message': 'Falta el RUT del mandante'}), 400
+
     client_data = {
         'rut_mandante': data.get('rut_mandante'),
         'digito_verificador_mandante': data.get('digito_verificador_mandante'),
@@ -408,3 +411,233 @@ def projects_management():
         'study_types': study_types,
         'clients': clients
     }), 200
+
+@app.route('/admin/projects-management/add/process', methods=['POST'])
+def add_project_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    project_data = {
+        'id_proyecto': data.get('id_proyecto'),
+        'nombre': data.get('nombre'),
+        'id_tipo_estudio': data.get('id_tipo_estudio'),
+        'jefe_proyectos': data.get('jefe_proyectos'),
+        'fecha_inicio': data.get('fecha_inicio'),
+        'fecha_termino': data.get('fecha_termino'),
+        'id_ot': data.get('id_ot'),
+        'estado': data.get('estado'),
+        'rut_mandante': data.get('rut_mandante')
+    }
+
+    Project.create(project_data)
+
+    return jsonify({'status': 'success', 'message': 'Proyecto creado correctamente'}), 200
+
+@app.route('/admin/projects-management/edit/process', methods=['PATCH'])
+def edit_project_process():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    project_data = {
+        'original_id_proyecto': data.get('original_id_proyecto'),
+        'id_proyecto': data.get('id_proyecto'),
+        'nombre': data.get('nombre'),
+        'id_tipo_estudio': data.get('id_tipo_estudio'),
+        'jefe_proyectos': data.get('jefe_proyectos'),
+        'fecha_inicio': data.get('fecha_inicio'),
+        'fecha_termino': data.get('fecha_termino'),
+        'id_ot': data.get('id_ot'),
+        'estado': data.get('estado'),
+        'rut_mandante': data.get('rut_mandante')
+    }
+
+    Project.update(project_data)
+
+    return jsonify({'status': 'success', 'message': 'Proyecto actualizado correctamente'}), 200
+
+@app.route('/admin/specialty-management')
+def specialty_management():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    specialties = Specialty.get_specialities()
+
+    staff = Staff.get_staff()
+
+    return jsonify({
+        'specialties': specialties,
+        'staff': staff
+    }), 200
+
+@app.route('/admin/specialty-management/update', methods=['PATCH'])
+def specialty_management_update():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    if data.get('jefe_especialidad') == 'NA':
+        data['jefe_especialidad'] = None
+
+    specialty_data = {
+        'id_especialidad': data.get('id_especialidad'),
+        'especialidad': data.get('especialidad'),
+        'color_especialidad': data.get('color_especialidad'),
+        'jefe_especialidad': data.get('jefe_especialidad')
+    }
+
+    Specialty.update(specialty_data)
+
+    return jsonify({'status': 'success', 'message': 'Especialidad actualizada correctamente'}), 200
+
+@app.route('/admin/specialty-management/add', methods=['POST'])
+def specialty_management_add():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    if data.get('jefe_especialidad') == 'NA':
+        data['jefe_especialidad'] = None
+
+    specialty_data = {
+        'especialidad': data.get('especialidad'),
+        'color_especialidad': data.get('color_especialidad'),
+        'jefe_especialidad': data.get('jefe_especialidad')
+    }
+
+    Specialty.create(specialty_data)
+
+    return jsonify({'status': 'success', 'message': 'Especialidad creada correctamente'}), 200
+
+@app.route('/admin/meeting-type-management')
+def meeting_type_management():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    meeting_types = MeetingType.select_all()
+
+    return jsonify({
+        'meeting_type': meeting_types
+    }), 200
+
+@app.route('/admin/meeting-type-management/add', methods=['POST'])
+def meeting_type_management_add():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    meeting_type_data = {
+        'descripcion_tipo_reunion': data.get('descripcion_tipo_reunion')
+    }
+
+    MeetingType.create(meeting_type_data)
+
+    return jsonify({'status': 'success', 'message': 'Tipo de reunión creado correctamente'}), 200
+
+@app.route('/admin/meeting-type-management/update', methods=['PATCH'])
+def meeting_type_management_update():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    meeting_type_data = {
+        'id_tipo_reunion': data.get('id_tipo_reunion'),
+        'descripcion_tipo_reunion': data.get('descripcion_tipo_reunion')
+    }
+
+    MeetingType.update(meeting_type_data)
+
+    return jsonify({'status': 'success', 'message': 'Tipo de reunión actualizado correctamente'}), 200
+
+@app.route('/admin/task-type-management')
+def task_type_management():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    task_types = TaskType.select_all()
+
+    return jsonify({
+        'taskType': task_types
+    }), 200
+
+@app.route('/admin/task-type-management/add', methods=['POST'])
+def task_type_management_add():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    task_type_data = {
+        'tipo_tarea': data.get('tipo_tarea')
+    }
+
+    TaskType.create(task_type_data)
+
+    return jsonify({'status': 'success', 'message': 'Tipo de tarea creado correctamente'}), 200
+
+@app.route('/admin/task-type-management/update', methods=['PATCH'])
+def task_type_management_update():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    task_type_data = {
+        'id_tipo_tarea': data.get('id_tipo_tarea'),
+        'tipo_tarea': data.get('tipo_tarea')
+    }
+
+    TaskType.update(task_type_data)
+
+    return jsonify({'status': 'success', 'message': 'Tipo de tarea actualizado correctamente'}), 200

@@ -38,6 +38,8 @@ export function Minute() {
     const [stateFilter, setStateFilter] = useState(1);
     const [projectFilter, setProjectFilter] = useState("");
 
+    const [selectKey, setSelectKey] = useState(0);
+
     const [loading, setLoading] = useState(true);
 
     const fetchApi = async () => {
@@ -85,6 +87,7 @@ export function Minute() {
         const response = await apiClient.post('/meetings/minute/add-commitment', data);
 
         await fetchApi();
+        setSelectKey(prev => prev + 1);
         resetAdd();
     }
 
@@ -316,6 +319,7 @@ export function Minute() {
                                 <fieldset className={styles['add-commitment-fieldset-responsible']}>
                                     <label>Responsable</label>
                                     <Controller
+                                        key={selectKey}
                                         name="name_and_last_name_form"
                                         control={control}
                                         rules={{ required: true }}

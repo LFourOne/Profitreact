@@ -12,7 +12,8 @@ class Specialty:
     def get_specialities(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT id_especialidad, especialidad, color_especialidad, jefe_especialidad FROM especialidades
+                SELECT especialidades.id_especialidad, especialidades.especialidad, especialidades.color_especialidad, especialidades.jefe_especialidad, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m FROM especialidades
+                LEFT JOIN maestro_personal ON especialidades.jefe_especialidad = maestro_personal.rut_personal
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
     
@@ -38,6 +39,24 @@ class Specialty:
         DATA_BASE = session.get('data_base')
         query = """
                 UPDATE especialidades SET color_especialidad = %(color_especialidad)s
+                WHERE id_especialidad = %(id_especialidad)s
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def create(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                INSERT INTO especialidades (especialidad, jefe_especialidad, color_especialidad) 
+                VALUES (%(especialidad)s, %(jefe_especialidad)s, %(color_especialidad)s)
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def update(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE especialidades SET especialidad = %(especialidad)s, jefe_especialidad = %(jefe_especialidad)s, color_especialidad = %(color_especialidad)s
                 WHERE id_especialidad = %(id_especialidad)s
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)

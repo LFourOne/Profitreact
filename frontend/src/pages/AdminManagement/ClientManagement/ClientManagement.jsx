@@ -54,6 +54,10 @@ export function ClientManagement() {
 
         } catch (error) {
 
+            if (error.response && error.response.status === 400) {
+                alert('Petición rechazada. Recuerda ingresar el rut del mandante')
+            }
+
             if (error.response && error.response.status === 401) {
                 navigate('/');
             }

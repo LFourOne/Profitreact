@@ -10,15 +10,4 @@ const apiClient = axios.create({
   }
 });
 
-// Interceptor global para errores de autenticación
-apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      window.location.href = '/';
-    }
-    return Promise.reject(error);
-  }
-);
-
 export default apiClient;

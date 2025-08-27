@@ -14,11 +14,31 @@ class Project:
         self.estado = data.get('estado')
 
     @classmethod
+    def create(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                INSERT INTO proyectos (id_proyecto, nombre, id_tipo_estudio, rut_mandante, jefe_proyectos, fecha_inicio, fecha_termino, id_ot, estado)
+                VALUES (%(id_proyecto)s, %(nombre)s, %(id_tipo_estudio)s, %(rut_mandante)s, %(jefe_proyectos)s, %(fecha_inicio)s, %(fecha_termino)s, %(id_ot)s, %(estado)s)
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+
+    @classmethod
+    def update(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                UPDATE proyectos
+                SET id_proyecto = %(id_proyecto)s, nombre = %(nombre)s, id_tipo_estudio = %(id_tipo_estudio)s, rut_mandante = %(rut_mandante)s, jefe_proyectos = %(jefe_proyectos)s, fecha_inicio = %(fecha_inicio)s, fecha_termino = %(fecha_termino)s, id_ot = %(id_ot)s, estado = %(estado)s
+                WHERE id_proyecto = %(original_id_proyecto)s
+                """
+        return connectToMySQL(DATA_BASE).query_db(query, data)
+
+    @classmethod
     def select_all(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT proyectos.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, tipos_estudio.descripcion_tipo_estudio FROM proyectos
+                SELECT proyectos.*, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, tipos_estudio.descripcion_tipo_estudio, mandantes.nombre_mandante FROM proyectos
                 JOIN maestro_personal ON proyectos.jefe_proyectos = maestro_personal.rut_personal
+                JOIN mandantes ON proyectos.rut_mandante = mandantes.rut_mandante
                 LEFT JOIN tipos_estudio ON proyectos.id_tipo_estudio = tipos_estudio.id_tipo_estudio
                 """
         return connectToMySQL(DATA_BASE).query_db(query)

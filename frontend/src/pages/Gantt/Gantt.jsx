@@ -919,7 +919,6 @@ export function Gantt() {
                             <form onSubmit={handleSubmitEdit(editSubmit)}>
                                 <div id={styles['modal-body']}>
                                     <span className={styles['span-block']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
-                                    <span className={styles['span-block']}>Responsable: Sergio Dávila </span>
                                     <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
                                     <span className={styles['span-block']}>Área: {selectedPlan.especialidad}</span>
                                     {isEditing ? (

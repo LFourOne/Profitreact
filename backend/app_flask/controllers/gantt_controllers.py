@@ -701,6 +701,14 @@ def edit_delivery():
             # Actualizamos los comentarios de la entrega
             Delivery.update_delivery_comment({'id_entrega': delivery_id, 'comentarios': new_comments})
 
+    # Hacemos un update de la fecha de la entrega
+
+    date_data = {
+        'id_entrega': delivery_id,
+        'fecha': data.get('newData', {}).get('fecha')
+    }
+    Delivery.update_delivery_date(date_data)
+
     return jsonify({
         'message': 'success'
     })

@@ -272,7 +272,7 @@
     box-sizing: border-box;
     width: 200px;
     min-height: 70px;
-    max-height: 90px;
+    max-height: 250px;
     gap: 4px;
 }
 .modal .view .view-content .view-info-content fieldset label {
@@ -444,13 +444,6 @@
     width: 200px;
     min-height: 70px;
     max-height: 90px;
-    gap: 4px;
-}
-.modal .add form fieldset .rut-container {
-    display: flex;
-    flex-direction: row;
-    box-sizing: border-box;
-    width: 200px;
     gap: 4px;
 }
 .modal .add form fieldset label {

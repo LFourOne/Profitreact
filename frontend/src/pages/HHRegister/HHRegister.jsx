@@ -95,12 +95,6 @@ export function HHRegister() {
             }
         }
         finally {
-            reset();
-            setSelectedProject('');
-            setSelectedReport(null);
-            setSelectedTask('');
-            setReports([]);
-            setTasks([]);
             fetchApi();
             fetchSchedule(selectedDate);
             console.log('Datos enviados:', data);
@@ -147,6 +141,8 @@ export function HHRegister() {
                 alert(response.data.message);
             }
 
+            fetchApi();
+
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');
@@ -157,8 +153,6 @@ export function HHRegister() {
             if (error.response && error.response.status === 400) {
                 alert(error.response.data.message);
             }
-        } finally {
-            fetchApi();
         }
     };
 
@@ -485,11 +479,11 @@ export function HHRegister() {
                             <div>
                                 {
                                 HHReportState[0]['id_estado'] === 4 ? (
-                                    <button className={styles['add-task-button']} onClick={handleHHReportStateChange}>Cerrar Día</button>
+                                    <button type='button' className={styles['add-task-button']} onClick={handleHHReportStateChange}>Cerrar Día</button>
                                 ) 
                                 :
                                 HHReportState[0]['id_estado'] === 5 && (
-                                    <button className={styles['add-task-button']} onClick={handleHHReportStateChange}>Abrir Día</button>
+                                    <button type='button' className={styles['add-task-button']} onClick={handleHHReportStateChange}>Abrir Día</button>
                                 )
                                 }
                             </div>
@@ -534,7 +528,7 @@ export function HHRegister() {
                                                     }}
                                                 >
                                                     <div className={styles['task-block-left']}>
-                                                        <strong>{scheduleMap[slot].id_proyecto} | Informe {scheduleMap[slot].id_informe} | {scheduleMap[slot].nombre}</strong>
+                                                        <strong>{scheduleMap[slot].id_proyecto} | {scheduleMap[slot].nombre_informe} | {scheduleMap[slot].nombre}</strong>
                                                         <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
                                                     </div>
                                                     <div className={styles['task-block-right']}>

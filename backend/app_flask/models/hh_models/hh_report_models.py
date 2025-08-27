@@ -27,8 +27,9 @@ class HH_Report:
     def select_all(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT registro_hh.*, tareas.nombre FROM registro_hh
+                SELECT registro_hh.*, tareas.nombre, informes.nombre as nombre_informe FROM registro_hh
                 JOIN tareas ON registro_hh.id_tarea = tareas.id_tarea
+                JOIN informes ON registro_hh.id_informe = informes.id_informe
                 WHERE fecha = %(fecha)s AND rut_personal = %(rut_personal)s
                 ORDER BY registro_hh.inicio ASC;
                 """

@@ -6,6 +6,9 @@ import { UserManagement } from './pages/AdminManagement/UserManagement/UserManag
 import { ProjectTaskReport } from './pages/AdminManagement/HHManagement/ProjectReportTask/ProjectReportTask';
 import { ClientManagement } from './pages/AdminManagement/ClientManagement/ClientManagement';
 import { ProjectManagement } from './pages/AdminManagement/ProjectManagement/ProjectManagement';
+import { SpecialtyManagement } from './pages/AdminManagement/SpecialtyManagement/SpecialtyManagement';
+import { MeetingTypeManagement } from './pages/AdminManagement/MeetingTypeManagement/MeetingTypeManagement';
+import { TaskTypeManagement } from './pages/AdminManagement/TaskTypeManagement/TaskTypeManagement';
 import { Task } from './pages/AdminManagement/HHManagement/Task/Task';
 import { Profile } from './pages/Profile/Profile';
 import { Index } from './pages/Index/Index';
@@ -37,6 +40,9 @@ export function App() {
           <Route path="/admin/task" element={<Task />} />
           <Route path="/admin/clients-management" element={<ClientManagement />} />
           <Route path="/admin/projects-management" element={<ProjectManagement />} />
+          <Route path="/admin/specialty-management" element={<SpecialtyManagement />} />
+          <Route path="/admin/meeting-type-management" element={<MeetingTypeManagement />} />
+          <Route path="/admin/task-type-management" element={<TaskTypeManagement />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/index" element={<Index />} />
           <Route path="/gantt" element={<Gantt />} />

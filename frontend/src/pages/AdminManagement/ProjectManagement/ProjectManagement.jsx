@@ -15,6 +15,7 @@ export function ProjectManagement() {
     const [projects, setProjects] = useState([]);
     const [staff, setStaff] = useState([]);
     const [studyTypes, setStudyTypes] = useState([]);
+    const [clients, setClients] = useState([]);
 
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
@@ -31,7 +32,9 @@ export function ProjectManagement() {
             setProjects(response.data.projects);
             setStaff(response.data.staff);
             setStudyTypes(response.data.study_types);
+            setClients(response.data.clients);
             setLoading(false);
+            console.log(response.data)
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -49,12 +52,16 @@ export function ProjectManagement() {
     const onSubmitAdd = async (data) => {
         try {
 
-            const response = await apiClient.post('/admin/clients-management/add/process', data);
+            const response = await apiClient.post('/admin/projects-management/add/process', data);
 
             handleCloseModal();
             fetchApi();
 
         } catch (error) {
+
+            if (error.response && error.response.status === 400) {
+                alert('Petición rechazada. Recuerda ingresar el rut del mandante')
+            }
 
             if (error.response && error.response.status === 401) {
                 navigate('/');
@@ -73,7 +80,7 @@ export function ProjectManagement() {
     const onSubmitEdit = async (data) => {
         try {
             
-            const response = await apiClient.patch('/admin/clients-management/edit/process', data);
+            const response = await apiClient.patch('/admin/projects-management/edit/process', data);
 
             handleCloseModal();
             fetchApi();
@@ -128,6 +135,20 @@ export function ProjectManagement() {
         return `${day}/${month}/${year}`;
     };
 
+    const formatDateForInput = (dateString) => {
+        const date = new Date(dateString);
+        
+        const day = String(date.getUTCDate()).padStart(2, '0');
+        const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // +1 porque los meses van de 0 a 11
+        const year = date.getUTCFullYear();
+        
+        return `${year}-${month}-${day}`;
+    };
+
+    const getSelectValue = (value) => {
+        return value !== null && value !== undefined ? String(value) : '';
+    };
+
     return (
         <>
         {loading ? <p id='loading'>Cargando</p> : (
@@ -164,6 +185,7 @@ export function ProjectManagement() {
                                     <th>Jefe de Proyecto</th>
                                     <th>Fecha de Inicio</th>
                                     <th>Fecha de Término</th>
+                                    <th>Mandante</th>
                                     <th>OT</th>
                                     <th>Estado</th>
                                 </tr>
@@ -174,10 +196,11 @@ export function ProjectManagement() {
                                         <tr key={project.id_proyecto} onClick={() => handleOpenViewModal(project)}>
                                             <td>{project.id_proyecto}</td>
                                             <td>{project.nombre}</td>
-                                            <td>{project.tipo_estudio}</td>
+                                            <td>{project.id_tipo_estudio ? project.descripcion_tipo_estudio : 'N/A'}</td>
                                             <td>{project.nombres} {project.apellido_p} {project.apellido_m}</td>
                                             <td>{formatDate(project.fecha_inicio)}</td>
                                             <td>{formatDate(project.fecha_termino)}</td>
+                                            <td>{project.nombre_mandante ? project.nombre_mandante : 'N/A'}</td>
                                             <td>{project.id_ot ? (project.id_ot === 1 && <span>Sí</span>) : 'No'}</td>
                                             <td>{project.estado ? (project.estado === 1 && <span>Vigente</span>) : <span>Terminado</span>}</td>
                                         </tr>
@@ -224,7 +247,7 @@ export function ProjectManagement() {
                                                     </fieldset>
                                                     <fieldset>
                                                         <label>Jefe de Proyecto</label>
-                                                        <select name="jefe_proyecto" id="jefe_proyecto" defaultValue='' {...registerAdd('id_jefe_proyecto', {required: true})}>
+                                                        <select name="jefe_proyecto" id="jefe_proyecto" defaultValue='' {...registerAdd('jefe_proyectos', {required: true})}>
                                                             <option value="" disabled>Seleccione un jefe de proyecto</option>
                                                             {staff.map(staff => (
                                                                 <option key={staff.rut_personal} value={staff.rut_personal}>{staff.nombres} {staff.apellido_p} {staff.apellido_m}</option>
@@ -241,10 +264,21 @@ export function ProjectManagement() {
                                                     </fieldset>
                                                     <fieldset>
                                                         <label>OT</label>
-                                                        <select name="ot" id="ot" defaultValue='' {...registerAdd('ot', {required: true})}>
+                                                        <select name="ot" id="ot" defaultValue='' {...registerAdd('id_ot', {required: true})}>
                                                             <option value="" disabled>Seleccione una opción</option>
                                                             <option value="1">Sí</option>
                                                             <option value="0">No</option>
+                                                        </select>
+                                                    </fieldset>
+                                                    <fieldset>
+                                                        <label>Mandante</label>
+                                                        <select name="mandante" id="mandante" defaultValue='' {...registerAdd('rut_mandante', {required: true})}>
+                                                            <option value="" disabled>Seleccione una opción</option>
+                                                            {clients.map(client => (
+                                                                <option key={client.rut_mandante} value={client.rut_mandante}>
+                                                                    {client.nombre_mandante}
+                                                                </option>
+                                                            ))}
                                                         </select>
                                                     </fieldset>
                                                     <input type="hidden" value="1" {...registerAdd('estado')} />
@@ -296,6 +330,7 @@ export function ProjectManagement() {
                                                                     <fieldset>
                                                                         <label>Proyecto</label>
                                                                         <input type="text" value={selectedProject.id_proyecto} {...registerEdit('id_proyecto')} />
+                                                                        <input type="hidden" value={selectedProject.id_proyecto} {...registerEdit('original_id_proyecto')} />
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Nombre</label>
@@ -321,15 +356,26 @@ export function ProjectManagement() {
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Fecha de Inicio</label>
-                                                                        <input type="date" defaultValue={selectedProject.fecha_inicio ? selectedProject.fecha_inicio : ''} {...registerEdit('fecha_inicio')} />
+                                                                        <input type="date" defaultValue={selectedProject.fecha_inicio ? formatDateForInput(selectedProject.fecha_inicio) : ''} {...registerEdit('fecha_inicio')} />
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Fecha de Término</label>
-                                                                        <input type="date" defaultValue={selectedProject.fecha_termino ? selectedProject.fecha_termino : ''} {...registerEdit('fecha_termino')} />
+                                                                        <input type="date" defaultValue={selectedProject.fecha_termino ? formatDateForInput(selectedProject.fecha_termino) : ''} {...registerEdit('fecha_termino')} />
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Mandante</label>
+                                                                        <select name="mandante" id="mandante" defaultValue={selectedProject.rut_mandante ? selectedProject.rut_mandante : ''} {...registerEdit('rut_mandante', {required: true})}>
+                                                                            <option value="" disabled>Seleccione una opción</option>
+                                                                            {clients.map(client => (
+                                                                                <option key={client.rut_mandante} value={client.rut_mandante}>
+                                                                                    {client.nombre_mandante}
+                                                                                </option>
+                                                                            ))}
+                                                                        </select>
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>OT</label>
-                                                                        <select name="ot" id="ot" defaultValue={selectedProject.id_ot ? selectedProject.id_ot : ''} {...registerAdd('ot', {required: true})}>
+                                                                        <select name="ot" id="ot" defaultValue={getSelectValue(selectedProject.id_ot)} {...registerEdit('id_ot', {required: true})}>
                                                                             <option value="" disabled>Seleccione una opción</option>
                                                                             <option value="1">Sí</option>
                                                                             <option value="0">No</option>
@@ -337,7 +383,7 @@ export function ProjectManagement() {
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Estado</label>
-                                                                        <select name="state" id="state" defaultValue={selectedProject.estado ? selectedProject.estado : ''} {...registerEdit('estado', {required: true})}>
+                                                                        <select name="state" id="state" defaultValue={getSelectValue(selectedProject.estado)} {...registerEdit('estado', {required: true})}>
                                                                             <option value="" disabled>Seleccione una opción</option>
                                                                             <option value="1">Vigente</option>
                                                                             <option value="0">Terminado</option>
@@ -373,8 +419,12 @@ export function ProjectManagement() {
                                                                         <span>{selectedProject.fecha_termino ? formatDate(selectedProject.fecha_termino) : 'N/A'}</span>
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label>Mandante</label>
+                                                                        <span>{selectedProject.nombre_mandante ? selectedProject.nombre_mandante : 'N/A'}</span>
+                                                                    </fieldset>
+                                                                    <fieldset>
                                                                         <label>OT</label>
-                                                                        <span>{selectedProject.ot && selectedProject.ot === 1 ? 'Sí' : 'No'}</span>
+                                                                        <span>{selectedProject.id_ot && selectedProject.id_ot === 1 ? 'Sí' : 'No'}</span>
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Estado</label>
