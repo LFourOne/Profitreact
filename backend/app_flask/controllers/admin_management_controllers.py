@@ -158,17 +158,21 @@ def create_project_report_task_process():
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
     
     data = request.get_json()
-    
+
     current_report_version = ProjectReport.select_max_current_report_version({'id_proyecto': data.get('id-project'), 'id_informe': data.get('id-report')})
 
     if not current_report_version:
         current_report_version = 1
 
-    project_report_data = {
-        'id_proyecto': data.get('id-project'),
-        'id_informe': data.get('id-report'),
-        'id_version': current_report_version
-    }
+    report_exist = ProjectReport.select_report_by_project_and_report({'id_proyecto': data.get('id-project'), 'id_informe': data.get('id-report')})
+
+    if not report_exist:
+        project_report_data = {
+            'id_proyecto': data.get('id-project'),
+            'id_informe': data.get('id-report'),
+            'id_version': current_report_version
+        }
+        ProjectReport.create(project_report_data)
 
     project_task_data = {
         'id_proyecto': data.get('id-project'),
@@ -177,8 +181,6 @@ def create_project_report_task_process():
         'alias_tarea': data.get('task-alias'),
         'id_estado': 1
     }
-
-    ProjectReport.create(project_report_data)
 
     ProjectTask.create(project_task_data)
 

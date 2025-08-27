@@ -46,3 +46,14 @@ class ProjectReport:
                 GROUP BY proyecto_informe.id_informe;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
+    
+    @classmethod
+    def select_report_by_project_and_report(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT * FROM proyecto_informe
+                WHERE id_proyecto = %(id_proyecto)s AND id_informe = %(id_informe)s
+                ORDER BY id_version DESC;
+                """
+        result = connectToMySQL(DATA_BASE).query_db(query, data)
+        return bool(result)
