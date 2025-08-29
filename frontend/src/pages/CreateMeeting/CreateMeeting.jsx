@@ -21,10 +21,19 @@ export function CreateMeeting() {
     const meetingType = watch("meeting_type");
 
     useEffect(() => {
-        if (meetingType === "3") {
+        if (meetingType === "1") {
+            setValue("project", "P001-RGG");
+            setIsProjectDisabled(true);
+        }
+        else if (meetingType === "2") {
+            setValue("project", "P002-RAD");
+            setIsProjectDisabled(true);
+        }
+        else if (meetingType === "3") {
             setValue("project", "JE");
             setIsProjectDisabled(true);
-        } else {
+        } 
+        else {
             setIsProjectDisabled(false);
             setValue("project", "");
         }
