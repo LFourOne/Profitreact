@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import apiClient from '../../../services/api';
 import styles from './ClientManagement.module.css';
 import logo from '../../../assets/icon1.png'
 
 export function ClientManagement() {
 
-    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd } = useForm();
-    const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit } = useForm();
+    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, setValue: setValueAdd } = useForm();
+    const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, setValue: setValueEdit } = useForm();
     
     const navigate = useNavigate();
     
     const [clients, setClients] = useState([]);
     const [regions, setRegions] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [communes, setCommunes] = useState([]);
     
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
@@ -45,6 +47,12 @@ export function ClientManagement() {
     }, []);
 
     const onSubmitAdd = async (data) => {
+        
+        const confirmed = window.confirm('¿Estás seguro de que deseas crear un nuevo mandante?');
+        if (!confirmed) {
+            return;
+        }
+
         try {
 
             const response = await apiClient.post('/admin/clients-management/add/process', data);
@@ -73,6 +81,12 @@ export function ClientManagement() {
     };
 
     const onSubmitEdit = async (data) => {
+
+        const confirmed = window.confirm('¿Estás seguro de que deseas editar este mandante?');
+        if (!confirmed) {
+            return;
+        }
+
         try {
             
             const response = await apiClient.patch('/admin/clients-management/edit/process', data);
@@ -114,10 +128,59 @@ export function ClientManagement() {
         setIsEditing(false);
         resetEdit();
         resetAdd();
+        setProvinces([]);
+        setCommunes([]);
+        setValueAdd('id_provincia', '');
+        setValueAdd('id_comuna', '');
     }
 
     const handleIsEditing = () => {
         setIsEditing(!isEditing);
+    }
+
+    const handleRegionChange = async (e) => {
+        const regionId = e.target.value;
+
+        if (provinces.length > 0) {
+            setProvinces([]);
+            setCommunes([]);
+            setValueAdd('id_provincia', '');
+            setValueAdd('id_comuna', '');
+            setValueEdit('id_provincia', '');
+            setValueEdit('id_comuna', '');
+        }
+
+        if (regionId) {
+            try {
+                const response = await apiClient.get(`/admin/api/get-provinces/${regionId}`);
+
+                setProvinces(response.data.provinces);
+
+            } catch (error) {
+                console.error('Error al cargar las provincias:', error);
+            }
+        }
+    }
+
+    const handleProvinceChange = async (e) => {
+        const provinceId = e.target.value;
+
+        if (communes.length > 0) {
+            setCommunes([]);
+            setValueAdd('id_comuna', '');
+            setValueEdit('id_comuna', '');
+        }
+
+        if (provinceId) {
+            try {
+                const response = await apiClient.get(`/admin/api/get-communes/${provinceId}`);
+
+                setCommunes(response.data.communes);
+
+            } catch (error) {
+                console.error('Error al cargar las comunas:', error);
+            }
+        }
     }
 
     const formatDate = (dateString) => {
@@ -164,6 +227,7 @@ export function ClientManagement() {
                                     <th>Nombre</th>
                                     <th>Dirección</th>
                                     <th>Región</th>
+                                    <th>Provincia</th>
                                     <th>Comuna</th>
                                     <th>Giro</th>
                                     <th>Teléfono</th>
@@ -184,7 +248,8 @@ export function ClientManagement() {
                                             <td>{client.nombre_mandante}</td>
                                             <td>{client.direccion}</td>
                                             <td>{client.region_nombre}</td>
-                                            <td>{client.comuna ? client.comuna : 'N/A'}</td>
+                                            <td>{client.id_provincia ? client.provincia_nombre : 'N/A'}</td>
+                                            <td>{client.id_comuna ? client.comuna_nombre : 'N/A'}</td>
                                             <td>{client.giro ? client.giro : 'N/A'}</td>
                                             <td>{client.telefono ? client.telefono : 'N/A'}</td>
                                             <td>{client.email ? client.email : 'N/A'}</td>
@@ -234,16 +299,42 @@ export function ClientManagement() {
                                                     </fieldset>
                                                     <fieldset>
                                                         <label>Región</label>
-                                                        <select name="region" id="region" defaultValue='' {...registerAdd('id_region', {required: true})}>
+                                                        <select name="region" id="region" defaultValue='' {...registerAdd('id_region', {required: true, onChange: handleRegionChange})}>
                                                             <option value="" disabled>Seleccione una región</option>
                                                             {regions.map(region => (
-                                                                <option key={region.id_region} value={region.id_region}>{region.nombre}</option>
+                                                                <option key={region.id_region} value={region.id_region}>{region.region}</option>
                                                             ))}
                                                         </select>
                                                     </fieldset>
                                                     <fieldset>
+                                                        <label>Provincia</label>
+                                                        {
+                                                            provinces.length > 0 ? (
+                                                                <select name="provincia" id="provincia" defaultValue='' {...registerAdd('id_provincia', {required: true, onChange: handleProvinceChange})}>
+                                                                    <option value="" disabled>Seleccione una provincia</option>
+                                                                    {provinces.map(provincia => (
+                                                                        <option key={provincia.id_provincia} value={provincia.id_provincia}>{provincia.provincia}</option>
+                                                                    ))}
+                                                                </select>
+                                                            ) 
+                                                            : 
+                                                            (
+                                                                <span className={styles['disabled-input']}></span>
+                                                            )}
+                                                    </fieldset>
+                                                    <fieldset>
                                                         <label>Comuna</label>
-                                                        <input type="text" placeholder='Ingrese la comuna del mandante' {...registerAdd('comuna')} />
+                                                        {
+                                                            communes.length > 0 ? (
+                                                                <select name="comuna" id="comuna" defaultValue='' {...registerAdd('id_comuna', {required: true})}>
+                                                                    <option value="" disabled>Seleccione una comuna</option>
+                                                                    {communes.map(comuna => (
+                                                                        <option key={comuna.id_comuna} value={comuna.id_comuna}>{comuna.comuna}</option>
+                                                                    ))}
+                                                                </select>
+                                                            ) : (
+                                                                <span className={styles['disabled-input']}></span>
+                                                            )}
                                                     </fieldset>
                                                     <fieldset>
                                                         <label>Giro</label>
@@ -321,27 +412,57 @@ export function ClientManagement() {
                                                                     <fieldset>
                                                                         <label>RUT</label>
                                                                         <span>{selectedClient.rut_mandante}-{selectedClient.digito_verificador_mandante}</span>
-                                                                        <input type="hidden" value={selectedClient.rut_mandante} {...registerEdit('rut_mandante')} />
+                                                                        <input type="hidden" value={selectedClient.rut_mandante} {...registerEdit('rut_mandante', { required: true })} />
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Nombre</label>
-                                                                        <input type="text" defaultValue={selectedClient.nombre_mandante ? selectedClient.nombre_mandante : ''} {...registerEdit('nombre_mandante')} />
+                                                                        <input type="text" defaultValue={selectedClient.nombre_mandante ? selectedClient.nombre_mandante : ''} {...registerEdit('nombre_mandante', { required: true })} />
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Dirección</label>
-                                                                        <input type="text" defaultValue={selectedClient.direccion ? selectedClient.direccion : ''} {...registerEdit('direccion')} />
+                                                                        <input type="text" defaultValue={selectedClient.direccion ? selectedClient.direccion : ''} {...registerEdit('direccion', { required: true })} />
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Región</label>
-                                                                        <select name="region" id="region" defaultValue={selectedClient.id_region ? selectedClient.id_region : ''} {...registerEdit('id_region')}>
+                                                                        <select name="region" id="region" defaultValue={selectedClient.id_region ? selectedClient.id_region : ''} {...registerEdit('id_region', { required: true, onChange: handleRegionChange })}>
                                                                             {regions.map(region => (
-                                                                                <option key={region.id_region} value={region.id_region}>{region.nombre}</option>
+                                                                                <option key={region.id_region} value={region.id_region}>{region.region}</option>
                                                                             ))}
                                                                         </select>
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label>Provincia</label>
+                                                                        {
+                                                                            provinces.length > 0 ? (
+                                                                                <select name="provincia" id="provincia" defaultValue={selectedClient.id_provincia ? selectedClient.id_provincia : ''} {...registerEdit('id_provincia', { required: true, onChange: handleProvinceChange })}>
+                                                                                    <option value="" disabled>Seleccione una provincia</option>
+                                                                                    {provinces.map(provincia => (
+                                                                                        <option key={provincia.id_provincia} value={provincia.id_provincia}>{provincia.provincia}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            )
+                                                                            :
+                                                                            (
+                                                                                <span className={styles['disabled-input']}></span>
+                                                                            )
+                                                                        }
+                                                                    </fieldset>
+                                                                    <fieldset>
                                                                         <label>Comuna</label>
-                                                                        <input type="text" defaultValue={selectedClient.comuna ? selectedClient.comuna : ''} {...registerEdit('comuna')} />
+                                                                        {
+                                                                            communes.length > 0 ? (
+                                                                                <select name="comuna" id="comuna" defaultValue={selectedClient.id_comuna ? selectedClient.id_comuna : ''} {...registerEdit('id_comuna', { required: true })}>
+                                                                                    <option value="" disabled>Seleccione una comuna</option>
+                                                                                    {communes.map(comuna => (
+                                                                                        <option key={comuna.id_comuna} value={comuna.id_comuna}>{comuna.comuna}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            )
+                                                                            :
+                                                                            (
+                                                                                <span className={styles['disabled-input']}></span>
+                                                                            )
+                                                                        }
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Giro</label>
@@ -393,8 +514,12 @@ export function ClientManagement() {
                                                                         <span>{selectedClient.region_nombre ? selectedClient.region_nombre : 'N/A'}</span>
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label>Provincia</label>
+                                                                        <span>{selectedClient.provincia_nombre ? selectedClient.provincia_nombre : 'N/A'}</span>
+                                                                    </fieldset>
+                                                                    <fieldset>
                                                                         <label>Comuna</label>
-                                                                        <span>{selectedClient.comuna ? selectedClient.comuna : 'N/A'}</span>
+                                                                        <span>{selectedClient.comuna_nombre ? selectedClient.comuna_nombre : 'N/A'}</span>
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Giro</label>

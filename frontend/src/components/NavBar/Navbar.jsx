@@ -99,6 +99,7 @@ export function NavBar() {
                         <NavLink to="/admin/meeting-type-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Tipos de Reunión</NavLink>
                         <NavLink to="/admin/task-type-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Tipos de Tareas</NavLink>
                         <NavLink to="/admin/study-type-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Tipos de Estudio</NavLink>
+                        <NavLink to="/admin/position-management" onClick={() => setActiveDropdown(null)} className={({ isActive }) => (isActive ? styles['selected-link'] : "")}>Cargos</NavLink>
                     </div>
                 </div>
               )

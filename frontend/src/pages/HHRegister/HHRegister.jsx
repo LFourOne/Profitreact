@@ -7,7 +7,7 @@ import logo from '../../assets/icon1.png'
 
 export function HHRegister() {
 
-    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+    const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
 
     const navigate = useNavigate();
 
@@ -15,15 +15,15 @@ export function HHRegister() {
     const [role, setRole] = useState([]);
     const [HHReportState, setHHReportState] = useState([]);
 
-    const [project, setProject] = useState([])
-    const [reports, setReports] = useState([])
-    const [tasks, setTasks] = useState([])
+    const [project, setProject] = useState([]);
+    const [reports, setReports] = useState([]);
+    const [tasks, setTasks] = useState([]);
 
     const [schedule, setSchedule] = useState([]);
     
-    const [selectedProject, setSelectedProject] = useState('')
-    const [selectedReport, setSelectedReport] = useState(null)
-    const [selectedTask, setSelectedTask] = useState('')
+    const [selectedProject, setSelectedProject] = useState('');
+    const [selectedReport, setSelectedReport] = useState(null);
+    const [selectedTask, setSelectedTask] = useState('');
     const [selectedDate, setSelectedDate] = useState(() => {
         const today = new Date();
         return today.toISOString().split('T')[0];
@@ -198,8 +198,10 @@ export function HHRegister() {
                 reports[0]
             );
             setSelectedReport(maxReport);
+            setValue('id_version_informe', maxReport.id_version);
         } else {
             setSelectedReport(null);
+            setValue('id_version_informe', '');
         }
     }, [reports]);
 
@@ -309,7 +311,7 @@ export function HHRegister() {
                                             <label>Informe</label>
                                             {
                                                 reports.length > 0 ? (
-                                                    <select name="report" id="report" {...register('report', { required: true })} onChange={(e) => {const found = reports.find(report => Number(report.id_informe) === Number(e.target.value)); setSelectedReport(found || null)}} value={selectedReport ? selectedReport.id_informe : ''}>
+                                                    <select name="report" id="report" {...register('report', { required: true })} onChange={(e) => {const found = reports.find(report => Number(report.id_informe) === Number(e.target.value)); setSelectedReport(found || null); setValue('id_version_informe', found ? found.id_version : '')}} value={selectedReport ? selectedReport.id_informe : ''}>
                                                         {reports.map((report) => (
                                                             <option key={report.id_informe} value={report.id_informe}>{report.nombre}</option>
                                                         ))}
@@ -327,7 +329,7 @@ export function HHRegister() {
                                                 selectedReport ? (
                                                     <>
                                                         <span className={styles['version']}>{selectedReport.id_version}</span>
-                                                        <input type="hidden" value={selectedReport.id_version} />
+                                                        <input type="hidden" value={selectedReport ? selectedReport.id_version : ''} {...register('id_version_informe')} />
                                                     </>
                                                 )
                                                 :
@@ -528,7 +530,7 @@ export function HHRegister() {
                                                     }}
                                                 >
                                                     <div className={styles['task-block-left']}>
-                                                        <strong>{scheduleMap[slot].id_proyecto} | {scheduleMap[slot].nombre_informe} | {scheduleMap[slot].nombre}</strong>
+                                                        <strong>{scheduleMap[slot].id_proyecto} | {scheduleMap[slot].nombre_informe} | {scheduleMap[slot].id_version_informe ? `Versión ${scheduleMap[slot].id_version_informe} | ` : ''} {scheduleMap[slot].nombre}</strong>
                                                         <div>{scheduleMap[slot].inicio} - {scheduleMap[slot].fin}</div>
                                                     </div>
                                                     <div className={styles['task-block-right']}>

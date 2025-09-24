@@ -1,6 +1,6 @@
 from app_flask import app
 from flask import Flask, request, jsonify, session
-from flask_bcrypt import Bcrypt
+from apscheduler.schedulers.background import BackgroundScheduler
 from app_flask.models.project_models import Project
 from app_flask.models.report_models import Report
 from app_flask.models.hh_models.task_models import Task
@@ -55,7 +55,21 @@ def process_hh_register():
     
     data = request.get_json()
 
+    today = datetime.now().date()
+
+    current_month = today.month
+
     date_str = data.get('date')
+
+    date_month = int(date_str.split('-')[1])
+
+    # Validar que la fecha sea hasta el mes anterior o el mes actual
+    if date_month < current_month - 1 or date_month > current_month:
+        return jsonify({'status': 'error', 'message': 'Solo puedes registrar HH del mes actual o el mes anterior'}), 400
+
+    # Validar que la fecha no sea futura
+    if date_str > today.isoformat():
+        return jsonify({'status': 'error', 'message': 'No puedes registrar HH en una fecha futura'}), 400
 
     date_obj = datetime.strptime(date_str, "%Y-%m-%d")  # Convertir a objeto datetime
     day_of_week = date_obj.weekday() 
@@ -115,10 +129,12 @@ def process_hh_register():
     hh_data = {
         'id_proyecto': data.get('project'),
         'id_informe': data.get('report'),
+        'id_version_informe': data.get('id_version_informe'),
         'id_tarea': data.get('task'),
         'inicio': data.get('start-time'),
         'fin': data.get('end-time'),
         'rut_personal': session['rut_personal'],
+        'id_cargo': session['id_cargo'],
         'id_especialidad': session['id_especialidad'],
         'fecha': data.get('date'),
         'horas': round(total_hours, 1)
@@ -208,6 +224,20 @@ def hh_report_state():
         HH_Report_State.update({'id_estado': 4})
 
     return jsonify({
-        'status': 'success', 
+        'status': 'success',
         'message': 'El estado del registro de horas ha sido actualizado correctamente'
     })
+
+scheduler = BackgroundScheduler()
+
+scheduler.start()
+
+def hh_open_day():
+    HH_Report_State.update({'id_estado': 4})
+
+def hh_close_day():
+    HH_Report_State.update({'id_estado': 5})
+
+scheduler.add_job(func=hh_open_day, trigger='cron', day_of_week='mon-sun', hour=8, minute=30)
+
+scheduler.add_job(func=hh_close_day, trigger='cron', day_of_week='mon-sun', hour=21, minute=00)

@@ -8,7 +8,8 @@ class Clients:
         self.nombre_mandante = data.get('nombre_mandante')
         self.direccion = data.get('direccion')
         self.id_region = data.get('id_region')
-        self.comuna = data.get('comuna')
+        self.id_provincia = data.get('id_provincia')
+        self.id_comuna = data.get('id_comuna')
         self.giro = data.get('giro')
         self.telefono = data.get('telefono')
         self.email = data.get('email')
@@ -21,8 +22,8 @@ class Clients:
     def create(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                INSERT INTO mandantes (rut_mandante, digito_verificador_mandante, nombre_mandante, direccion, id_region, comuna, giro, telefono, email, sitio_web, nombre_contacto, telefono_contacto, email_contacto)
-                VALUES (%(rut_mandante)s, %(digito_verificador_mandante)s, %(nombre_mandante)s, %(direccion)s, %(id_region)s, %(comuna)s, %(giro)s, %(telefono)s, %(email)s, %(sitio_web)s, %(nombre_contacto)s, %(telefono_contacto)s, %(email_contacto)s);
+                INSERT INTO mandantes (rut_mandante, digito_verificador_mandante, nombre_mandante, direccion, id_region, id_provincia, id_comuna, giro, telefono, email, sitio_web, nombre_contacto, telefono_contacto, email_contacto)
+                VALUES (%(rut_mandante)s, %(digito_verificador_mandante)s, %(nombre_mandante)s, %(direccion)s, %(id_region)s, %(id_provincia)s, %(id_comuna)s, %(giro)s, %(telefono)s, %(email)s, %(sitio_web)s, %(nombre_contacto)s, %(telefono_contacto)s, %(email_contacto)s);
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
@@ -34,7 +35,8 @@ class Clients:
                     nombre_mandante = %(nombre_mandante)s,
                     direccion = %(direccion)s,
                     id_region = %(id_region)s,
-                    comuna = %(comuna)s,
+                    id_provincia = %(id_provincia)s,
+                    id_comuna = %(id_comuna)s,
                     giro = %(giro)s,
                     telefono = %(telefono)s,
                     email = %(email)s,
@@ -50,8 +52,10 @@ class Clients:
     def select_all(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT mandantes.*, regiones.nombre AS region_nombre FROM mandantes
-                JOIN regiones ON mandantes.id_region = regiones.id_region;
+                SELECT mandantes.*, regiones.region AS region_nombre, provincias.provincia AS provincia_nombre, comunas.comuna AS comuna_nombre FROM mandantes
+                LEFT JOIN regiones ON mandantes.id_region = regiones.id_region
+                LEFT JOIN provincias ON mandantes.id_provincia = provincias.id_provincia
+                LEFT JOIN comunas ON mandantes.id_comuna = comunas.id_comuna;
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
 

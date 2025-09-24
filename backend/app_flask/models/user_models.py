@@ -18,6 +18,7 @@ class User:
         self.fecha_nacimiento = data.get('fecha_nacimiento')
         self.fecha_contratacion = data.get('fecha_contratacion')
         self.estado = data.get('estado')
+        self.id_cargo = data.get('id_cargo')
         self.id_especialidad = data.get('id_especialidad')
         self.id_rol = data.get('id_rol')
         self.reporta_hh = data.get('reporta_hh')
@@ -31,9 +32,10 @@ class User:
         query = """
                 SELECT maestro_personal.rut_personal, maestro_personal.digito_verificador, maestro_personal.usuario, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m, 
                 maestro_personal.iniciales_nombre, maestro_personal.email, maestro_personal.telefono, maestro_personal.fecha_nacimiento, maestro_personal.fecha_contratacion, maestro_personal.estado, 
-                maestro_personal.id_especialidad, maestro_personal.id_rol, maestro_personal.reporta_hh, maestro_personal.color, maestro_personal.creado_en, maestro_personal.modificado_en, 
-                especialidades.especialidad, roles.rol FROM maestro_personal
+                maestro_personal.id_cargo, maestro_personal.id_especialidad, maestro_personal.id_rol, maestro_personal.reporta_hh, maestro_personal.color, maestro_personal.creado_en, maestro_personal.modificado_en, 
+                especialidades.especialidad, roles.rol, cargos.cargo FROM maestro_personal
                 JOIN especialidades ON maestro_personal.id_especialidad = especialidades.id_especialidad
+                LEFT JOIN cargos ON maestro_personal.id_cargo = cargos.id_cargo
                 JOIN roles ON maestro_personal.id_rol = roles.id_rol
                 ORDER BY maestro_personal.estado DESC, maestro_personal.id_rol ASC, maestro_personal.id_especialidad ASC;
                 """
@@ -43,8 +45,8 @@ class User:
     def create_one(cls, data):
         DATA_BASE = session.get('data_base')
         query = """
-                INSERT INTO maestro_personal(rut_personal, digito_verificador, usuario, contraseña, nombres, apellido_p, apellido_m, iniciales_nombre, email, fecha_nacimiento, fecha_contratacion, estado, id_especialidad, id_rol, reporta_hh, color)
-                VALUES (%(rut_personal)s, %(digito_verificador)s, %(usuario)s, %(contraseña)s, %(nombres)s, %(apellido_p)s, %(apellido_m)s, %(iniciales_nombre)s, %(email)s, %(fecha_nacimiento)s, %(fecha_contratacion)s, 1, %(id_especialidad)s, %(id_rol)s, %(reporta_hh)s, '#000000');
+                INSERT INTO maestro_personal(rut_personal, digito_verificador, usuario, contraseña, nombres, apellido_p, apellido_m, iniciales_nombre, email, fecha_nacimiento, fecha_contratacion, estado, id_cargo, id_especialidad, id_rol, reporta_hh, color)
+                VALUES (%(rut_personal)s, %(digito_verificador)s, %(usuario)s, %(contraseña)s, %(nombres)s, %(apellido_p)s, %(apellido_m)s, %(iniciales_nombre)s, %(email)s, %(fecha_nacimiento)s, %(fecha_contratacion)s, 1, %(id_cargo)s, %(id_especialidad)s, %(id_rol)s, %(reporta_hh)s, '#000000');
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
@@ -55,7 +57,7 @@ class User:
                 UPDATE maestro_personal
                 SET rut_personal = %(rut_personal)s, digito_verificador = %(digito_verificador)s, usuario = %(usuario)s, nombres = %(nombres)s, apellido_p = %(apellido_p)s, 
                 apellido_m = %(apellido_m)s, iniciales_nombre = %(iniciales_nombre)s, email = %(email)s, telefono = %(telefono)s, fecha_nacimiento = %(fecha_nacimiento)s, 
-                fecha_contratacion = %(fecha_contratacion)s, estado = %(estado)s, id_especialidad = %(id_especialidad)s, id_rol = %(id_rol)s, reporta_hh = %(reporta_hh)s, color = %(color)s
+                fecha_contratacion = %(fecha_contratacion)s, estado = %(estado)s, id_cargo = %(id_cargo)s, id_especialidad = %(id_especialidad)s, id_rol = %(id_rol)s, reporta_hh = %(reporta_hh)s, color = %(color)s
                 WHERE rut_personal = %(rut_personal)s;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)
@@ -67,7 +69,7 @@ class User:
                 UPDATE maestro_personal
                 SET rut_personal = %(rut_personal)s, digito_verificador = %(digito_verificador)s, usuario = %(usuario)s, contraseña = %(contraseña)s, nombres = %(nombres)s, apellido_p = %(apellido_p)s, 
                 apellido_m = %(apellido_m)s, iniciales_nombre = %(iniciales_nombre)s, email = %(email)s, telefono = %(telefono)s, fecha_nacimiento = %(fecha_nacimiento)s, 
-                fecha_contratacion = %(fecha_contratacion)s, estado = %(estado)s, id_especialidad = %(id_especialidad)s, id_rol = %(id_rol)s, reporta_hh = %(reporta_hh)s, color = %(color)s
+                fecha_contratacion = %(fecha_contratacion)s, estado = %(estado)s, id_cargo = %(id_cargo)s, id_especialidad = %(id_especialidad)s, id_rol = %(id_rol)s, reporta_hh = %(reporta_hh)s, color = %(color)s
                 WHERE rut_personal = %(rut_personal)s;
                 """
         return connectToMySQL(DATA_BASE).query_db(query, data)

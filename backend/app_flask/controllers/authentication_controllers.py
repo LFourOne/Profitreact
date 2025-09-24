@@ -53,10 +53,14 @@ def login():
 @app.route('/login/process', methods=['POST'])
 def login_process():
 
+    data_base = session.get('data_base')
+
+    # Si no hay base de datos seleccionada, retornamos un error
+    if data_base is None:
+        return jsonify({'status': 'error', 'message': 'error'}), 400
+
     # Obtenemos el usuario que intenta logearse
     user_login = User.obtain_one(request.form)
-
-    data_base = session.get('data_base')
 
     # Si no se encuentra el usuario, retornamos un error
     if user_login == None:
@@ -80,6 +84,7 @@ def login_process():
     session['apellido_p'] = user_login.apellido_p
     session['apellido_m'] = user_login.apellido_m
     session['email'] = user_login.email
+    session['id_cargo'] = user_login.id_cargo
     session['id_especialidad'] = user_login.id_especialidad
     session['id_rol'] = user_login.id_rol
     session['color'] = user_login.color

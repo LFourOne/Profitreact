@@ -4,14 +4,16 @@ from flask_bcrypt import Bcrypt
 from app_flask.models.user_models import User
 from app_flask.models.specialty_models import Specialty
 from app_flask.models.role_models import Role
+from app_flask.models.position_models import Position
 from app_flask.models.project_models import Project
 from app_flask.models.report_models import Report
-from app_flask.models.hh_models.task_type_models import TaskType
 from app_flask.models.hh_models.task_models import Task
 from app_flask.models.hh_models.project_report_models import ProjectReport
 from app_flask.models.hh_models.project_task_models import ProjectTask
 from app_flask.models.client_models import Clients
 from app_flask.models.region_models import Regions
+from app_flask.models.province_models import Province
+from app_flask.models.commune_models import Commune
 from app_flask.models.staff_models import Staff
 from app_flask.models.study_type_models import Study_type
 from app_flask.models.meeting_type_models import MeetingType 
@@ -34,11 +36,14 @@ def user_management():
 
     specialty = Specialty.get_specialities()
 
+    position = Position.select_all()
+
     role = Role.get_all()
 
     return jsonify({
         'staff' : staff,
         'specialty': specialty,
+        'position': position,
         'role': role
     }), 200
 
@@ -69,6 +74,7 @@ def register_process():
         'fecha_contratacion': data['fecha_contratacion'],
         'estado': 1,
         'id_especialidad': data['id_especialidad'],
+        'id_cargo': data['id_cargo'],
         'id_rol': data['id_rol'],
         'reporta_hh': data['reporta_hh'],
     }
@@ -103,6 +109,7 @@ def edit_user_process():
         'fecha_contratacion': data.get('fecha_contratacion'),
         'estado': data.get('estado'),
         'id_especialidad': data.get('id_especialidad'),
+        'id_cargo': data.get('id_cargo'),
         'id_rol': data.get('id_rol'),
         'reporta_hh': data.get('reporta_hh'),
         'color': data.get('color')
@@ -234,7 +241,7 @@ def task():
 
     tasks = Task.get_all()
 
-    task_types = TaskType.get_all()
+    task_types = TaskType.select_all()
 
     return jsonify({
         'tasks': tasks,
@@ -345,7 +352,8 @@ def add_client_process():
         'nombre_mandante': data.get('nombre_mandante'),
         'direccion': data.get('direccion'),
         'id_region': data.get('id_region'),
-        'comuna': data.get('comuna'),
+        'id_provincia': data.get('id_provincia'),
+        'id_comuna': data.get('id_comuna'),
         'giro': data.get('giro'),
         'telefono': data.get('telefono'),
         'email': data.get('email'),
@@ -376,7 +384,8 @@ def edit_client_process():
         'nombre_mandante': data.get('nombre_mandante'),
         'direccion': data.get('direccion'),
         'id_region': data.get('id_region'),
-        'comuna': data.get('comuna'),
+        'id_provincia': data.get('id_provincia'),
+        'id_comuna': data.get('id_comuna'),
         'giro': data.get('giro'),
         'telefono': data.get('telefono'),
         'email': data.get('email'),
@@ -407,11 +416,14 @@ def projects_management():
 
     clients = Clients.select_all_rut_and_name()
 
+    regions = Regions.select_all()
+
     return jsonify({
         'projects': projects,
         'staff': staff,
         'study_types': study_types,
-        'clients': clients
+        'clients': clients,
+        'regions': regions
     }), 200
 
 @app.route('/admin/projects-management/add/process', methods=['POST'])
@@ -433,6 +445,9 @@ def add_project_process():
         'fecha_inicio': data.get('fecha_inicio'),
         'fecha_termino': data.get('fecha_termino'),
         'id_ot': data.get('id_ot'),
+        'id_region': data.get('id_region'),
+        'id_provincia': data.get('id_provincia'),
+        'id_comuna': data.get('id_comuna'),
         'estado': data.get('estado'),
         'rut_mandante': data.get('rut_mandante')
     }
@@ -461,6 +476,9 @@ def edit_project_process():
         'fecha_inicio': data.get('fecha_inicio'),
         'fecha_termino': data.get('fecha_termino'),
         'id_ot': data.get('id_ot'),
+        'id_region': data.get('id_region'),
+        'id_provincia': data.get('id_provincia'),
+        'id_comuna': data.get('id_comuna'),
         'estado': data.get('estado'),
         'rut_mandante': data.get('rut_mandante')
     }
@@ -697,3 +715,87 @@ def study_type_management_update():
     Study_type.update(study_type_data)
 
     return jsonify({'status': 'success', 'message': 'Tipo de estudio actualizado correctamente'}), 200
+
+@app.route('/admin/position-management')
+def position_management():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    positions = Position.select_all()
+
+    return jsonify({
+        'positions': positions
+    }), 200
+
+@app.route('/admin/position-management/add', methods=['POST'])
+def position_management_add():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    position_data = {
+        'cargo': data.get('cargo')
+    }
+
+    Position.create(position_data)
+
+    return jsonify({'status': 'success', 'message': 'Cargo creado correctamente'}), 200
+
+@app.route('/admin/position-management/update', methods=['PATCH'])
+def position_management_update():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    position_data = {
+        'id_cargo': data.get('id_cargo'),
+        'cargo': data.get('cargo')
+    }
+
+    Position.update(position_data)
+
+    return jsonify({'status': 'success', 'message': 'Cargo actualizado correctamente'}), 200
+
+@app.route('/admin/api/get-provinces/<int:id_region>', methods=['GET'])
+def get_provinces(id_region):
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    provinces = Province.select_by_region({'id_region': id_region})
+
+    return jsonify({
+        'provinces': provinces
+    }), 200
+
+@app.route('/admin/api/get-communes/<int:id_province>', methods=['GET'])
+def get_communes(id_province):
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+
+    if session['id_rol'] not in [1, 2, 3]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    communes = Commune.select_by_province({'id_provincia': id_province})
+
+    return jsonify({
+        'communes': communes
+    }), 200

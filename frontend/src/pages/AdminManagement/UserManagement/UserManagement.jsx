@@ -21,8 +21,9 @@ export function UserManagement() {
     const [isEditing, setIsEditing] = useState(false);
 
     const [staff, setStaff] = useState([]);
-    const [role, setRole] = useState([]);
     const [specialty, setSpecialty] = useState([]);
+    const [position, setPosition] = useState([]);
+    const [role, setRole] = useState([]);
 
     const [searchUser, setSearchUser] = useState('');
     const [roleFilter, setRoleFilter] = useState('');
@@ -35,8 +36,9 @@ export function UserManagement() {
         try {
             const response = await apiClient.get('/admin/user-management');
             setStaff(response.data.staff);
-            setRole(response.data.role);
             setSpecialty(response.data.specialty);
+            setPosition(response.data.position);
+            setRole(response.data.role);
             console.log(response.data);
         } 
         catch (error) {
@@ -356,6 +358,17 @@ export function UserManagement() {
                                                                 </select>
                                                             </div>
                                                             <div className={styles['add-info-item']}>
+                                                                <label>Cargo</label>
+                                                                <select className={styles['add-input']} defaultValue="" {...registerAdd('id_cargo', {required: true})}>
+                                                                    <option value="" disabled>Seleccionar cargo</option>
+                                                                    {
+                                                                        position.map((position) =>(
+                                                                            <option key={position.id_cargo} value={position.id_cargo}>{position.cargo}</option>
+                                                                        ))
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div className={styles['add-info-item']}>
                                                                 <label>Especialidad</label>
                                                                 <select className={styles['add-input']} defaultValue="" {...registerAdd('id_especialidad', {required: true})}>
                                                                     <option value="" disabled>Seleccionar especialidad</option>
@@ -516,6 +529,15 @@ export function UserManagement() {
                                                                             </select>
                                                                         </div>
                                                                         <div className={styles['view-info-item']}>
+                                                                            <label>Cargo</label>
+                                                                            <select defaultValue={selectedStaff.id_cargo ? selectedStaff.id_cargo : ''} className={styles['edit-input']} {...registerEdit('id_cargo', {required: true})}>
+                                                                                <option value="">Seleccione un cargo</option>
+                                                                                {position.map((position) => (
+                                                                                    <option key={position.id_cargo} value={position.id_cargo}>{position.cargo}</option>
+                                                                                ))}
+                                                                            </select>
+                                                                        </div>
+                                                                        <div className={styles['view-info-item']}>
                                                                             <label>Estado</label>
                                                                             <select defaultValue={selectedStaff.estado} className={styles['edit-input']} {...registerEdit('estado', {required: true})}>
                                                                                 <option value="1">Activo</option>
@@ -570,6 +592,7 @@ export function UserManagement() {
                                                         :
                                                         (
                                                             <>
+                                                            {/* Modal de Visualización */}
                                                             <div className={styles['view-info-container']}>
                                                                 <header className={styles['view-info-header']}>
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -631,6 +654,10 @@ export function UserManagement() {
                                                                     <div className={styles['view-info-item']}>
                                                                         <label>Especialidad</label>
                                                                         <span>{selectedStaff.especialidad}</span>
+                                                                    </div>
+                                                                    <div className={styles['view-info-item']}>
+                                                                        <label>Cargo</label>
+                                                                        <span>{selectedStaff.cargo ? selectedStaff.cargo : 'N/A'}</span>
                                                                     </div>
                                                                     <div className={styles['view-info-item']}>
                                                                         <label>Estado</label>

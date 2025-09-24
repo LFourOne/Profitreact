@@ -383,7 +383,7 @@
         flex-direction: column;
         align-items: center;
         box-sizing: border-box;
-        height: 350px;
+        height: 450px;
         width: 100%;
         border: 1px solid #d4d4d4;
         border-radius: 8px;
@@ -992,7 +992,7 @@
         flex-direction: column;
         box-sizing: border-box;
         flex: 1 1 45%;
-        height: 350px;
+        height: 450px;
         width: 452px;
         border: 1px solid #d4d4d4;
         border-radius: 8px;
@@ -1601,7 +1601,7 @@
         flex-direction: column;
         box-sizing: border-box;
         flex: 1 1 45%;
-        height: 350px;
+        height: 450px;
         width: 452px;
         border: 1px solid #d4d4d4;
         border-radius: 8px;

@@ -49,6 +49,10 @@ export function Login() {
                 navigate('/index');
             }
         } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setErrorMessages('Ocurrió un error inesperado. Inténtalo de nuevo más tarde.');
+                navigate('/');
+            }
             if (error.response && error.response.status === 401) {
                 setErrorMessages('Por favor, ingrese credenciales válidas.');
             } else {

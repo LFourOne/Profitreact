@@ -350,6 +350,18 @@
     border-radius: 8px;
     background-color: white;
 }
+.disabled-input{
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 174px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f3f4f6;
+}
 .modal .view .view-content form fieldset select{
     display: flex;
     box-sizing: border-box;

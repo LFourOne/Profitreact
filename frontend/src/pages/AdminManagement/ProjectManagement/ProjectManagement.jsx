@@ -7,15 +7,18 @@ import logo from '../../../assets/icon1.png'
 
 export function ProjectManagement() {
 
-    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd } = useForm();
-    const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit } = useForm();
-    
+    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, setValue: setValueAdd } = useForm();
+    const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, setValue: setValueEdit } = useForm();
+
     const navigate = useNavigate();
     
     const [projects, setProjects] = useState([]);
     const [staff, setStaff] = useState([]);
     const [studyTypes, setStudyTypes] = useState([]);
     const [clients, setClients] = useState([]);
+    const [regions, setRegions] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [communes, setCommunes] = useState([]);
 
     const [showModal, setShowModal] = useState(false);
     const [modalType, setModalType] = useState('');
@@ -30,6 +33,7 @@ export function ProjectManagement() {
             const response = await apiClient.get('/admin/projects-management');
 
             setProjects(response.data.projects);
+            setRegions(response.data.regions);
             setStaff(response.data.staff);
             setStudyTypes(response.data.study_types);
             setClients(response.data.clients);
@@ -109,6 +113,9 @@ export function ProjectManagement() {
     const handleOpenViewModal = (project) => {
         setModalType('view');
         setSelectedProject(project);
+        setValueEdit('id_region', project.id_region ? project.id_region : '');
+        setValueEdit('id_provincia', project.id_provincia ? project.id_provincia : '');
+        setValueEdit('id_comuna', project.id_comuna ? project.id_comuna : '');
         setShowModal(true);
     }
 
@@ -119,10 +126,61 @@ export function ProjectManagement() {
         setIsEditing(false);
         resetEdit();
         resetAdd();
+        setProvinces([]);
+        setCommunes([]);
+        setValueAdd('id_provincia', '');
+        setValueAdd('id_comuna', '');
+        setValueEdit('id_provincia', '');
+        setValueEdit('id_comuna', '');
     }
 
     const handleIsEditing = () => {
         setIsEditing(!isEditing);
+    }
+
+    const handleRegionChange = async (e) => {
+        const regionId = e.target.value;
+
+        if (provinces.length > 0) {
+            setProvinces([]);
+            setCommunes([]);
+            setValueAdd('id_provincia', '');
+            setValueAdd('id_comuna', '');
+            setValueEdit('id_provincia', '');
+            setValueEdit('id_comuna', '');
+        }
+
+        if (regionId) {
+            try {
+                const response = await apiClient.get(`/admin/api/get-provinces/${regionId}`);
+
+                setProvinces(response.data.provinces);
+
+            } catch (error) {
+                console.error('Error al cargar las provincias:', error);
+            }
+        }
+    }
+
+    const handleProvinceChange = async (e) => {
+        const provinceId = e.target.value;
+
+        if (communes.length > 0) {
+            setCommunes([]);
+            setValueAdd('id_comuna', '');
+            setValueEdit('id_comuna', '');
+        }
+
+        if (provinceId) {
+            try {
+                const response = await apiClient.get(`/admin/api/get-communes/${provinceId}`);
+
+                setCommunes(response.data.communes);
+
+            } catch (error) {
+                console.error('Error al cargar las comunas:', error);
+            }
+        }
     }
 
     const formatDate = (dateString) => {
@@ -187,6 +245,9 @@ export function ProjectManagement() {
                                     <th>Fecha de Término</th>
                                     <th>Mandante</th>
                                     <th>OT</th>
+                                    <th>Región</th>
+                                    <th>Provincia</th>
+                                    <th>Comuna</th>
                                     <th>Estado</th>
                                 </tr>
                             </thead>
@@ -202,6 +263,9 @@ export function ProjectManagement() {
                                             <td>{formatDate(project.fecha_termino)}</td>
                                             <td>{project.nombre_mandante ? project.nombre_mandante : 'N/A'}</td>
                                             <td>{project.id_ot ? (project.id_ot === 1 && <span>Sí</span>) : 'No'}</td>
+                                            <td>{project.region_nombre ? project.region_nombre : 'N/A'}</td>
+                                            <td>{project.provincia_nombre ? project.provincia_nombre : 'N/A'}</td>
+                                            <td>{project.comuna_nombre ? project.comuna_nombre : 'N/A'}</td>
                                             <td>{project.estado ? (project.estado === 1 && <span>Vigente</span>) : <span>Terminado</span>}</td>
                                         </tr>
                                     ))
@@ -271,6 +335,45 @@ export function ProjectManagement() {
                                                         </select>
                                                     </fieldset>
                                                     <fieldset>
+                                                        <label>Región</label>
+                                                        <select name="region" id="region" defaultValue='' {...registerAdd('id_region', {required: true, onChange: handleRegionChange})}>
+                                                            <option value="" disabled>Seleccione una región</option>
+                                                            {regions.map(region => (
+                                                                <option key={region.id_region} value={region.id_region}>{region.region}</option>
+                                                            ))}
+                                                        </select>
+                                                    </fieldset>
+                                                    <fieldset>
+                                                        <label>Provincia</label>
+                                                        {
+                                                            provinces.length > 0 ? (
+                                                                <select name="provincia" id="provincia" defaultValue='' {...registerAdd('id_provincia', {required: true, onChange: handleProvinceChange})}>
+                                                                    <option value="" disabled>Seleccione una provincia</option>
+                                                                    {provinces.map(provincia => (
+                                                                        <option key={provincia.id_provincia} value={provincia.id_provincia}>{provincia.provincia}</option>
+                                                                    ))}
+                                                                </select>
+                                                            ) 
+                                                            :
+                                                            (
+                                                                <span className={styles['disabled-input']}></span>
+                                                            )}
+                                                    </fieldset>
+                                                    <fieldset>
+                                                        <label>Comuna</label>
+                                                        {
+                                                            communes.length > 0 ? (
+                                                                <select name="comuna" id="comuna" defaultValue='' {...registerAdd('id_comuna', {required: true})}>
+                                                                    <option value="" disabled>Seleccione una comuna</option>
+                                                                    {communes.map(comuna => (
+                                                                        <option key={comuna.id_comuna} value={comuna.id_comuna}>{comuna.comuna}</option>
+                                                                    ))}
+                                                                </select>
+                                                            ) : (
+                                                                <span className={styles['disabled-input']}></span>
+                                                            )}
+                                                    </fieldset>
+                                                    <fieldset>
                                                         <label>Mandante</label>
                                                         <select name="mandante" id="mandante" defaultValue='' {...registerAdd('rut_mandante', {required: true})}>
                                                             <option value="" disabled>Seleccione una opción</option>
@@ -298,7 +401,7 @@ export function ProjectManagement() {
                                             <div className={styles['view']}>
                                                 <header>
                                                     <div className={styles['view-left-container']}>
-                                                            <h1>{selectedProject.nombre_mandante}</h1>
+                                                            <h1>{selectedProject.id_proyecto}</h1>
                                                     </div>
                                                     <div className={styles['view-right-container']}>
                                                         {
@@ -382,6 +485,48 @@ export function ProjectManagement() {
                                                                         </select>
                                                                     </fieldset>
                                                                     <fieldset>
+                                                                        <label>Región</label>
+                                                                        <select name="region" id="region" defaultValue={selectedProject.id_region ? selectedProject.id_region : ''} {...registerEdit('id_region', { required: true, onChange: handleRegionChange })}>
+                                                                            {regions.map(region => (
+                                                                                <option key={region.id_region} value={region.id_region}>{region.region}</option>
+                                                                            ))}
+                                                                        </select>
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Provincia</label>
+                                                                        {
+                                                                            provinces.length > 0 ? (
+                                                                                <select name="provincia" id="provincia" defaultValue={selectedProject.id_provincia ? selectedProject.id_provincia : ''} {...registerEdit('id_provincia', { required: true, onChange: handleProvinceChange })}>
+                                                                                    <option value="" disabled>Seleccione una provincia</option>
+                                                                                    {provinces.map(provincia => (
+                                                                                        <option key={provincia.id_provincia} value={provincia.id_provincia}>{provincia.provincia}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            )
+                                                                            :
+                                                                            (
+                                                                                <span className={styles['disabled-input']}></span>
+                                                                            )
+                                                                        }
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Comuna</label>
+                                                                        {
+                                                                            communes.length > 0 ? (
+                                                                                <select name="comuna" id="comuna" defaultValue={selectedProject.id_comuna ? selectedProject.id_comuna : ''} {...registerEdit('id_comuna', { required: true })}>
+                                                                                    <option value="" disabled>Seleccione una comuna</option>
+                                                                                    {communes.map(comuna => (
+                                                                                        <option key={comuna.id_comuna} value={comuna.id_comuna}>{comuna.comuna}</option>
+                                                                                    ))}
+                                                                                </select>
+                                                                            )
+                                                                            :
+                                                                            (
+                                                                                <span className={styles['disabled-input']}></span>
+                                                                            )
+                                                                        }
+                                                                    </fieldset>
+                                                                    <fieldset>
                                                                         <label>Estado</label>
                                                                         <select name="state" id="state" defaultValue={getSelectValue(selectedProject.estado)} {...registerEdit('estado', {required: true})}>
                                                                             <option value="" disabled>Seleccione una opción</option>
@@ -394,6 +539,7 @@ export function ProjectManagement() {
                                                             :
                                                             (
                                                                 <div className={styles['view-info-content']}>
+                                                                    {console.log(selectedProject)}
                                                                     <fieldset>
                                                                         <label>Proyecto</label>
                                                                         <span>{selectedProject.id_proyecto}</span>
@@ -425,6 +571,18 @@ export function ProjectManagement() {
                                                                     <fieldset>
                                                                         <label>OT</label>
                                                                         <span>{selectedProject.id_ot && selectedProject.id_ot === 1 ? 'Sí' : 'No'}</span>
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Región</label>
+                                                                        <span>{selectedProject.region_nombre ? selectedProject.region_nombre : 'N/A'}</span>
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Provincia</label>
+                                                                        <span>{selectedProject.provincia_nombre ? selectedProject.provincia_nombre : 'N/A'}</span>
+                                                                    </fieldset>
+                                                                    <fieldset>
+                                                                        <label>Comuna</label>
+                                                                        <span>{selectedProject.comuna_nombre ? selectedProject.comuna_nombre : 'N/A'}</span>
                                                                     </fieldset>
                                                                     <fieldset>
                                                                         <label>Estado</label>

@@ -174,7 +174,7 @@
     box-sizing: border-box;
     width: 1000px;
     max-width: 1000px;
-    height: 570px;
+    height: 600px;
     padding: 30px;
     background: white;
     border-radius: 8px;
@@ -469,6 +469,18 @@
     border: 1px solid #d1d5db;
     border-radius: 8px;
     background-color: white;
+}
+.disabled-input{
+    display: flex;
+    box-sizing: border-box;
+    height: 40px;
+    width: 174px;
+    padding: 8px;
+    font-size: 14px;
+    color: #1f2937;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #f3f4f6;
 }
 .modal .add form fieldset select {
     display: flex;

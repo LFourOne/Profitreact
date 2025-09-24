@@ -10,6 +10,7 @@ import { SpecialtyManagement } from './pages/AdminManagement/SpecialtyManagement
 import { MeetingTypeManagement } from './pages/AdminManagement/MeetingTypeManagement/MeetingTypeManagement';
 import { TaskTypeManagement } from './pages/AdminManagement/TaskTypeManagement/TaskTypeManagement';
 import { StudyTypeManagement } from './pages/AdminManagement/StudyTypeManagement/StudyTypeManagement';
+import { PositionManagement } from './pages/AdminManagement/PositionManagement/PositionManagement';
 import { Task } from './pages/AdminManagement/HHManagement/Task/Task';
 import { Profile } from './pages/Profile/Profile';
 import { Index } from './pages/Index/Index';
@@ -45,6 +46,7 @@ export function App() {
           <Route path="/admin/meeting-type-management" element={<MeetingTypeManagement />} />
           <Route path="/admin/task-type-management" element={<TaskTypeManagement />} />
           <Route path="/admin/study-type-management" element={<StudyTypeManagement />} />
+          <Route path="/admin/position-management" element={<PositionManagement />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/index" element={<Index />} />
           <Route path="/gantt" element={<Gantt />} />
