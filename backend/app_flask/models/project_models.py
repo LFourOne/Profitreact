@@ -14,6 +14,7 @@ class Project:
         self.id_region = data.get('id_region')
         self.id_provincia = data.get('id_provincia')
         self.id_comuna = data.get('id_comuna')
+        self.id_area_empresa = data.get('id_area_empresa')
         self.estado = data.get('estado')
 
     @classmethod
@@ -84,6 +85,16 @@ class Project:
                 SELECT proyectos.id_proyecto, proyectos.jefe_proyectos, proyectos.id_ot, maestro_personal.rut_personal, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m FROM proyectos
                 JOIN maestro_personal ON proyectos.jefe_proyectos = maestro_personal.rut_personal
                 WHERE proyectos.estado = 1 AND proyectos.id_proyecto != "JE"
+                """
+        return connectToMySQL(DATA_BASE).query_db(query)
+    
+    @classmethod
+    def get_gantt_projects(cls):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT proyectos.id_proyecto, proyectos.jefe_proyectos, proyectos.id_ot, maestro_personal.rut_personal, maestro_personal.nombres, maestro_personal.apellido_p, maestro_personal.apellido_m FROM proyectos
+                JOIN maestro_personal ON proyectos.jefe_proyectos = maestro_personal.rut_personal
+                WHERE proyectos.estado = 1 AND proyectos.id_proyecto != "JE" AND proyectos.id_proyecto NOT LIKE '%OT%' AND proyectos.id_area_empresa = 3
                 """
         return connectToMySQL(DATA_BASE).query_db(query)
     

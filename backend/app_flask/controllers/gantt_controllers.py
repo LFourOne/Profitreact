@@ -21,7 +21,7 @@ def gantt():
     if 'rut_personal' not in session:
         return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
 
-    projects = Project.get_projects()
+    projects = Project.get_gantt_projects()
 
     project_list = []
 
