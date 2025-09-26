@@ -10,7 +10,7 @@ export function Minute() {
 
     Modal.setAppElement('#root');
 
-    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, control: controlAdd, formState: { errors : errorsAdd }, control } = useForm();
+    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, control: controlAdd, formState: { errors : errorsAdd }, control, setValue: setValueAdd } = useForm();
     const { register: registerComplete, handleSubmit: handleSubmitComplete, reset: resetComplete, control: controlComplete, formState: { errors : errorsComplete } } = useForm();
     const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, control: controlEdit, formState: { errors : errorsEdit } } = useForm();
     const { register: registerDelete, handleSubmit: handleSubmitDelete, reset: resetDelete, control: controlDelete, formState: { errors : errorsDelete } } = useForm();
@@ -84,11 +84,14 @@ export function Minute() {
 
         data.id_reunion = id_reunion;
 
+        const projectToKeep = data.project_id;
+
         const response = await apiClient.post('/meetings/minute/add-commitment', data);
 
         await fetchApi();
         setSelectKey(prev => prev + 1);
         resetAdd();
+        setValueAdd('project_id', projectToKeep);
     }
 
     const onSubmitComplete = async (event, id_compromiso) => {
