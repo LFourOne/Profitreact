@@ -86,6 +86,16 @@ class Assigned:
         return connectToMySQL(DATA_BASE).query_db(query, data)
     
     @classmethod
+    def select_assigned_by_planitication_and_rut(cls, data):
+        DATA_BASE = session.get('data_base')
+        query = """
+                SELECT * FROM gantt_asignados
+                WHERE id_planificacion = %(id_planificacion)s AND rut_personal = %(rut_personal)s;
+                """
+        response = connectToMySQL(DATA_BASE).query_db(query, data)
+        return bool(response)
+    
+    @classmethod
     def remove_assigned(cls, data):
         DATA_BASE = session.get('data_base')
         query = """

@@ -47,6 +47,7 @@ def gantt():
                 'nombres' : person['nombres'],
                 'apellido_p' : person['apellido_p'],
                 'apellido_m' : person['apellido_m'],
+                'iniciales_nombre' : person['iniciales_nombre'],
                 'id_especialidad' : person['id_especialidad'],
                 'color' : person['color']
             }
@@ -242,7 +243,7 @@ def get_delivery_by_date():
         'ot': ots
     })
 
-@app.route('/gantt/planificacion', methods=['POST'])
+@app.route('/gantt/planification/process', methods=['POST'])
 def planification():
 
     if 'rut_personal' not in session:
@@ -253,153 +254,55 @@ def planification():
 
     data = request.get_json()
 
-    date_parts = data['date'].split('/')
-    formatted_date = f"{date_parts[2]}-{date_parts[1]}-{date_parts[0]}"
+    print("Received Data:", data)
 
-    planning_data = {
-        'id_proyecto' : data['project'],
-        'fecha' : formatted_date,
-        'rut_personal' : data['staff'],
-        'id_especialidad' : data['specialty']
+    data_searching_planning = {
+        'id_proyecto' : data['id_proyecto'],
+        'fecha' : data['fecha']
     }
-    
-    planning_id = Planning.insert_planning(planning_data)
 
-    for staff in data['staff']:
+    existing_planning = Planning.select_planning_id(data_searching_planning)
+
+    print("Existing Planning:", existing_planning)
+
+    if existing_planning:
+        
+        assigned = Assigned.select_assigned_by_planitication_and_rut({'id_planificacion': existing_planning[0]['id_planificacion'], 'rut_personal': data['selectedStaff']['rut_personal']})
+
+        if assigned:
+            Assigned.remove_assigned({'id_planificacion': existing_planning[0]['id_planificacion'], 'rut_personal': data['selectedStaff']['rut_personal']})
+            assigned_exists = Assigned.select_assigned_by_planification({'id_planificacion': existing_planning[0]['id_planificacion']})
+            if not assigned_exists:
+                Planning.delete_planning({'id_planificacion': existing_planning[0]['id_planificacion']})
+        else:
+            assigned_data = {
+                'id_planificacion' : existing_planning[0]['id_planificacion'],
+                'rut_personal' : data['selectedStaff']['rut_personal'],
+                'id_especialidad' : data['selectedStaff']['id_especialidad']
+            }
+
+            Assigned.insert_assigned(assigned_data)
+
+    else:
+
+        planning_data = {
+            'id_proyecto' : data['id_proyecto'],
+            'fecha' : data['fecha'],
+            'id_especialidad' : data['selectedStaff']['id_especialidad']
+        }
+    
+        planning_id = Planning.insert_planning(planning_data)
 
         assigned_data = {
             'id_planificacion' : planning_id,
-            'rut_personal' : staff,
-            'id_especialidad' : data['specialty']
+            'rut_personal' : data['selectedStaff']['rut_personal'],
+            'id_especialidad' : data['selectedStaff']['id_especialidad']
         }
 
         Assigned.insert_assigned(assigned_data)
-
 
     return jsonify({
         'message': 'success',
-    })
-
-@app.route('/gantt/editar', methods=['PATCH'])
-def edit_planification():
-    
-    if 'rut_personal' not in session:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-
-    if session['id_rol'] not in [1, 2, 3, 4, 5]:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
-
-    # Almacenamos los datos entregados desde el front
-    data = request.get_json()
-
-    new_staff = data['staff']
-
-    # Formateamos la fecha a Año/Mes/Día
-    date_parts = data['date'].split('/')
-    formatted_date = f"{date_parts[2]}-{date_parts[1]}-{date_parts[0]}"
-
-    # Asignamos datos a una variable para encontrar la planificación necesaria
-    data_to_planification = {
-        'id_proyecto': data['project'],
-        'fecha': formatted_date
-    }
-
-    # Obtenemos el id de la planificación
-    planification_id = Planning.select_planning_id(data_to_planification)
-    planification_id = planification_id[0]['id_planificacion']
-    
-    # Obtenemos los asignados actuales de la planificación
-    current_assigned = Assigned.select_assigned_by_planification({'id_planificacion': planification_id})
-    current_staff_ruts = [str(assigned['rut_personal']) for assigned in current_assigned]
-
-    # Convertimos los ruts de los asignados actuales y nuevos a sets para facilitar las comparaciones
-
-    current_set = set(current_staff_ruts)
-    new_set = set(new_staff)
-
-    to_remove_staff = current_set - new_set
-    for staff in to_remove_staff:
-        Assigned.remove_assigned({'id_planificacion': planification_id, 'rut_personal': staff})
-
-    to_add_staff = new_set - current_set
-    for staff in to_add_staff:
-        specialty = Staff.get_specialty_staff_by_rut({'rut_personal': staff})
-        formatted_specialty = specialty[0]['id_especialidad']
-        assigned_data = {
-            'id_planificacion': planification_id,
-            'rut_personal': staff,
-            'id_especialidad': formatted_specialty
-        }
-        Assigned.insert_assigned(assigned_data)
-
-
-    return jsonify({
-        'message': 'success'
-    })
-
-@app.route('/gantt/eliminar', methods=['DELETE'])
-def delete_planification():
-    
-    if 'rut_personal' not in session:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-    
-    if session['id_rol'] not in [1, 2, 3, 4, 5]:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
-
-    # Almacenamos los datos entregados desde el front
-    data = request.get_json()
-
-    # Formateamos la fecha a Año/Mes/Día
-
-    date_parts = data['date'].split('/')
-    formatted_date = f"{date_parts[2]}-{date_parts[1]}-{date_parts[0]}"
-
-    # Asignamos datos a una variable para encontrar la planificación necesaria
-    data_to_planification = {
-        'id_proyecto': data['project'],
-        'fecha': formatted_date
-    }
-
-    # Obtenemos el id de la planificación
-    planification_id = Planning.select_planning_id(data_to_planification)
-    planification_id = planification_id[0]['id_planificacion']
-    
-    # Primero partimos eliminando los asignados de la planificación para no tener problemas con las llaves foráneas
-
-    # Eliminamos todos los asignados de la planificación
-    Assigned.remove_assigned_by_planification({'id_planificacion': planification_id})
-
-    # Eliminamos la planificación
-    Planning.delete_planning({'id_planificacion': planification_id})
-
-    return jsonify({
-        'message': 'success'
-    })
-
-@app.route('/gantt/customize', methods=['PATCH'])
-def customize_user():
-    
-    if 'rut_personal' not in session:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
-
-    if session['id_rol'] not in [1, 2, 3, 4]:
-        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
-    
-    data = request.get_json()
-
-    for key, user in data.items():
-        color = user['color']
-        rut_personal = user['rut_personal']
-
-        current_color = Staff.select_color_by_rut({'rut_personal': rut_personal})
-
-        if current_color[0]['color'] == color:
-            pass
-        else:
-            Staff.update_color_by_rut({'rut_personal': rut_personal, 'color': color})
-    
-    return jsonify({
-        'message': 'success'
     })
 
 # <------------ Para arriba corresponde a la Gantt de Planificación ------------>

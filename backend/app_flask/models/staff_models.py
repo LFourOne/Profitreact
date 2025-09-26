@@ -83,7 +83,7 @@ class Staff:
     def get_staff(cls):
         DATA_BASE = session.get('data_base')
         query = """
-                SELECT rut_personal, nombres, apellido_p, apellido_m, id_especialidad, color FROM maestro_personal
+                SELECT rut_personal, nombres, apellido_p, apellido_m, iniciales_nombre, id_especialidad, color FROM maestro_personal
                 WHERE estado = 1
                 """
         return connectToMySQL(DATA_BASE).query_db(query)

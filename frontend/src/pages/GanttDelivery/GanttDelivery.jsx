@@ -283,7 +283,7 @@ export function GanttDelivery() {
 
     return (
         <>
-        <main id={styles['gantt-body-main']}>
+        <main className={styles['main']}>
             <section className={styles['gantt-header']}>
                 <div className={styles['gantt-header-subcontainer']}></div>
                 <div id={styles['date-container']} className={styles['gantt-header-subcontainer']}>
@@ -990,8 +990,8 @@ export function GanttDelivery() {
                                     </div>
                                 ))
                             }
+                            <button type='submit' className={styles['primary-btn']}>Guardar cambios</button>
                         </div>
-                        <button type='submit' className={styles['primary-btn']}>Guardar cambios</button>
                     </form>
                 </Modal>
             </div>

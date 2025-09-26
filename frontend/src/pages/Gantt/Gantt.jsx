@@ -2,16 +2,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { v4 as uuidvd4 } from 'uuid';
 import Modal from 'react-modal';
-import { useNavigate } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import styles from './Gantt.module.css';
 import apiClient from '../../services/api';
 
 export function Gantt() {
-    
-    const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, formState: { errors: errorsAdd }, setValue: setValueAdd } = useForm();
-    const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, formState: { errors: errorsEdit }, watch: watchEdit, setValue: setValueEdit } = useForm();
-    const { register: registerDelete, handleSubmit: handleSubmitDelete, reset: resetDelete} = useForm();
-    const { register: registerCustomize, handleSubmit: handleSubmitCustomize, reset: resetCustomize, formState: { errors: errorsCustomize }, setValue: setValueCustomize } = useForm();
 
     const navigate = useNavigate();
 
@@ -21,14 +16,6 @@ export function Gantt() {
     const [specialty, setSpecialty] = useState([]);
     const [dates, setDates] = useState([]);
     const [planification, setPlanification] = useState([]);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedProject, setSelectedProject] = useState(null);
-    const [selectedPlan, setSelectedPlan] = useState(null); 
-    const [editModalIsOpen, setEditModalIsOpen] = useState(false);
-    const [customizeModalIsOpen, setCustomizeModalIsOpen] = useState(false);
-    const [staffInputs, setStaffInputs] = useState([{ id: uuidvd4() }]);
-    const [isEditing, setIsEditing] = useState(false);
     const currentDate = new Date();
     const currentMonth = currentDate.toISOString().slice(0, 7);
     const [selectedMonth, setSelectedMonth] = useState(currentMonth);
@@ -37,6 +24,8 @@ export function Gantt() {
     const [version, setVersion] = useState([]);
     const [ot, setOt] = useState([]);
     const [deliveryType, setDeliveryType] = useState([]);
+    
+    const [selectedStaff, setSelectedStaff] = useState([]);
 
     const fetchApi = async () => {
         try {
@@ -59,6 +48,25 @@ export function Gantt() {
         }
     };
 
+    const onSubmit = async (data) => {
+
+        console.log('Datos a enviar:', data);
+
+        if (!data.selectedStaff || data.selectedStaff === undefined || data.selectedStaff.length === 0) {
+            alert('Por favor, seleccione un miembro del personal antes de asignar o eliminar.');
+            return;
+        }
+
+        try {
+            const response = await apiClient.post('/gantt/planification/process', data);
+            console.log('Respuesta del servidor:', response.data);
+            await fetchApi();
+        } catch (error) {
+            console.error('Error al enviar datos:', error);
+        }
+
+    };
+
     useEffect(() => {
         fetchApi();
     }, []);
@@ -68,6 +76,10 @@ export function Gantt() {
         const generatedDates = generateMonthDates(year, month);
         setDates(generatedDates);
     }, [selectedMonth]);
+
+    const handleStaffSelect = (staff) => {
+        setSelectedStaff(staff);
+    };
 
     const handleMonthChange = (event) => {
         const newMonth = event.target.value;
@@ -131,191 +143,6 @@ export function Gantt() {
         return dates;
     }
 
-    Modal.setAppElement('#root');
-
-    const openModal = (project, date) => {
-        setSelectedProject(project);
-        setSelectedDate(date);
-        setModalIsOpen(true);
-    };
-
-    const openEditModal = (project, date, plan) => {
-        setSelectedProject(project);
-        setSelectedDate(date);
-        setSelectedPlan(plan);
-        setEditModalIsOpen(true);
-
-        plan.asignados.forEach(asignado => {
-            const id = uuidvd4();
-            setStaffInputs(prev => [...prev, { id, rut_personal: asignado.rut_personal }]); // Actualiza el estado local
-        });
-
-    };
-
-    const openCustomizeModal = () => {
-        setCustomizeModalIsOpen(true);
-    };
-
-    const closeModal = () => {
-        resetAdd();
-        resetEdit();
-        resetDelete();
-        resetCustomize();
-        setModalIsOpen(false);
-        setEditModalIsOpen(false);
-        setCustomizeModalIsOpen(false);
-        setSelectedProject(null);
-        setSelectedDate(null);
-        setSelectedPlan(null);
-        setIsEditing(false);
-        setStaffInputs([]);
-    };
-
-    const onSubmitAdd = async (data) => {
-        try {
-
-            const staffArray = Object.values(data.staff).filter(value => value && value !== ""); // Extrae los valores de "staff" como un array
-
-            const formattedData = {
-                ...data,
-                staff: staffArray, // Cambia "staff" a un array
-            };
-
-            const response = await apiClient.post('/gantt/planificacion', formattedData);
-
-            if (selectedFilterSpecialty && selectedMonth) {
-                const dateStr = `${selectedMonth}-01`;
-                await fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
-                await fetchFilteredDelivery(dateStr);
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
-            }
-        } finally {
-            closeModal();
-        }
-    };
-
-    const editSubmit = async (data) => {
-        try {
-            // Extrae los valores actuales del formulario
-            const staffArray = Object.values(data.staff).filter((value) => value && value !== "");
-
-            // Obtén los valores originales de la planificación
-            const originalStaff = selectedPlan.asignados.map((asignado) => asignado.rut_personal);
-
-            // Filtra solo los valores nuevos o diferentes
-            const updatedStaff = staffArray.filter((rut) => !originalStaff.includes(rut));
-
-            // Prepara el objeto con los datos formateados
-            const formattedData = {
-                ...data,
-                staff: updatedStaff, // Solo las personas nuevas
-            };
-
-            // Enviar la solicitud al backend
-            const response = await apiClient.patch('/gantt/editar', formattedData);
-
-            if (selectedFilterSpecialty && selectedMonth) {
-                const dateStr = `${selectedMonth}-01`;
-                await fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
-                await fetchFilteredDelivery(dateStr);
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
-            }
-        } finally {
-            closeModal(); // Cierra la modal
-            
-        }
-    };
-
-    const deleteSubmit = async (data) => {
-        try {
-            const response = await apiClient.delete('/gantt/eliminar', { data });
-
-            if (selectedFilterSpecialty && selectedMonth) {
-                const dateStr = `${selectedMonth}-01`;
-                console.log('Recargando datos filtrados después del delete...');
-                await fetchFilteredPlanifications(selectedFilterSpecialty, dateStr);
-                await fetchFilteredDelivery(dateStr);
-            }
-
-        } catch (error) {
-            if (error.response && error.response.status === 401) {
-                navigate('/');
-            } else {
-                console.error('Error inesperado:', error);
-            }
-        } finally {
-            closeModal();
-        }
-    };
-
-    const customizeSubmit = async (data) => {
-        const response = await apiClient.patch('/gantt/customize', data);
-        await fetchApi();
-        closeModal();
-    };
-
-    {/* Esta función se encarga de sumar personal asignado al planificar presionando un boton para agregar personal */}
-
-    const addStaffInput = () => {
-        setStaffInputs([...staffInputs, { id: uuidvd4(), rut_personal: "" }]); // Añade un nuevo índice
-    };
-
-    const removeStaffInputAdd = (id) => { 
-        setStaffInputs(staffInputs.filter((input) => input.id !== id))
-
-        setValueAdd("staff", (currentValues) => {
-            const updatedValues = { ...currentValues };
-            delete updatedValues[id]; // Elimina el valor asociado al ID
-            return updatedValues;
-        });
-    };
-
-    const removeStaffInputEdit = (id) => {
-        setStaffInputs(staffInputs.filter((input) => input.id !== id))
-
-        setValueEdit("staff", (currentValues) => {
-            const updatedValues = { ...currentValues };
-            delete updatedValues[id]; // Elimina el valor asociado al ID
-            return updatedValues;
-        });
-    };    
-
-    const switchEdit = () => { 
-        if (!isEditing) {
-            // Al iniciar edición, inicializar los inputs con los asignados actuales
-            const currentStaffInputs = selectedPlan.asignados.map(asignado => ({
-                id: uuidvd4(), // Genera un ID único para cada input
-                rut_personal: asignado.rut_personal, // Inicializa con el rut actual del asignado
-            }));
-            setStaffInputs(currentStaffInputs);
-        }
-        setIsEditing(true); // Cambia el estado de isEditing
-    };
-    
-    const backEdit = () => {
-        setIsEditing(false);
-    };
-
-    // Maneja el cambio en un select
-    const handleSelectChange = useCallback((id, value) => {
-        // Actualiza el estado local
-        setStaffInputs(prevInputs =>
-            prevInputs.map(input =>
-                input.id === id ? { ...input, rut_personal: value } : input
-            )
-        );
-    });
-
     const [selectedSpecialty, setSelectedSpecialty] = useState();
 
     useEffect(() => {
@@ -345,6 +172,7 @@ export function Gantt() {
     const handleSpecialtyChange = (event) => {
         const newSpecialty = Number(event.target.value);
         setSelectedFilterSpecialty(newSpecialty);
+        setSelectedStaff([]); // Limpiar el staff seleccionado al cambiar la especialidad
         
         // Cargar datos filtrados inmediatamente
         if (newSpecialty && selectedMonth) {
@@ -396,15 +224,15 @@ export function Gantt() {
 
     return (
         <>
-        <main id={styles['gantt-body-main']}>
+        <main className={styles['main']}>
             <section className={styles['gantt-header']}>
-                <div className={styles['gantt-header-subcontainer']}>
+                <div className={styles['gantt-header-left-subcontainer']}>
                     <select name="filter-specialty" id={styles['filter-specialty']} value={selectedFilterSpecialty} onChange={handleSpecialtyChange}>
                         <option value="" disabled>Seleccione una especialidad</option>
                         {
                             sessionData.company === 1 ? (
                                 specialty
-                                .filter((specialty) => (specialty.id_especialidad !== 10 && specialty.id_especialidad !== 8))
+                                .filter((specialty) => (specialty.id_especialidad !== 1 && specialty.id_especialidad !== 2 && specialty.id_especialidad !== 8  && specialty.id_especialidad !== 10))
                                 .map((specialty) => (
                                     <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
                                 ))
@@ -419,6 +247,22 @@ export function Gantt() {
                             )
                         }
                     </select>
+                    <div className={styles['staff-container']}>
+                    {
+                        selectedFilterSpecialty && (
+                            staff
+                            .filter((staff) => staff.id_especialidad === selectedFilterSpecialty)
+                            .map((staff) => (
+                                <button key={staff.rut_personal} 
+                                className={selectedStaff.rut_personal === staff.rut_personal ? styles['staff-button-selected'] : styles['staff-button']} 
+                                style={{ backgroundColor: staff.color, color: '#ffffff'}} 
+                                onClick={() => handleStaffSelect(staff)}>
+                                            {staff.iniciales_nombre}
+                                    </button>
+                                ))
+                            )
+                        }
+                    </div>
                 </div>
                 <div id={styles['date-container']} className={styles['gantt-header-subcontainer']}>
                     <button id={styles['previous-date']} className={styles['date-btn']} onClick={handlePreviousMonth}>
@@ -432,18 +276,6 @@ export function Gantt() {
                             <path d="M9.00005 6C9.00005 6 15 10.4189 15 12C15 13.5812 9 18 9 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                     </button>
-                </div>
-                <div className={styles['gantt-header-subcontainer']} id={styles['gantt-header-customize-container']}>
-                    {((specialty.some((specialtyItem) => specialtyItem.jefe_especialidad === sessionData.rut_personal) || (sessionData.id_rol == 1 || sessionData.id_rol == 2 || sessionData.id_rol == 3 || sessionData.id_rol == 4))) && (
-                        <button id={styles['customize-btn']} onClick={openCustomizeModal}>
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={32} height={32} fill={"none"}>
-                                <path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C12.8417 22 14 22.1163 14 21C14 20.391 13.6832 19.9212 13.3686 19.4544C12.9082 18.7715 12.4523 18.0953 13 17C13.6667 15.6667 14.7778 15.6667 16.4815 15.6667C17.3334 15.6667 18.3334 15.6667 19.5 15.5C21.601 15.1999 22 13.9084 22 12Z" stroke="currentColor" strokeWidth="1.5" />
-                                <path d="M7 15.002L7.00868 14.9996" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                <circle cx="9.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-                                <circle cx="16.5" cy="9.5" r="1.5" stroke="currentColor" strokeWidth="1.5" />
-                            </svg>
-                        </button>
-                    )}
                 </div>
             </section>
             <section className={styles['table-container']}>
@@ -494,7 +326,7 @@ export function Gantt() {
                                             className={`
                                                 ${date.getDay() === 0 || date.getDay() === 6 ? styles['weekend'] : styles['']}
                                             `}
-                                            onClick={() => isPlanned ? openEditModal(projects, date, plan) : openModal(projects, date)}
+                                            onClick={() => onSubmit({ id_proyecto: projects.id_proyecto, fecha: date.toISOString().split('T')[0], selectedStaff })}
                                         >
                                             {isPlanned && (
                                                 plan.asignados.map((asignado) => (
@@ -818,190 +650,7 @@ export function Gantt() {
                             </tr>
                         ))}
                     </tbody>
-                </table>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Detalles de Planificación"
-                    className={styles['modal']}
-                    style={{overlay: {zIndex:9999}}}
-                >
-                    {selectedProject && selectedDate && (
-                        <>
-                            <div id={styles['modal-header-add']}>
-                                <h2>{selectedProject.id_proyecto}</h2>
-                            </div>
-                            <form onSubmit={handleSubmitAdd(onSubmitAdd)}>
-                                <div id={styles['modal-body']}>
-                                    <span className={styles['span-profile']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
-                                    <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
-                                    <span className={styles['span-block']}>Área:</span>
-                                    <select name="specialty" id={styles['specialty']} {...registerAdd("specialty", { required: true })} value={selectedSpecialty} onChange={(e) => setSelectedSpecialty(e.target.value)}>
-                                        <option disabled>Seleccione una especialidad / área</option>
-                                        {specialty
-                                        .filter((specialty) => specialty.id_especialidad !== 10)
-                                        .map((specialty) => (
-                                            <option key={specialty.id_especialidad} value={specialty.id_especialidad}>{specialty.especialidad}</option>
-                                        ))}
-                                    </select>
-                                    <div className={styles['staff-top-container']}>
-                                        <span className={styles['span-block']}>Asignad@/s:</span>
-                                        <button type="button" onClick={() => addStaffInput()} className={styles['add-staff-btn']}>Añadir Encargado</button>
-                                    </div>
-                                    <div className={styles['staff-input-container-plan']}>
-                                        {staffInputs.map((input) => (
-                                            <div key={input.id} className={styles['staff-input']}>
-                                                <select name={`staff[${input.id}]`} id={`staff-${input.id}`} {...registerAdd(`staff.${input.id}`, { required: "Seleccione un asignado válido" })} className={styles['staff-select']}>
-                                                    <option disabled value="">Seleccione un/a asignad@</option>
-                                                    {staff.filter((s) => s.id_especialidad === parseInt(selectedSpecialty)).map((filteredStaff) => (
-                                                        <option key={filteredStaff.rut_personal} value={filteredStaff.rut_personal}>
-                                                            {filteredStaff.nombres} {filteredStaff.apellido_p} {filteredStaff.apellido_m}
-                                                        </option>
-                                                    ))}
-                                                </select>
-                                                {staffInputs.length > 1 && (
-                                                    <button type="button" onClick={() => removeStaffInputAdd(input.id)} className={styles['remove-staff-btn']}>X</button>
-                                                )}
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <input type="hidden" {...registerAdd("date")} value={selectedDate.toLocaleDateString('es-ES')} />
-                                    <input type="hidden" {...registerAdd("project")} value={selectedProject.id_proyecto} />
-                                    <div id={styles['buttons-container']}>
-                                        <button onClick={closeModal} id={styles['secondary-btn']}>Cerrar</button>
-                                        {
-                                            (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5) && (
-                                                <button type='submit' id={styles['primary-btn']}>Agregar</button>
-                                            )
-                                        }
-                                    </div>
-                                </div>
-                            </form>
-                        </>
-                    )}
-                </Modal>
-                <Modal
-                    isOpen={editModalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Editar Planificación"
-                    className={styles['modal']}
-                    style={{overlay: {zIndex:9999}}}
-                >
-                    {selectedProject && selectedDate && selectedPlan && (
-                        <>
-                            <div id={styles['modal-header-edit']}>
-                                <div id={styles['title-container']}>
-                                    <h2>{selectedProject.id_proyecto}</h2>
-                                </div>
-                                <form onSubmit={handleSubmitDelete(deleteSubmit)} id={styles['delete-form']}>
-                                    {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5) ? (
-                                        !isEditing && 
-                                        <>
-                                            <button type='submit' id={styles['delete-btn']}>
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width={24} height={24} color={"#ff4d4d"} fill={"none"}>
-                                                    <path d="M19.5 5.5L18.8803 15.5251C18.7219 18.0864 18.6428 19.3671 18.0008 20.2879C17.6833 20.7431 17.2747 21.1273 16.8007 21.416C15.8421 22 14.559 22 11.9927 22C9.42312 22 8.1383 22 7.17905 21.4149C6.7048 21.1257 6.296 20.7408 5.97868 20.2848C5.33688 19.3626 5.25945 18.0801 5.10461 15.5152L4.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                                    <path d="M3 5.5H21M16.0557 5.5L15.3731 4.09173C14.9196 3.15626 14.6928 2.68852 14.3017 2.39681C14.215 2.3321 14.1231 2.27454 14.027 2.2247C13.5939 2 13.0741 2 12.0345 2C10.9688 2 10.436 2 9.99568 2.23412C9.8981 2.28601 9.80498 2.3459 9.71729 2.41317C9.32164 2.7167 9.10063 3.20155 8.65861 4.17126L8.05292 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                                    <path d="M9.5 16.5L9.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                                    <path d="M14.5 16.5L14.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                                                </svg>
-                                            </button> 
-                                        <input type="hidden" {...registerDelete("date")} value={selectedDate.toLocaleDateString('es-ES')} />
-                                        <input type="hidden" {...registerDelete("project")} value={selectedProject.id_proyecto} />
-                                        </>
-                                    )
-                                    :
-                                    (
-                                        <div style={{marginRight: '40px'}}></div>
-                                    )
-                                    }
-                                </form>
-                            </div>
-                            <form onSubmit={handleSubmitEdit(editSubmit)}>
-                                <div id={styles['modal-body']}>
-                                    <span className={styles['span-block']} onClick={() => navigate(`/profile/${selectedProject.rut_personal}`)}>Jefe de Proyecto: {selectedProject.nombres} {selectedProject.apellido_p} {selectedProject.apellido_m}</span>
-                                    <span className={styles['span-block']}>Fecha: {selectedDate.toLocaleDateString('es-ES')}</span>
-                                    <span className={styles['span-block']}>Área: {selectedPlan.especialidad}</span>
-                                    {isEditing ? (
-                                        <>
-                                            <div className={styles['staff-top-container']}>
-                                                <span className={styles['span-block']}>Asignad@/s:</span>
-                                                <button type="button" onClick={addStaffInput} className={styles['add-staff-btn']}>Añadir Encargado</button>
-                                            </div>
-                                            <div className={styles['staff-input-container-plan']}>
-                                                {staffInputs.map((input) => (
-                                                    <div key={input.id} className={styles['staff-input']}>
-                                                        <select name={`staff[${input.id}]`} id={`staff-${input.id}`} value={watchEdit(`staff.${input.id}`) || input.rut_personal || ''} onChange={(e) => handleSelectChange(input.id, e.target.value)} {...registerEdit(`staff.${input.id}`, { required: true })} className={styles['staff-select']}>
-                                                            <option value="" disabled>Seleccione un/a asignad@</option>
-                                                            {staff
-                                                            .filter((s) => s.id_especialidad === selectedPlan.id_especialidad)
-                                                            .map((filteredStaff) => (
-                                                                <option key={filteredStaff.rut_personal} value={filteredStaff.rut_personal}>
-                                                                    {filteredStaff.nombres} {filteredStaff.apellido_p} {filteredStaff.apellido_m}
-                                                                </option>
-                                                            ))}
-                                                        </select>
-                                                        {staffInputs.length > 1 && (
-                                                            <button type="button" onClick={() => removeStaffInputEdit(input.id)} className={styles['remove-staff-btn']}>X</button>
-                                                        )}
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <span className={styles['span-block']}>Asignad@/s:</span>
-                                            <div className={styles['staff-input-container']}>
-                                                {selectedPlan.asignados.map((asignado) => (
-                                                    <div className={styles['staff-input']} key={asignado.rut_personal}>
-                                                        <span>{asignado.nombres} {asignado.apellido_p} {asignado.apellido_m}</span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </>
-                                    )}
-                                    <input type="hidden" {...registerEdit("date")} value={selectedDate.toLocaleDateString('es-ES')} />
-                                    <input type="hidden" {...registerEdit("project")} value={selectedProject.id_proyecto} />
-                                </div>
-                                <div id={styles['buttons-container']}>
-                                    {
-                                        isEditing 
-                                        ? <button onClick={backEdit} id={styles['secondary-btn']} type='button'>Cancelar</button> 
-                                        : <button onClick={closeModal} id={styles['secondary-btn']} type='button'>Cerrar</button>
-                                    }
-                                    {
-                                        (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5)  && (
-                                            isEditing
-                                            ? <button type='submit' id={styles['primary-btn']}>Aplicar</button>
-                                            : <button onClick={(e) => {e.preventDefault(); switchEdit(); }} id={styles['primary-btn']} type='button'>Editar</button>
-                                        )
-                                    }
-                                </div>
-                            </form>
-                        </>
-                    )}
-                </Modal>
-                <Modal
-                    isOpen={customizeModalIsOpen}
-                    onRequestClose={closeModal}
-                    contentLabel="Personalizar Planificación"
-                    className={styles['modal']}
-                    style={{overlay: {zIndex:9999}}}
-                >
-                    <form onSubmit={handleSubmitCustomize(customizeSubmit)}>
-                        {
-                            staff
-                                .filter((staff) => staff.id_especialidad === sessionData.id_especialidad)
-                                .map((staff, index) => (
-                                    <div key={staff.rut_personal}>
-                                        <label htmlFor="color-input">{`${staff.nombres} ${staff.apellido_p} ${staff.apellido_m}`}</label>
-                                        <input type="color" id={styles['color-input']} defaultValue={staff.color} {...registerCustomize(`${index}.color`)} />
-                                        <input type="hidden" defaultValue={staff.rut_personal} {...registerCustomize(`${index}.rut_personal`)} />
-                                    </div>
-                                ))
-                        }
-                        <button type='submit' className={styles['primary-btn']}>Guardar cambios</button>
-                    </form>
-                </Modal>
+                </table>            
             </section>
         </main>
         </>
