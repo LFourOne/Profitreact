@@ -289,7 +289,8 @@ export function HHRegister() {
                                 <label>Proyecto</label>
                                 {
                                     project.length > 0 && (
-                                        <select name="project" id="project" {...register('project', { required: true })} onChange={handleProjectChange} value={selectedProject}>
+                                        <select name="project" id="project" defaultValue='' {...register('project', { required: true })} onChange={handleProjectChange} value={selectedProject}>
+                                            <option value="" disabled>Selecciona un proyecto</option>
                                             {project
                                             .filter((project) => project.id_proyecto != 'JE')
                                             .map((project) => (
