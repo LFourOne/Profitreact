@@ -26,8 +26,6 @@ export function SpecialtyManagement() {
             setSpecialties(response.data.specialties);
             setStaff(response.data.staff);
 
-            console.log(response.data);
-
             setLoading(false);
         } catch (error) {
             console.error('Error inesperado:', error);

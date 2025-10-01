@@ -1418,6 +1418,29 @@
         display: flex;
         margin-top: 50px;
     }
+    .close-meeting-section div{
+        display: flex;
+        align-items: center;
+        gap: 24px;
+    }
+    .add-attendants-btn{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 42px;
+        width: 200px;
+        background-color: white;
+        border: 1px solid #d1d5db;
+        font-weight: bold;
+        color: #1f2937;
+        border-radius: 5px;
+        gap: 8px;
+        transition: 0.1s ease-in-out;
+    }
+    .add-attendants-btn:hover{
+        background-color: #f3f4f6;
+        cursor: pointer;
+    }
     .close-meeting-btn{
         height: 40px;
         width: 150px;
@@ -1720,7 +1743,7 @@
 
     /* Edition Modal Section */
     
-    .modal{
+    .modal-edit{
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -1976,6 +1999,43 @@
         padding: 0 0 0 20px;
         border-bottom: 1px solid lightgray;
         text-align: left;
+    }
+
+    /* Add Attendant Modal Section */
+
+    .modal-overlay-add-attendant{
+        position: fixed;
+        box-sizing: border-box;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 5000;
+    }
+    .modal-add-attendant{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        position: fixed;
+        box-sizing: border-box;
+        width: 500px;
+        max-width: 500px;
+        min-height: 400px;
+        max-height: 400px;
+        padding: 30px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        z-index: 5001;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .modal-add-attendant form{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
     /* Topic Section */

@@ -171,7 +171,6 @@ export function GanttDelivery() {
                 setOt(response.data.ot);
                 setDeliveryType(response.data.delivery_type);
             }
-            console.log('Entregas filtradas:', response.data);
         } catch (error) {
             console.error('Error al cargar entregas filtradas:', error);
         }

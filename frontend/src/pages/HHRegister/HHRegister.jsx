@@ -57,7 +57,6 @@ export function HHRegister() {
             setProject(response.data.project);
             setRole(response.data.role);
             setHHReportState(response.data.hh_report_state);
-            console.log(response.data);
 
         }
         catch (error) {
@@ -97,7 +96,6 @@ export function HHRegister() {
         finally {
             fetchApi();
             fetchSchedule(selectedDate);
-            console.log('Datos enviados:', data);
         }
     }
 
@@ -166,8 +164,6 @@ export function HHRegister() {
 
                     setReports(response.data.reports);
                     setTasks(response.data.tasks);
-
-                    console.log(response.data);
                     
                 } catch (error) {
                     console.error('Error fetching reports:', error);
@@ -180,7 +176,6 @@ export function HHRegister() {
             try {
                 const response = await apiClient.get(`/hh-register/api/schedule/${date}`);
                 setSchedule(response.data.schedule);
-                console.log('Schedule data:', response.data.schedule);
             } catch (error) {
                 console.error('Error fetching schedule:', error);
             }

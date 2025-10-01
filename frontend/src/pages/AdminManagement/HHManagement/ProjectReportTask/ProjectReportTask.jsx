@@ -40,8 +40,6 @@ export function ProjectTaskReport() {
             setProjectReport(response.data['project-report']);
             setProjectTask(response.data['project-task']);
             setTask(response.data.task);
-
-            console.log('Datos obtenidos:', response.data);
         }
         catch (error) {
             if (error.response && error.response.status === 401) {
@@ -114,7 +112,6 @@ export function ProjectTaskReport() {
                 }
              });
 
-            console.log('Tarea agregada:', response.data);
         } catch (error) {
             console.error('Error al agregar tarea:', error);
         }
@@ -140,7 +137,6 @@ export function ProjectTaskReport() {
                 }
             });
 
-            console.log('Versión de informe agregada:', response.data);
         } catch (error) {
             console.error('Error al agregar versión de informe:', error);
         }

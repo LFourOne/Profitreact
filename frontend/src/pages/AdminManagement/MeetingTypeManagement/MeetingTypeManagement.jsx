@@ -24,8 +24,6 @@ export function MeetingTypeManagement() {
             const response = await apiClient.get('/admin/meeting-type-management');
 
             setMeetingTypes(response.data.meeting_type);
-            
-            console.log(response.data);
 
             setLoading(false);
         } catch (error) {

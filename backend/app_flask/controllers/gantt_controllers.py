@@ -233,8 +233,6 @@ def get_delivery_by_date():
     
     consolidated_delivery = list(grouped_delivery.values())
 
-    print("Consolidated Delivery:", consolidated_delivery)
-
     return jsonify({
         'delivery': consolidated_delivery,
         'report': reports,
@@ -254,16 +252,12 @@ def planification():
 
     data = request.get_json()
 
-    print("Received Data:", data)
-
     data_searching_planning = {
         'id_proyecto' : data['id_proyecto'],
         'fecha' : data['fecha']
     }
 
     existing_planning = Planning.select_planning_id(data_searching_planning)
-
-    print("Existing Planning:", existing_planning)
 
     if existing_planning:
         

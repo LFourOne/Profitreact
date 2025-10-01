@@ -44,7 +44,6 @@
     }
     .welcome-section-text-container button:hover{
         background-color: #f3f4f6;
-        transition: 0.1s ease-in-out;
     }
     .welcome-section-logo-container{
         display: flex;

@@ -32,8 +32,6 @@ export function TrainingDetails() {
             setAssistant(response.data.assistants);
             setSessionData(response.data.session);
             setLoading(false);
-
-            console.log(response.data);
             
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -69,14 +67,12 @@ export function TrainingDetails() {
         if (!staff.length) {
             const response = await apiClient.get('/training/get-staff');
             setStaff(response.data.staff);
-            console.log(response.data.staff);
         }
         setIsEditing(true);
     };
 
     const onSubmitEdit = async (data) => {
         try {
-            console.log(data);
             const response = await apiClient.patch(`/training/edit/${id_capacitacion}`, data);
 
             setIsEditing(false);
@@ -433,7 +429,7 @@ export function TrainingDetails() {
                                 {training[0].ruta ? (
                                     <div id={styles['file-attach-container']}>
                                         <a
-                                            href={`http://localhost:5500/training/files/${training[0].ruta}`}
+                                            href={`http://18.205.45.194:5000/training/files/${training[0].ruta}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             id={styles['file-attach']}

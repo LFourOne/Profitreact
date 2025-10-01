@@ -26,8 +26,6 @@ export function Meeting() {
             setProjects(response.data.projects);
             setMeetingType(response.data.meeting_type);
 
-            console.log(response.data);
-
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');

@@ -39,7 +39,6 @@ export function UserManagement() {
             setSpecialty(response.data.specialty);
             setPosition(response.data.position);
             setRole(response.data.role);
-            console.log(response.data);
         } 
         catch (error) {
 
@@ -69,12 +68,14 @@ export function UserManagement() {
         setModalType('add');
         setSelectedStaff(null);
         setShowModal(true);
+        document.body.style.overflowY = 'hidden';
     };
 
     const handleOpenViewModal = (staff) => {
         setModalType('view');
         setSelectedStaff(staff);
         setShowModal(true);
+        document.body.style.overflowY = 'hidden';
     };
 
     const handleCloseModal = () => {
@@ -85,6 +86,7 @@ export function UserManagement() {
         setShowPasswordInput(false);
         resetEdit();
         resetAdd();
+        document.body.style.overflowY = 'unset';
     };
 
     const handleIsEditing = () => {
@@ -96,7 +98,9 @@ export function UserManagement() {
         try {
             const response = await apiClient.post('/admin/user-management/register/process', data);
 
-            console.log(response.data);
+            setShowModal(false);
+            resetAdd();
+            fetchApi();
         } 
         catch (error) {
 
@@ -112,20 +116,18 @@ export function UserManagement() {
                 console.error(error);
             }
         }
-        finally {
-            setShowModal(false);
-            resetAdd();
-            fetchApi();
-        }
     }
 
     const onSubmitEdit = async (data) => {
         try {
-            console.log(data);
             const response = await apiClient.patch(`/admin/user-management/edit/process`, data);
 
-            console.log(data);
-            console.log(response.data);
+            setShowModal(false);
+            setSelectedStaff(null);
+            setIsEditing(false);
+            setShowPasswordInput(false);
+            resetEdit();
+            fetchApi();
         }
         catch (error) {
 
@@ -140,14 +142,6 @@ export function UserManagement() {
             else {
                 console.error(error);
             }
-        }
-        finally {
-            setShowModal(false);
-            setSelectedStaff(null);
-            setIsEditing(false);
-            setShowPasswordInput(false);
-            resetEdit();
-            fetchApi();
         }
     };
         

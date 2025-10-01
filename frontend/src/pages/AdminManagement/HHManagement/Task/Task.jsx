@@ -27,7 +27,6 @@ export function Task() {
 
             setTasks(response.data.tasks);
             setTasksTypes(response.data.task_types);
-            console.log(response.data);
 
         }
         catch (error) {
@@ -284,7 +283,6 @@ export function Task() {
                                     </header>
                                     <form onSubmit={handleSubmitEdit(onSubmitEdit)} id='edit-task-form'>
                                         <fieldset>
-                                            {console.log(selectedTask)}
                                             <label htmlFor="task-name">Nombre de la Tarea</label>
                                             <input type="text" id="task-name" defaultValue={selectedTask.nombre} {...registerEdit('task-name', {required: true})} required />
                                         </fieldset>

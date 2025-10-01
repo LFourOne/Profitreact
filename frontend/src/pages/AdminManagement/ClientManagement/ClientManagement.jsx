@@ -113,12 +113,14 @@ export function ClientManagement() {
         setSelectedClient(null);
         setModalType('add');
         setShowModal(true);
+        document.body.style.overflowY = 'hidden';
     }
 
     const handleOpenViewModal = (client) => {
         setModalType('view');
         setSelectedClient(client);
         setShowModal(true);
+        document.body.style.overflowY = 'hidden';
     }
 
     const handleCloseModal = () => {
@@ -132,6 +134,7 @@ export function ClientManagement() {
         setCommunes([]);
         setValueAdd('id_provincia', '');
         setValueAdd('id_comuna', '');
+        document.body.style.overflowY = 'unset';
     }
 
     const handleIsEditing = () => {

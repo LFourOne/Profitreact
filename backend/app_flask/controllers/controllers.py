@@ -273,6 +273,8 @@ def minute(id_reunion):
     meeting_data = Meeting.select_all({'id_reunion' : id_reunion})
     
     meeting_type = meeting_data[0]['id_tipo_reunion']
+
+    attendants = Attendant.select_attendants_by_meeting({'id_reunion' : id_reunion})
     
     allowed_types = role_permissions[session['id_rol']]
     if meeting_type not in allowed_types:
@@ -318,7 +320,8 @@ def minute(id_reunion):
         'projects' : project_list,
         'commitments' : commitments,
         'agreements' : agreements,
-        'topics' : topics
+        'topics' : topics,
+        'attendants' : attendants
         }), 200
 
 @app.route('/meetings/minute/add-commitment', methods=['POST'])
@@ -434,6 +437,30 @@ def delete_commitment():
     }
 
     Commitment.delete_commitment(commitment_data)
+
+    return jsonify({'status': 'success', 'message': 'success'}), 200
+
+@app.route('/meetings/minute/add-attendant', methods=['POST'])
+def add_attendant():
+
+    if 'rut_personal' not in session:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 401
+    
+    if session['id_rol'] not in [1, 2, 3, 4, 5, 6]:
+        return jsonify({'status': 'error', 'message': 'Usuario no autorizado'}), 403
+
+    data = request.get_json()
+
+    for attendant in data['add-attendants']:
+
+        attendant_data = {
+            'id_reunion' : data['id_reunion'],
+            'rut_asistente' : attendant['value']
+        }
+
+        attendant_data['rut_asistente'] = attendant['value']
+
+        Attendant.create_attendant(attendant_data)
 
     return jsonify({'status': 'success', 'message': 'success'}), 200
 

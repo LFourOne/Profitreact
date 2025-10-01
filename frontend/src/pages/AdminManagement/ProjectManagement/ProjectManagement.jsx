@@ -38,7 +38,6 @@ export function ProjectManagement() {
             setStudyTypes(response.data.study_types);
             setClients(response.data.clients);
             setLoading(false);
-            console.log(response.data)
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -539,7 +538,6 @@ export function ProjectManagement() {
                                                             :
                                                             (
                                                                 <div className={styles['view-info-content']}>
-                                                                    {console.log(selectedProject)}
                                                                     <fieldset>
                                                                         <label>Proyecto</label>
                                                                         <span>{selectedProject.id_proyecto}</span>

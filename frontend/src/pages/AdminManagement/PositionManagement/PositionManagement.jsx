@@ -25,8 +25,6 @@ export function PositionManagement() {
 
             setPositions(response.data.positions);
 
-            console.log(response.data);
-
             setLoading(false);
         } catch (error) {
             console.error('Error inesperado:', error);

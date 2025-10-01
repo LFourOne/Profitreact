@@ -24,8 +24,6 @@ export function TaskTypeManagement() {
 
             setTaskTypes(response.data.taskType);
 
-            console.log(response.data);
-
             setLoading(false);
         } catch (error) {
             console.error('Error inesperado:', error);

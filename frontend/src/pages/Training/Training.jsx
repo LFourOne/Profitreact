@@ -20,7 +20,6 @@ export function Training() {
             setTraining(response.data.trainings);
             setRol(response.data.session);
             setLoading(false);
-            console.log(response.data);
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 navigate('/');

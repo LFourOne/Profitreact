@@ -11,6 +11,7 @@ export function Minute() {
     Modal.setAppElement('#root');
 
     const { register: registerAdd, handleSubmit: handleSubmitAdd, reset: resetAdd, control: controlAdd, formState: { errors : errorsAdd }, control, setValue: setValueAdd } = useForm();
+    const { register: registerAddAttendant, handleSubmit: handleSubmitAddAttendant, reset: resetAddAttendant, control: controlAddAttendant, formState: { errors : errorsAddAttendant } } = useForm();
     const { register: registerComplete, handleSubmit: handleSubmitComplete, reset: resetComplete, control: controlComplete, formState: { errors : errorsComplete } } = useForm();
     const { register: registerEdit, handleSubmit: handleSubmitEdit, reset: resetEdit, control: controlEdit, formState: { errors : errorsEdit } } = useForm();
     const { register: registerDelete, handleSubmit: handleSubmitDelete, reset: resetDelete, control: controlDelete, formState: { errors : errorsDelete } } = useForm();
@@ -27,9 +28,12 @@ export function Minute() {
     const [commitments, setCommitments] = useState([]);
     const [agreements, setAgreements] = useState([]);
     const [topics, setTopics] = useState([]);
+    const [attendants, setAttendants] = useState([]);
 
     const [editingCommitment, setEditingCommitment] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const [showModal, setShowModal] = useState(false);
 
     const { id_reunion } = useParams();
 
@@ -56,8 +60,7 @@ export function Minute() {
             setCommitments(response.data.commitments);
             setAgreements(response.data.agreements);
             setTopics(response.data.topics);
-
-            console.log(response.data);
+            setAttendants(response.data.attendants);
             
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -169,6 +172,32 @@ export function Minute() {
         resetTopic();
     }
 
+    const onSubmitAddAttendant = async (data) => {
+        const confirmed = window.confirm('¿Estás segur@ que deseas añadir nuevos asistentes?');
+        if (!confirmed) {
+            return;
+        }
+        try {
+
+            data.id_reunion = id_reunion;
+
+            const response = await apiClient.post('/meetings/minute/add-attendant', data);
+
+            await fetchApi();
+            resetAddAttendant();
+            handleCloseAddAttendantModal();
+            
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                alert(error.response.data.message);
+                resetAddAttendant();
+            }
+            if (error.response && error.response.status === 401) {
+                navigate('/');
+            }
+        }
+    }
+
     const closeMeeting = async (event) => {
 
         const confirmed = window.confirm('¿Estás segur@ que deseas cerrar la reunión? (No podrás agregar más compromisos en esta reunión)');
@@ -204,7 +233,16 @@ export function Minute() {
         return `${year}-${month}-${day}`;
     };
 
-    const openModal = (id_compromiso) => {
+    const handleOpenAddAttendantModal = () => {
+        setShowModal(true);
+        document.body.style.overflowY = 'hidden';
+    }
+    const handleCloseAddAttendantModal = () => {
+        document.body.style.overflowY = 'unset';
+        setShowModal(false);
+    }
+
+    const openEditModal = (id_compromiso) => {
         const commitmentToEdit = commitments.find(commitment => commitment.id_compromiso === id_compromiso);
         setEditingCommitment(commitmentToEdit);
         setModalIsOpen(true);
@@ -220,7 +258,14 @@ export function Minute() {
         setChangeTopicAgreementView(!changeTopicAgreementView);
     }
 
-    const staffList = staff.map((staff) => ({
+    const attendantsList = attendants.map((attendant) => ({
+        value: attendant.rut_personal,
+        label: `${attendant.nombres} ${attendant.apellido_p} ${attendant.apellido_m}`
+    }));
+
+    const staffList = staff
+    .filter((staff) => !attendants.some((attendant) => attendant.rut_personal === staff.rut_personal))
+    .map((staff) => ({
         value: staff.rut_personal,
         label: `${staff.nombres} ${staff.apellido_p} ${staff.apellido_m}`
     }));
@@ -284,7 +329,13 @@ export function Minute() {
                     </div>
                     <div className={styles['close-meeting-section']}>
                         {((meetingData[0].id_estado === 1) && (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6)) ? (
-                            <button type='submit' className={styles['close-meeting-btn']} onClick={(e) => closeMeeting(e)}>Cerrar Reunión</button>
+                            <div>
+                                <button className={styles['add-attendants-btn']} onClick={handleOpenAddAttendantModal}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f2937" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                    Añadir asistentes
+                                </button>
+                                <button type='submit' className={styles['close-meeting-btn']} onClick={(e) => closeMeeting(e)}>Cerrar Reunión</button>
+                            </div>
                         )
                         :
                         ( meetingData[0].id_estado === 2 ? (
@@ -332,7 +383,7 @@ export function Minute() {
                                             <Select
                                                 {...field}
                                                 placeholder="Seleccione el responsable..."
-                                                options={staffList}
+                                                options={attendantsList}
                                                 className={styles['name_and_last_name_form']}
                                                 styles={{
                                                     control: (base) => ({
@@ -501,7 +552,7 @@ export function Minute() {
                                             {/* Editar compromiso */}
                                             {commitment.id_estado === 1 ? (
                                                 (sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4 || sessionData.id_rol === 5 || sessionData.id_rol === 6) ? (
-                                                <button onClick={() => openModal(commitment.id_compromiso)} className={styles['action-btn-edit']}>
+                                                <button onClick={() => openEditModal(commitment.id_compromiso)} className={styles['action-btn-edit']}>
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon></svg>
                                                 </button>
                                                 )
@@ -634,7 +685,7 @@ export function Minute() {
                     isOpen={modalIsOpen}
                     onRequestClose={closeModal}
                     contentLabel='Editar Compromiso'
-                    className={styles['modal']}
+                    className={styles['modal-edit']}
                 >
                     {editingCommitment && (
                         <>
@@ -730,6 +781,74 @@ export function Minute() {
                     )}
                 </Modal>
             </section>
+            {
+                showModal && (
+                    <div className={styles['modal-overlay-add-attendant']} onClick={handleCloseAddAttendantModal}>
+                        <div className={styles['modal-add-attendant']} onClick={(e) => e.stopPropagation()}>
+                            <section className={styles['modal-header']}>
+                                <div>
+                                    <h1>Añadir asistentes</h1>
+                                    <p>Agregue nuevos asistentes a la reunión</p>
+                                </div>
+                                <button onClick={handleCloseAddAttendantModal}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                </button>
+                            </section>
+                            <form onSubmit={handleSubmitAddAttendant(onSubmitAddAttendant)} id='modal-add-attendant-form'>
+                                <fieldset>
+                                    <Controller
+                                        name="add-attendants"
+                                        control={controlAddAttendant}
+                                        rules={{ required: "Debes seleccionar mínimo un asistente" }}
+                                        render={({ field }) => (
+                                            <Select
+                                                {...field}
+                                                placeholder="Selecciona asistentes"
+                                                closeMenuOnSelect={false}
+                                                isMulti
+                                                options={staffList}
+                                                id={styles['add-attendants']}
+                                                className={styles['add-attendants']}
+                                                styles={{
+                                                    control: (base) => ({
+                                                        ...base,
+                                                        width: 400,
+                                                        minHeight: 48,
+                                                        borderRadius: 4,
+                                                        border: '1px solid #d1d5db',
+                                                        backgroundColor: 'white',
+                                                        color: 'black',
+                                                        fontSize: 16,
+                                                        boxSizing: 'border-box',
+                                                        paddingLeft: 4,
+                                                    }),
+                                                    menu: (base) => ({
+                                                        ...base,
+                                                        zIndex: 9999,
+                                                    }),
+                                                    option: (base, state) => ({
+                                                        ...base,
+                                                        backgroundColor: state.isSelected ? '#15803d' : 'white',
+                                                        color: state.isSelected ? 'white' : 'black',
+                                                        '&:hover': {
+                                                            backgroundColor: '#f3f4f6',
+                                                            color: 'black',
+                                                        },
+                                                    }),
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                </fieldset>
+                            </form>
+                            <section className={styles['modal-footer']}>
+                                <button className={styles['modal-btn-cancel']} onClick={handleCloseAddAttendantModal}>Cancelar</button>
+                                <button className={styles['modal-btn-save']} onClick={handleSubmitAddAttendant(onSubmitAddAttendant)} form='modal-add-attendant-form'>Guardar Cambios</button>
+                            </section>
+                        </div>
+                    </div>
+                )
+            }
             </>
         )}
         </>

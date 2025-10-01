@@ -36,8 +36,6 @@ export function Gantt() {
             setStaff(response.data.staff);
             setSpecialty(response.data.specialty);
             setSessionData(response.data.session);
-            
-            console.log(response.data);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -50,8 +48,6 @@ export function Gantt() {
 
     const onSubmit = async (data) => {
 
-        console.log('Datos a enviar:', data);
-
         if (!data.selectedStaff || data.selectedStaff === undefined || data.selectedStaff.length === 0) {
             alert('Por favor, seleccione un miembro del personal antes de asignar o eliminar.');
             return;
@@ -59,7 +55,6 @@ export function Gantt() {
 
         try {
             const response = await apiClient.post('/gantt/planification/process', data);
-            console.log('Respuesta del servidor:', response.data);
             await fetchApi();
         } catch (error) {
             console.error('Error al enviar datos:', error);
@@ -195,7 +190,6 @@ export function Gantt() {
                 setPlanification(response.data.planification);
             }
 
-            console.log('Planificaciones filtradas:', response.data.planification);
         } catch (error) {
             console.error('Error al cargar planificaciones filtradas:', error);
         }
@@ -216,7 +210,6 @@ export function Gantt() {
                 setOt(response.data.ot);
                 setDeliveryType(response.data.delivery_type);
             }
-            console.log('Entregas filtradas:', response.data);
         } catch (error) {
             console.error('Error al cargar entregas filtradas:', error);
         }
@@ -248,7 +241,7 @@ export function Gantt() {
                         }
                     </select>
                     <div className={styles['staff-container']}>
-                    {
+                    {(sessionData.id_rol === 1 || sessionData.id_rol === 2 || sessionData.id_rol === 3 || sessionData.id_rol === 4) &&
                         selectedFilterSpecialty && (
                             staff
                             .filter((staff) => staff.id_especialidad === selectedFilterSpecialty)

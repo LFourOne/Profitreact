@@ -24,8 +24,6 @@ export function StudyTypeManagement() {
 
             setStudyTypes(response.data.studyTypes);
 
-            console.log(response.data);
-
             setLoading(false);
         } catch (error) {
             console.error('Error inesperado:', error);

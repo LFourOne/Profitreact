@@ -17,7 +17,6 @@ export function Profile() {
         try {
             const response = await apiClient.get(`/profile/${id}`);
             setProfile(response.data.profile);
-            console.log(response.data);
         } 
         catch (error) {
             if (error.response && error.response.status === 401) {

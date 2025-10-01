@@ -19,7 +19,6 @@ export function CreateTraining() {
         try {
             const response = await apiClient.get('/training/create');
             setStaff(response.data.staff);
-            console.log(response.data);
             setLoading(false);
         } catch (error) {
             if (error.response && error.response.status === 401) {

@@ -34,7 +34,6 @@ export function Index() {
         setProjects(response.data.projects);
         setMeetingType(response.data.meeting_type);
         setSession(response.data.session);
-        console.log(response.data)
 
         } catch (error) {
             if (error.response && error.response.status === 401) {

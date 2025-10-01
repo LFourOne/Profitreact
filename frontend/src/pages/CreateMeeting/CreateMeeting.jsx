@@ -48,7 +48,6 @@ export function CreateMeeting() {
         setProjects(response.data.projects);
         setMeetingData(response.data.meetings);
         setStaff(response.data.staff);
-        console.log(response.data);
 
         } catch (error) {
             if (error.response && error.response.status === 401) {
